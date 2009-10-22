@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   ch = getc( input );
   while( ch != EOF ) {
 
-    if( (ch == '}')||  (ch == '\n') ||  (ch == ';') ){
+    if( (ch == '}')||  (ch == '{') || (ch == ';') ){
 
       if(statement_number >= MAX_LENGTH)break;
 
@@ -44,6 +44,12 @@ int main(int argc, char **argv)
       
       ch = getc( input );
 	       
+      continue;
+    }
+
+
+    if(ch == '\n'){
+      ch = getc(input);
       continue;
     }
 
@@ -349,7 +355,7 @@ int main(int argc, char **argv)
     for(i = 0; i < statement_number; i++ )
     fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(statements[i]),statements[i]);
   
-  /*
+
 
     for(i = 0; i < total_tokens; i++ )
     fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(tokens[i]),tokens[i]);
@@ -379,7 +385,6 @@ int main(int argc, char **argv)
 
   fprintf(stdout, "\n\n --------------------------------------\n\n");
 
-  */
 
   fprintf(stdout, "\n");
   
