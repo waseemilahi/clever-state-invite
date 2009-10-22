@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   ch = getc( input );
   while( ch != EOF ) {
 
-    if( (ch == '\n') ||  (ch == ';') ){
+    if( (ch == '}')||  (ch == '\n') ||  (ch == ';') ){
 
       if(statement_number >= MAX_LENGTH)break;
 
@@ -346,6 +346,8 @@ int main(int argc, char **argv)
     else strcpy(external_vars[external_unique_vars++] , real_unique_vars[i]);
     
   }
+    for(i = 0; i < statement_number; i++ )
+    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(statements[i]),statements[i]);
   
   /*
 
