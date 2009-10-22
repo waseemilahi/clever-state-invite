@@ -352,6 +352,8 @@ int main(int argc, char **argv)
     else strcpy(external_vars[external_unique_vars++] , real_unique_vars[i]);
     
   }
+
+  /*
     for(i = 0; i < statement_number; i++ )
     fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(statements[i]),statements[i]);
   
@@ -385,12 +387,12 @@ int main(int argc, char **argv)
 
   fprintf(stdout, "\n\n --------------------------------------\n\n");
 
-
+  */
+  
   fprintf(stdout, "\n");
   
   for(i = 0; i < external_unique_vars; i++ )
     fprintf(stdout, "%d: %s  \n\n",i+1,external_vars[i]);
-  
   
   fprintf(stdout, "\n Total External(required) Variable(s) = %d \n",external_unique_vars);
   
