@@ -13,6 +13,12 @@ int main(int argc, char **argv)
   char tokens[MAX_LENGTH][MAX_LENGTH];
   int total_tokens = 0;
 
+  if(argc != 2){
+    fprintf(stderr, "\n Usage: get_var file_name.\n\n");
+    exit(1);
+  }
+
+
   for(i =0; i < MAX_LENGTH; i++)
     for(j =0; j < MAX_LENGTH; j++){
       statements[i][j] = '\0';
