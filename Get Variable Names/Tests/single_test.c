@@ -12,7 +12,8 @@ void second(int a, double b, char c)
 	int t = 128;
 	a = 2 * t;
 	t = b + c + t;
- 
+	fprintf(stdout, "\n T = %d \n", t);
+
 	return ;
 
 }

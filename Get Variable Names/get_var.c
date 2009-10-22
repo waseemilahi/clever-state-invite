@@ -18,7 +18,6 @@ int main(int argc, char **argv)
     exit(1);
   }
 
-
   for(i =0; i < MAX_LENGTH; i++)
     for(j =0; j < MAX_LENGTH; j++){
       statements[i][j] = '\0';
@@ -36,23 +35,6 @@ int main(int argc, char **argv)
  
   ch = getc( input );
   while( ch != EOF ) {
-
-    if( (ch == '}')||  (ch == '{') || (ch == ';') ){
-
-      if(statement_number >= MAX_LENGTH)break;
-
-      strcpy(statements[statement_number] , line);
-      
-      statement_number ++;
-      
-      for(i = 0; i < MAX_LENGTH; i++)
-	line[i] = '\0';
-      
-      ch = getc( input );
-	       
-      continue;
-    }
-
 
     if(ch == '\n'){
       ch = getc(input);
@@ -101,16 +83,46 @@ int main(int argc, char **argv)
       continue;
     }
     
+    if(ch == '"'){
+      while(1){
+	ch = getc( input );
+	if(ch == '"'){
+	  ch = getc(input);
+	  break;
+	}
+      }
+      continue;
+    }
+    
+    
+    if( (ch == '}') || (ch == ',') || (ch == '{') || (ch == ';') ){
+      
+      if(statement_number >= MAX_LENGTH)break;
+      
+      strcpy(statements[statement_number] , line);
+      
+      statement_number ++;
+      
+      for(i = 0; i < MAX_LENGTH; i++)
+	line[i] = '\0';
+      
+      ch = getc( input );
+	       
+      continue;
+    }
+
     line[strlen(line)] = ch;
     
     ch = getc( input );
   }
+  /*
+
   for(i = 0; i < MAX_LENGTH; i++){
     if( (j = findsubstr(statements[i] , "fprintf"))  == 1)
       for(k = 0; k < MAX_LENGTH; k++)
 	statements[i][k] = '\0';
   }
-  
+  */
   const char delimeters[] = "";
   char *running;
   char *token;
@@ -359,7 +371,7 @@ int main(int argc, char **argv)
     
   }
 
-  /*
+
     for(i = 0; i < statement_number; i++ )
     fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(statements[i]),statements[i]);
   
@@ -393,7 +405,7 @@ int main(int argc, char **argv)
 
   fprintf(stdout, "\n\n --------------------------------------\n\n");
 
-  */
+
   
   fprintf(stdout, "\n");
   
