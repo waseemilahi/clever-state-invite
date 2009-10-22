@@ -5,7 +5,7 @@
 # include <string.h>
 
 int first(int a, double b, char c);
-void first(int a, double b, char c);
+void second(int a, double b, char c);
 
 void first(int a, double b, char c)
 {
