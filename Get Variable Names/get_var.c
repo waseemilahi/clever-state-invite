@@ -28,9 +28,10 @@ int main(int argc, char **argv)
   	char statements[MAX_LENGTH][MAX_LENGTH];
   	char tokens[MAX_LENGTH][MAX_LENGTH];
   	char declare_vars[MAX_LENGTH][MAX_LENGTH];
+	char all_vars[MAX_LENGTH][MAX_LENGTH];
   	char global_constants[MAX_LENGTH][MAX_LENGTH];
   	char global_variables[MAX_LENGTH][MAX_LENGTH];
-	char all_vars[MAX_LENGTH][MAX_LENGTH];
+	
 
   	const char delimeters[] = "";
   	char *running;
@@ -44,24 +45,18 @@ int main(int argc, char **argv)
 	char *pp;
 	const char de[] = "[]";  
 
-  for(i =0; i < MAX_LENGTH; i++)
-    for(j =0; j < MAX_LENGTH; j++){
-      statements[i][j] = '\0';
-      global_variables[i][j]='\0';
-      global_constants[i][j]='\0';
-      tokens[i][j] = '\0';
-    }
+	for(i =0; i < MAX_LENGTH; i++)
+    	for(j =0; j < MAX_LENGTH; j++){
+      		statements[i][j] = '\0';
+			tokens[i][j] = '\0';
+			declare_vars[i][j] = '\0';
+			all_vars[i][j] = '\0';
+      		global_constants[i][j]='\0';
+      		global_variables[i][j]='\0';
+    	}
 
- statement_number = get_input(statements,argv[1]);
-
-  /*
-
-  for(i = 0; i < MAX_LENGTH; i++){
-    if( (j = findsubstr(statements[i] , "fprintf"))  == 1)
-      for(k = 0; k < MAX_LENGTH; k++)
-	statements[i][k] = '\0';
-  }
-  */
+	/* Get the input from the file. */
+ 	statement_number = get_input(statements,argv[1]);
   
   for(i = 0; i <  statement_number; i++){
     
@@ -85,14 +80,12 @@ int main(int argc, char **argv)
 	char token_statements[total_tokens][MAX_LENGTH];
 	char declare_statements[total_tokens][MAX_LENGTH];
 
-  for (i = 0; i < total_tokens; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      token_statements[i][j] = '\0';
-  
-  for (i = 0; i < total_tokens; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      declare_statements[i][j] = '\0';
-  
+  	for (i = 0; i < total_tokens; i++)
+    	for(j = 0; j < MAX_LENGTH; j++){
+      		token_statements[i][j] = '\0';
+			declare_statements[i][j] = '\0';
+		}
+    
   for(i = 0; i < total_tokens; i++){
     if( ( ((findsubstr(tokens[i] , "int")) == 1) || ((findsubstr(tokens[i] , "float")) == 1) || ((findsubstr(tokens[i] , "double")) == 1)
 	  ||((findsubstr(tokens[i] , "char")) == 1) || ((findsubstr(tokens[i] , "long")) == 1) || ((findsubstr(tokens[i] , "short")) == 1)
@@ -130,13 +123,7 @@ int main(int argc, char **argv)
       truncated_number++;
     }
   }  
-
-  
-  for (i = 0; i < MAX_LENGTH; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      all_vars[i][j] = '\0';
-  
-  
+   
   for(i = 0; i < truncated_number; i++){
     
     running = strdup(truncated_statements[i]);
@@ -171,11 +158,6 @@ int main(int argc, char **argv)
     
   }  
 
-  for (i = 0; i < MAX_LENGTH; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      declare_vars[i][j] = '\0';
-  
-  
   for(i = 0; i < d_truncated_number; i++){
     
     running = strdup(d_truncated_statements[i]);
@@ -236,8 +218,6 @@ int main(int argc, char **argv)
     }
   }
   
-
- 
   for (i = 0; i < total_real_vars; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       real_unique_vars[i][j] = '\0';
@@ -258,11 +238,13 @@ int main(int argc, char **argv)
 	char dd_truncated_statements[declared_vars][MAX_LENGTH];
 	char external_vars[unique_real_vars][MAX_LENGTH];
 
- 
   for (i = 0; i < declared_vars; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       dd_truncated_statements[i][j] = '\0';
-  
+
+	for (i = 0; i < unique_real_vars; i++)
+    	for(j = 0; j < MAX_LENGTH; j++)
+      		external_vars[i][j] = '\0';
  
   for( i = 0; i < declared_vars; i++){
     strcpy(tmpstr ,declare_vars[i]);
@@ -271,10 +253,7 @@ int main(int argc, char **argv)
     strcpy(dd_truncated_statements[dd_truncated_number],tmp);
     dd_truncated_number++;
     
-  }  
-  for (i = 0; i < unique_real_vars; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      external_vars[i][j] = '\0';
+  }   
   
   for(i = 0; i < unique_real_vars; i++){
     found = 0;
@@ -288,7 +267,6 @@ int main(int argc, char **argv)
     else strcpy(external_vars[external_unique_vars++] , real_unique_vars[i]);
     
   }
-
 
     print_output(statements,statement_number);
 	print_output(tokens,total_tokens);
@@ -309,8 +287,6 @@ int main(int argc, char **argv)
   fprintf(stdout, "\n Total External(required) Variable(s) = %d \n",external_unique_vars);
   
   fprintf(stdout, "\n");
-  
-  
   
   return 0;
 }
