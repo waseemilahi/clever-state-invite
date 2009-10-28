@@ -8,6 +8,6 @@
 
 # define MAX_LENGTH 256
 
-int findsubstr(char *string , char *substring);
+extern int findsubstr(char *string , char *substring);
 
 #endif
