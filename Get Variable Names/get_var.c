@@ -13,6 +13,59 @@ int main(int argc, char **argv)
   char tokens[MAX_LENGTH][MAX_LENGTH];
   int total_tokens = 0;
 
+  char global_constants[MAX_LENGTH][MAX_LENGTH];
+  char global_variables[MAX_LENGTH][MAX_LENGTH];
+
+  const char delimeters[] = "";
+  char *running;
+  char *token;
+  char *tmpt;
+  char token_statements[total_tokens][MAX_LENGTH];
+  int t_statements_number = 0;
+  char truncated_statements[t_statements_number][MAX_LENGTH];
+  
+  int truncated_number = 0;
+  char *tmp;
+  char tmpstr[MAX_LENGTH];
+  int d_truncated_number = 0;
+  int d_statements_number = 0;
+  char d_truncated_statements[d_statements_number][MAX_LENGTH];
+  char declare_vars[MAX_LENGTH][MAX_LENGTH];
+  
+  int declared_vars = 0;
+  
+  const char delim[] = " ,*";
+ 
+  
+  int t = 0 ;
+  const char del[] = "=";  
+
+  int total_real_vars = 0;
+  
+  char real_vars[total_real_vars][MAX_LENGTH];
+  char *pp;
+
+  char declare_statements[total_tokens][MAX_LENGTH];
+
+  char all_vars[MAX_LENGTH][MAX_LENGTH];
+  
+  int total_vars = 0;
+  
+  const char delims[] = "=-+*/% \\\"\'";
+ int unique_real_vars = 0;
+  int found = 0;
+  
+  char real_unique_vars[total_real_vars][MAX_LENGTH];
+  
+  char dd_truncated_statements[declared_vars][MAX_LENGTH];
+  int dd_truncated_number = 0;
+  
+  const char de[] = "[]";
+  
+  char external_vars[unique_real_vars][MAX_LENGTH];
+  
+  int external_unique_vars = 0;
+ 
   if(argc != 2){
     fprintf(stderr, "\n Usage: get_var file_name.\n\n");
     exit(1);
@@ -21,6 +74,8 @@ int main(int argc, char **argv)
   for(i =0; i < MAX_LENGTH; i++)
     for(j =0; j < MAX_LENGTH; j++){
       statements[i][j] = '\0';
+      global_variables[i][j]='\0';
+      global_constants[i][j]='\0';
       tokens[i][j] = '\0';
     }
 
@@ -123,9 +178,6 @@ int main(int argc, char **argv)
 	statements[i][k] = '\0';
   }
   */
-  const char delimeters[] = "";
-  char *running;
-  char *token;
   
   for(i = 0; i <  statement_number; i++){
     
@@ -134,7 +186,7 @@ int main(int argc, char **argv)
     token = strtok(running , delimeters);
     while(token != NULL){
       
-      char *tmpt = token;
+      tmpt = token;
       if(token != NULL){
 	while(*tmpt != '\0'){
 	  sprintf(tokens[total_tokens],"%s%c",tokens[total_tokens],*tmpt);
@@ -146,14 +198,9 @@ int main(int argc, char **argv)
     }
   }
   
-  char token_statements[total_tokens][MAX_LENGTH];
   for (i = 0; i < total_tokens; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       token_statements[i][j] = '\0';
-  int t_statements_number = 0;
-  
-  int d_statements_number = 0;
-  char declare_statements[total_tokens][MAX_LENGTH];
   
   for (i = 0; i < total_tokens; i++)
     for(j = 0; j < MAX_LENGTH; j++)
@@ -175,14 +222,10 @@ int main(int argc, char **argv)
     }
   }
   
-  char truncated_statements[t_statements_number][MAX_LENGTH];
   for (i = 0; i < t_statements_number; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       truncated_statements[i][j] = '\0';
-  
-  int truncated_number = 0;
-  char *tmp;
-  char tmpstr[MAX_LENGTH];
+
   for(i = 0; i < MAX_LENGTH; i++)
     tmpstr[i] = '\0';
   
@@ -197,14 +240,10 @@ int main(int argc, char **argv)
     }
   }  
   
-  char all_vars[MAX_LENGTH][MAX_LENGTH];
   for (i = 0; i < MAX_LENGTH; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       all_vars[i][j] = '\0';
   
-  int total_vars = 0;
-  
-  const char delims[] = "=-+*/% \\\"\'";
   
   for(i = 0; i < truncated_number; i++){
     
@@ -213,7 +252,7 @@ int main(int argc, char **argv)
     token = strtok(running , delims);
     while(token != NULL){
       
-      char *tmpt = token;
+      tmpt = token;
       if(token != NULL){
 	while(*tmpt != '\0'){
 	  sprintf(all_vars[total_vars],"%s%c",all_vars[total_vars],*tmpt);
@@ -225,15 +264,10 @@ int main(int argc, char **argv)
     }
   }
   
-  char d_truncated_statements[d_statements_number][MAX_LENGTH];
   for (i = 0; i < d_statements_number; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       d_truncated_statements[i][j] = '\0';
   
-  int d_truncated_number = 0;
-  
-  int t = 0 ;
-  const char del[] = "=";
   for( i = 0; i < d_statements_number; i++){
     strcpy(tmpstr ,declare_statements[i]);
     tmp = strtok(tmpstr,del);t =0;
@@ -242,15 +276,10 @@ int main(int argc, char **argv)
     d_truncated_number++;
     
   }  
-  
-  char declare_vars[MAX_LENGTH][MAX_LENGTH];
+
   for (i = 0; i < MAX_LENGTH; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       declare_vars[i][j] = '\0';
-  
-  int declared_vars = 0;
-  
-  const char delim[] = " ,*";
   
   
   for(i = 0; i < d_truncated_number; i++){
@@ -262,7 +291,7 @@ int main(int argc, char **argv)
       if( (strcmp(token , "int") != 0) && (strcmp(token , "char") != 0) && (strcmp(token , "float") != 0)
 	  &&(strcmp(token , "double") != 0) && (strcmp(token , "long") != 0) && (strcmp(token , "short") != 0)
 	  &&(strcmp(token , "struct") != 0) &&(strcmp(token , "*") != 0)   ){
-	char *tmpt = token;
+	tmpt = token;
 	if(token != NULL){
 	  while(*tmpt != '\0'){
 	    sprintf(declare_vars[declared_vars],"%s%c",declare_vars[declared_vars],*tmpt);
@@ -275,8 +304,6 @@ int main(int argc, char **argv)
       token = strtok(NULL,delim);
     }
   }  
-  
-  int total_real_vars = 0;
   
   for (i = 0; i < total_vars; i++){
     for(j = 0; j < MAX_LENGTH; j++){
@@ -291,12 +318,11 @@ int main(int argc, char **argv)
     }
   }
   
-  char real_vars[total_real_vars][MAX_LENGTH];
   for (i = 0; i < total_real_vars; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       real_vars[i][j] = '\0';
   
-  char *pp;
+  
   k = 0;
   for(i = 0 ; i < total_vars; i++){
     pp = all_vars[i];
@@ -313,10 +339,7 @@ int main(int argc, char **argv)
     }
   }
   
-  int unique_real_vars = 0;
-  int found = 0;
-  
-  char real_unique_vars[total_real_vars][MAX_LENGTH];
+ 
   for (i = 0; i < total_real_vars; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       real_unique_vars[i][j] = '\0';
@@ -333,15 +356,12 @@ int main(int argc, char **argv)
     else strcpy(real_unique_vars[unique_real_vars++] , real_vars[i]);
     
   }
-  
-  char dd_truncated_statements[declared_vars][MAX_LENGTH];
+ 
   for (i = 0; i < declared_vars; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       dd_truncated_statements[i][j] = '\0';
   
-  int dd_truncated_number = 0;
-  
-  const char de[] = "[]";
+ 
   for( i = 0; i < declared_vars; i++){
     strcpy(tmpstr ,declare_vars[i]);
     tmp = strtok(tmpstr,de);
@@ -350,13 +370,9 @@ int main(int argc, char **argv)
     dd_truncated_number++;
     
   }  
-  
-  char external_vars[unique_real_vars][MAX_LENGTH];
   for (i = 0; i < unique_real_vars; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       external_vars[i][j] = '\0';
-  
-  int external_unique_vars = 0;
   
   for(i = 0; i < unique_real_vars; i++){
     found = 0;
