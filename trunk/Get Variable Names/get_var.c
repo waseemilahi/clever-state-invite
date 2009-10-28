@@ -3,12 +3,9 @@
 
 int main(int argc, char **argv)
 {
-
-  int ch;
-  FILE *input;
-  char line[MAX_LENGTH];
+  
   int i,j,k;
-  int statement_number = 0;
+  int statement_number;
   char statements[MAX_LENGTH][MAX_LENGTH];
   char tokens[MAX_LENGTH][MAX_LENGTH];
   int total_tokens = 0;
@@ -20,16 +17,16 @@ int main(int argc, char **argv)
   char *running;
   char *token;
   char *tmpt;
-  char token_statements[total_tokens][MAX_LENGTH];
+  
   int t_statements_number = 0;
-  char truncated_statements[t_statements_number][MAX_LENGTH];
+  
   
   int truncated_number = 0;
   char *tmp;
   char tmpstr[MAX_LENGTH];
   int d_truncated_number = 0;
   int d_statements_number = 0;
-  char d_truncated_statements[d_statements_number][MAX_LENGTH];
+  
   char declare_vars[MAX_LENGTH][MAX_LENGTH];
   
   int declared_vars = 0;
@@ -79,97 +76,8 @@ int main(int argc, char **argv)
       tokens[i][j] = '\0';
     }
 
-  for(i = 0; i < MAX_LENGTH; i++)
-    line[i] = '\0';
-  
-  if((input = fopen( argv[1], "r" )) == NULL)
-    {
-      fprintf(stderr, "\n File Could not be opened for reading. \n\n");
-      exit(1);
-    }
- 
-  ch = getc( input );
-  while( ch != EOF ) {
+ statement_number = get_input(statements,argv[1]);
 
-    if(ch == '\n'){
-      ch = getc(input);
-      continue;
-    }
-
-    if(ch == '#'){
-      while(1){
-	ch = getc( input );
-	if(ch == '\n'){
-	  ch = getc(input);
-	  break;
-	}
-      }
-      continue;
-    }
-
-    if(ch == '/'){
-      ch = getc(input);
-      if( ch  == '/'){
-	while(1){
-	  ch = getc( input );
-	  if(ch == '\n'){
-	    ch = getc(input);
-	    break;
-	  }
-	}
-     	continue;
-      }
-      else if( ch  == '*'){
-	while(1){
-	  ch = getc( input );
-	  if(ch == '*'){
-	    if( (ch = getc(input)) == '/'){
-	      ch = getc(input);
-	      break;
-	    }
-	  }
-	}
-	continue;
-      }
-    }
-    
-    if(ch == '\t'){
-      ch = getc(input);
-      continue;
-    }
-    
-    if(ch == '"'){
-      while(1){
-	ch = getc( input );
-	if(ch == '"'){
-	  ch = getc(input);
-	  break;
-	}
-      }
-      continue;
-    }
-    
-    
-    if( (ch == '}') || (ch == ',') || (ch == '{') || (ch == ';') ){
-      
-      if(statement_number >= MAX_LENGTH)break;
-      
-      strcpy(statements[statement_number] , line);
-      
-      statement_number ++;
-      
-      for(i = 0; i < MAX_LENGTH; i++)
-	line[i] = '\0';
-      
-      ch = getc( input );
-	       
-      continue;
-    }
-
-    line[strlen(line)] = ch;
-    
-    ch = getc( input );
-  }
   /*
 
   for(i = 0; i < MAX_LENGTH; i++){
@@ -198,6 +106,8 @@ int main(int argc, char **argv)
     }
   }
   
+	char token_statements[total_tokens][MAX_LENGTH];
+
   for (i = 0; i < total_tokens; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       token_statements[i][j] = '\0';
@@ -214,13 +124,16 @@ int main(int argc, char **argv)
       d_statements_number++;
     }
   }
-  
+
+ 
   for(i = 0; i < total_tokens; i++){
     if( (findsubstr(tokens[i] , "=")) == 1){
       strcpy(token_statements[t_statements_number] , tokens[i]);
       t_statements_number++;
     }
   }
+
+	char truncated_statements[t_statements_number][MAX_LENGTH];
   
   for (i = 0; i < t_statements_number; i++)
     for(j = 0; j < MAX_LENGTH; j++)
@@ -228,7 +141,8 @@ int main(int argc, char **argv)
 
   for(i = 0; i < MAX_LENGTH; i++)
     tmpstr[i] = '\0';
-  
+
+   print_output(token_statements,t_statements_number);
   /* We have all the '=' statements. Lets remove the left hand side of each. */
   for( i = 0; i < t_statements_number; i++){
     strcpy(tmpstr ,token_statements[i]);
@@ -239,6 +153,7 @@ int main(int argc, char **argv)
       truncated_number++;
     }
   }  
+
   
   for (i = 0; i < MAX_LENGTH; i++)
     for(j = 0; j < MAX_LENGTH; j++)
@@ -264,6 +179,8 @@ int main(int argc, char **argv)
     }
   }
   
+	char d_truncated_statements[d_statements_number][MAX_LENGTH];
+
   for (i = 0; i < d_statements_number; i++)
     for(j = 0; j < MAX_LENGTH; j++)
       d_truncated_statements[i][j] = '\0';
@@ -432,7 +349,7 @@ int main(int argc, char **argv)
   
   fprintf(stdout, "\n");
   
-  fclose(input);
+  
   
   return 0;
 }
