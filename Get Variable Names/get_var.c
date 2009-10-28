@@ -42,20 +42,7 @@ int main(int argc, char **argv)
   	const char del[] = "=";  
 	const char delims[] = "=-+*/% \\\"\'";
 	char *pp;
-	const char de[] = "[]";
-	  
- 
-  
-  
-  
-  
-  
-  
-  
-  
-  
- 
-  
+	const char de[] = "[]";  
 
   for(i =0; i < MAX_LENGTH; i++)
     for(j =0; j < MAX_LENGTH; j++){
@@ -303,42 +290,18 @@ int main(int argc, char **argv)
   }
 
 
-    for(i = 0; i < statement_number; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(statements[i]),statements[i]);
-  
+    print_output(statements,statement_number);
+	print_output(tokens,total_tokens);
+	print_output(token_statements,t_statements_number);
+	print_output(truncated_statements,t_statements_number);
+   	print_output(all_vars,total_vars);
+	print_output(real_vars,total_real_vars);
+    print_output(declare_vars,declared_vars);
+    print_output(dd_truncated_statements,dd_truncated_number);
+   	print_output(real_unique_vars,unique_real_vars);
 
-
-    for(i = 0; i < total_tokens; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(tokens[i]),tokens[i]);
-    
-    for(i = 0; i < t_statements_number; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(token_statements[i]),token_statements[i]);
-    
-    for(i = 0; i < t_statements_number; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(truncated_statements[i]),truncated_statements[i]);
-    
-    for(i = 0; i < total_vars; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(all_vars[i]),all_vars[i]);
-    
-    for(i = 0; i < total_real_vars; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(real_vars[i]),real_vars[i]);
-    
-    for(i = 0; i < declared_vars; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(declare_vars[i]),declare_vars[i]);
-
-
-    for(i = 0; i < dd_truncated_number; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(dd_truncated_statements[i]),dd_truncated_statements[i]);
-
-    for(i = 0; i < unique_real_vars; i++ )
-    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(real_unique_vars[i]),real_unique_vars[i]);
-
-
-  fprintf(stdout, "\n\n --------------------------------------\n\n");
-
-
-  
-  fprintf(stdout, "\n");
+  	fprintf(stdout, "\n\n --------------------------------------\n\n");
+  	fprintf(stdout, "\n");
   
   for(i = 0; i < external_unique_vars; i++ )
     fprintf(stdout, "%d: %s  \n\n",i+1,external_vars[i]);
