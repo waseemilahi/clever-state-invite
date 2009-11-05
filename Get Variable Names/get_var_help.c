@@ -1,7 +1,7 @@
 #include "get_var.h"
 
 
-/* The Find Substring Function. */
+/* The Find Substring Function. (acquired from an online forum*/
 int findsubstr( char *str, char *substr)
 {
   if ( !*substr )
@@ -31,18 +31,22 @@ int findsubstr( char *str, char *substr)
 int get_input(char (*statements)[MAX_LENGTH], char *filename)
 {
 	char ch;
+	int brace = 0;
 	int i;
 	char line[MAX_LENGTH];
+	char d_line[MAX_LENGTH];
 	int statement_number = 0;
 	FILE *input;
 
- for(i = 0; i < MAX_LENGTH; i++)
+ for(i = 0; i < MAX_LENGTH; i++){
+	d_line[i] = '\0';
     line[i] = '\0';
+}
   
   if((input = fopen( filename, "r" )) == NULL)
     {
       fprintf(stderr, "\n File Could not be opened for reading. \n\n");
-      exit(1);
+      return -1;
     }
 
 	ch = getc( input );
@@ -55,15 +59,28 @@ int get_input(char (*statements)[MAX_LENGTH], char *filename)
 	    }
 
 	    if(ch == '#'){
-	      while(1){
-		ch = getc( input );
-		if(ch == '\n'){
-		  ch = getc(input);
-		  break;
+			line[strlen(line)] = ch;
+	      while(ch != '\n'){
+			ch = getc( input );  
+			line[strlen(line)] = ch;
+		  }
+		  if(findsubstr(line,"define")==1){
+		  
+			if(statement_number >= MAX_LENGTH)break;
+      
+			strcpy(statements[statement_number] , line);
+      
+			statement_number ++;
+      
+			
+		  }
+		  for(i = 0; i < MAX_LENGTH; i++)
+				line[i] = '\0';
+      
+      ch = getc( input );
+      
+		   continue;
 		}
-      }
-      continue;
-    }
 
     if(ch == '/'){
       ch = getc(input);
@@ -107,11 +124,28 @@ int get_input(char (*statements)[MAX_LENGTH], char *filename)
       continue;
     }
     
+	if(ch == '{')brace++;
     
-    if( (ch == '}') || (ch == '{') || (ch == ';') ){
-      
+    if( (ch == '}') || (ch == ';') ){
+		if(ch == '}')brace--;
+		if( brace != 0){		
+			line[strlen(line)] = ch;
+			ch = getc( input );
+			continue;
+		}
+		
+		if(ch == ';'){
+			if((findsubstr(line,"(") == 1) && (findsubstr(line, "=") == 0)){
+				for(i = 0; i < MAX_LENGTH; i++)
+					line[i] = '\0';
+					
+				ch = getc( input );
+				continue;
+			}
+		}
+		
       if(statement_number >= MAX_LENGTH)break;
-      
+      line[strlen(line)] = ch;
       strcpy(statements[statement_number] , line);
       
       statement_number ++;

@@ -24,14 +24,16 @@ int main(int argc, char **argv)
   	int found = 0;
 	int dd_truncated_number = 0;
 	int external_unique_vars = 0;
+	int total_constants = 0;
+	int total_globals = 0;
 
   	char statements[MAX_LENGTH][MAX_LENGTH];
   	char tokens[MAX_LENGTH][MAX_LENGTH];
   	char declare_vars[MAX_LENGTH][MAX_LENGTH];
 	char all_vars[MAX_LENGTH][MAX_LENGTH];
   	char global_constants[MAX_LENGTH][MAX_LENGTH];
-  	char global_variables[MAX_LENGTH][MAX_LENGTH];
-	
+  	GlobalVars global_variables[MAX_LENGTH];
+	char declared_functions[MAX_LENGTH][MAX_LENGTH];
 
   	const char delimeters[] = "";
   	char *running;
@@ -43,7 +45,13 @@ int main(int argc, char **argv)
   	const char del[] = "=";  
 	const char delims[] = "=-+*/% \\\"\'";
 	char *pp;
-	const char de[] = "[]";  
+	const char de[] = "[];";  
+	
+	for(i = 0; i < MAX_LENGTH; i++){
+		strcpy(global_variables[i].type, "");
+		strcpy(global_variables[i].vars ,"");
+	}
+	
 
 	for(i =0; i < MAX_LENGTH; i++)
     	for(j =0; j < MAX_LENGTH; j++){
@@ -51,12 +59,91 @@ int main(int argc, char **argv)
 			tokens[i][j] = '\0';
 			declare_vars[i][j] = '\0';
 			all_vars[i][j] = '\0';
-      		global_constants[i][j]='\0';
-      		global_variables[i][j]='\0';
+      		global_constants[i][j]='\0';      		
+			declared_functions[i][j]='\0';
     	}
 
 	/* Get the input from the file. */
  	statement_number = get_input(statements,argv[1]);
+	
+	
+	
+	if(statement_number == -1)exit(1);
+	
+	for(i = 0; i < statement_number; i++){
+		if( (findsubstr(statements[i],"define") == 1)){
+			running = strdup(statements[i]);
+			token = strtok(running , " ");
+			token = strtok(NULL , " ");
+			token = strtok(NULL , " ");
+			tmpt = token;
+			if(token != NULL){
+				while(*tmpt != '\0'){
+					sprintf(global_constants[total_constants],"%s%c",global_constants[total_constants],*tmpt);
+					
+					tmpt++;
+				}
+			}
+			total_constants++;
+			strcpy(statements[i],"\0");
+		}
+		else if(findsubstr(statements[i],"{") == 0){
+		
+			running = strdup(statements[i]);
+			token = strtok(running , " ;");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+			int tmpy = 0;
+				while(*tmpt != '\0'){
+					global_variables[total_globals].type[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}			
+			
+			token = strtok(NULL , " ;");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+			int tmpy = 0;
+				while(*tmpt != '\0'){
+					global_variables[total_globals].vars[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}
+			total_globals++;
+			strcpy(statements[i],"\0");
+		}
+		
+	}
+		
+	for( i = 0 ; i < statement_number; i++){
+		if((  ((findsubstr(statements[i] , "int")) == 1) || ((findsubstr(statements[i] , "float")) == 1) || ((findsubstr(statements[i] , "double")) == 1)
+	  ||((findsubstr(statements[i] , "char")) == 1) || ((findsubstr(statements[i] , "long")) == 1) ||((findsubstr(statements[i] , "void")) == 1)
+	  || ((findsubstr(statements[i] , "short")) == 1)
+	  ||((findsubstr(statements[i] , "struct")) == 1)		) &&(((findsubstr(statements[i] , "(")) == 1) &&((findsubstr(statements[i] , ")")) == 1))){
+				 running = strdup(statements[i]);
+   // fprintf(stdout, "\n %s \n",running);
+    token = strtok(running , "(");
+	if((token!=NULL) && (strcmp(token,"struct")))token = strtok(NULL,"(");
+	//token = strtok(NULL," ");
+	tmpt = token;
+	//fprintf(stdout, "\n %s \n",token);
+	if(token != NULL){
+	  while(*tmpt != '\0'){
+	    sprintf(declared_functions[i],"%s%c",declared_functions[i],*tmpt);
+	    tmpt++;
+	  }
+	  
+	}
+	  }
+			
+}
+			
   
   for(i = 0; i <  statement_number; i++){
     
@@ -269,6 +356,8 @@ int main(int argc, char **argv)
   }
 
     print_output(statements,statement_number);
+	print_output(global_constants, total_constants);
+	/*
 	print_output(tokens,total_tokens);
 	print_output(token_statements,t_statements_number);
 	print_output(truncated_statements,t_statements_number);
@@ -277,6 +366,7 @@ int main(int argc, char **argv)
     print_output(declare_vars,declared_vars);
     print_output(dd_truncated_statements,dd_truncated_number);
    	print_output(real_unique_vars,unique_real_vars);
+	*/
 
   	fprintf(stdout, "\n\n --------------------------------------\n\n");
   	fprintf(stdout, "\n");

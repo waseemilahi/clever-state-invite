@@ -4,6 +4,11 @@
 # include <stdlib.h>
 # include <string.h>
 
+       #      define     Global_Variable      1
+	   
+     int xx;
+double     xy;
+
 int first(int a, double b, char c);
 void second(int a, double b, char c);
 
