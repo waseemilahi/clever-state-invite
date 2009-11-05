@@ -6,7 +6,7 @@
 # include <string.h>
 # include <stddef.h>
 
-# define MAX_LENGTH 65536
+# define MAX_LENGTH 2048
 
 typedef struct globals {
 	char type[1024];
