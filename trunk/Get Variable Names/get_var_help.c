@@ -190,8 +190,7 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
 				token = strtok(NULL," *(");
 			}
 			tmpt = token;
-		fprintf(stdout, "\n %s \n",token);
-		
+				
 			if(token != NULL){
 				int tmpy = 0;
 			while(*tmpt != '\0'){
