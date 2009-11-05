@@ -167,3 +167,80 @@ fclose(input);
 return statement_number;
 }
 
+
+int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVars global_variables[], int statement_number)
+{
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;
+	int total_globals = 0;
+	
+	for(i = 0; i < statement_number; i++){
+		if((findsubstr(statements[i],"{") == 0) && (strlen(statements[i]) > 2)){
+		
+			running = strdup(statements[i]);
+			token = strtok(running , " ;");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+			int tmpy = 0;
+				while(*tmpt != '\0'){
+					global_variables[total_globals].type[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}			
+			
+			token = strtok(NULL , " ;");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+			int tmpy = 0;
+				while(*tmpt != '\0'){
+					global_variables[total_globals].vars[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}
+			total_globals++;
+			strcpy(statements[i],"\0");
+		}
+		
+	}
+	return total_globals;
+}
+
+int set_global_constants(char (*statements)[MAX_LENGTH],char (*global_constants)[MAX_LENGTH], int statement_number)
+{
+	int total_constants = 0;	
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;
+	
+	for(i = 0; i < statement_number; i++){
+		if( (findsubstr(statements[i],"define") == 1)  && (strlen(statements[i]) > 2)){
+			running = strdup(statements[i]);
+			token = strtok(running , " ");
+			token = strtok(NULL , " ");
+			token = strtok(NULL , " ");
+			tmpt = token;
+			if(token != NULL){
+				while(*tmpt != '\0'){
+					sprintf(global_constants[total_constants],"%s%c",global_constants[total_constants],*tmpt);
+					
+					tmpt++;
+				}
+			}
+			total_constants++;
+			strcpy(statements[i],"\0");
+		}
+	}
+	
+	return total_constants;
+	
+
+}
