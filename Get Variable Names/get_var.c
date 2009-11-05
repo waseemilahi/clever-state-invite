@@ -26,6 +26,7 @@ int main(int argc, char **argv)
 	int external_unique_vars = 0;
 	int total_constants = 0;
 	int total_globals = 0;
+	int total_functions = 0;
 
   	char statements[MAX_LENGTH][MAX_LENGTH];
   	char tokens[MAX_LENGTH][MAX_LENGTH];
@@ -33,7 +34,6 @@ int main(int argc, char **argv)
 	char all_vars[MAX_LENGTH][MAX_LENGTH];
   	char global_constants[MAX_LENGTH][MAX_LENGTH];
   	GlobalVars global_variables[MAX_LENGTH];
-	Functions function_list[MAX_LENGTH];
 	char function_names[MAX_LENGTH][MAX_LENGTH];
 
   	const char delimeters[] = "";
@@ -71,9 +71,12 @@ int main(int argc, char **argv)
 	total_constants = set_global_constants(statements,global_constants,statement_number);
 	total_globals = set_global_variables(statements,global_variables,statement_number);
 
+	for(i = 0; i < statement_number; i++)
+		if(strlen(statements[i]) > 2)total_functions++;
 		
-		
-		
+	Functions function_list[total_functions];
+	
+	//Set the Functions list so that name has name and definition has the entire code.......
 		
 		
 		
