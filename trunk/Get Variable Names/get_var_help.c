@@ -167,6 +167,47 @@ fclose(input);
 return statement_number;
 }
 
+/* Set the function names and their definitions. */
+int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int statement_number)
+{	
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;
+	int function_number = 0;
+
+	for( i = 0 ; i < statement_number; i++){
+		
+		if(strlen(statements[i]) > 5){
+		
+			running = strdup(statements[i]);
+   
+			token = strtok(running , " *(");
+			if(token != NULL)
+				if(strcmp(token,"struct") == 0)
+					token = strtok(NULL , " *(");
+			if(token != NULL){
+				token = strtok(NULL," *(");
+			}
+			tmpt = token;
+		fprintf(stdout, "\n %s \n",token);
+		
+			if(token != NULL){
+				int tmpy = 0;
+			while(*tmpt != '\0'){
+				function_list[function_number].name[tmpy]=*tmpt;
+				strcpy(function_list[function_number].definition,statements[i]);
+				tmpt++;
+				tmpy++;
+			}
+	  
+			}
+			function_number++;
+		}
+		
+	}
+	return function_number;
+}
 
 int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVars global_variables[], int statement_number)
 {

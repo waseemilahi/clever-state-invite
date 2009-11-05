@@ -21,3 +21,17 @@ void print_global_vars(GlobalVars g_vars[], int total)
 
 return ;
 }
+
+
+void print_functions(Functions func_list[], int total)
+{
+	int i;
+	
+	for(i = 0; i < total; i++){
+		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(func_list[i].name),func_list[i].name);
+		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(func_list[i].definition),func_list[i].definition);
+	}
+
+return ;
+}
+
