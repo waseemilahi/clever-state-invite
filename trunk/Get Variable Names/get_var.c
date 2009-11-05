@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 	char all_vars[MAX_LENGTH][MAX_LENGTH];
   	char global_constants[MAX_LENGTH][MAX_LENGTH];
   	GlobalVars global_variables[MAX_LENGTH];
-	char declared_functions[MAX_LENGTH][MAX_LENGTH];
+	char function_names[MAX_LENGTH][MAX_LENGTH];
 
   	const char delimeters[] = "";
   	char *running;
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 			declare_vars[i][j] = '\0';
 			all_vars[i][j] = '\0';
       		global_constants[i][j]='\0';      		
-			declared_functions[i][j]='\0';
+			function_names[i][j]='\0';
     	}
 
 	/* Get the input from the file. */
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 	//fprintf(stdout, "\n %s \n",token);
 	if(token != NULL){
 	  while(*tmpt != '\0'){
-	    sprintf(declared_functions[i],"%s%c",declared_functions[i],*tmpt);
+	    sprintf(function_names[i],"%s%c",function_names[i],*tmpt);
 	    tmpt++;
 	  }
 	  
