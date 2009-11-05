@@ -87,6 +87,28 @@ int main(int argc, char **argv)
 		
 	function_number = set_functions(statements,function_list,statement_number);
 	
+	char funcs[MAX_LENGTH];
+	int function_found = 0;
+	for(i = 0; i < MAX_LENGTH; i++)funcs[i] = '\0';
+	while(1){
+		function_found = 0;
+		fprintf(stdout,"\n Please enter the name of the Function/Test you want to check: ");
+		fscanf(stdin,"%s", funcs);
+		fprintf(stdout, "\n");
+		
+		for(i = 0; i < function_number; i++){
+			if(strcmp(funcs,function_list[i].name) == 0){
+				function_found = 1;
+				fprintf(stdout,"\n Function Found. Processing...... \n ");
+				//Do the stuff here...............
+			}
+		}
+		if(function_found == 0){
+			fprintf(stderr,"\n No Such Function/Test in this File. \n");
+			fprintf(stdout," Try Again!\n");
+		}
+	}
+	
 	//------------------------------------------------------------------------------------------------------------------
 	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.
 	
