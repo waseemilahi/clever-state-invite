@@ -199,7 +199,7 @@ int main(int argc, char **argv)
   for(i = 0; i < MAX_LENGTH; i++)
     tmpstr[i] = '\0';
 
-   print_output(token_statements,t_statements_number);
+  
   /* We have all the '=' statements. Lets remove the left hand side of each. */
   for( i = 0; i < t_statements_number; i++){
     strcpy(tmpstr ,token_statements[i]);
