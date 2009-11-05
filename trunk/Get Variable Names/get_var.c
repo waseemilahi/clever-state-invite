@@ -51,9 +51,7 @@ int main(int argc, char **argv)
 	for(i = 0; i < MAX_LENGTH; i++){
 		strcpy(global_variables[i].type, "");
 		strcpy(global_variables[i].vars ,"");
-		strcpy(function_list[i].name, "");
-		strcpy(function_list[i].definition, "");
-	
+			
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
 			tokens[i][j] = '\0';
@@ -72,12 +70,45 @@ int main(int argc, char **argv)
 	total_globals = set_global_variables(statements,global_variables,statement_number);
 
 	for(i = 0; i < statement_number; i++)
-		if(strlen(statements[i]) > 2)total_functions++;
-		
+		if(strlen(statements[i]) > 5)total_functions++;
+			
+	if(total_functions == 0){
+		fprintf(stderr, "\n No Function Definitions in the File. \n");
+		exit(1);
+	}	
+			
 	Functions function_list[total_functions];
 	
+	for(i = 0; i < total_functions; i++){
+		strcpy(function_list[i].name, "");
+		strcpy(function_list[i].definition, "");
+	}
+	
 	//Set the Functions list so that name has name and definition has the entire code.......
+	
+	for( i = 0 ; i < statement_number; i++){
 		
+			running = strdup(statements[i]);
+   
+			token = strtok(running , " *");
+			if(token != NULL)
+				if(strcmp(token,"struct") == 0)
+					token = strtok(running , " *");
+			if(token != NULL){
+				token = strtok(NULL," *");
+			}
+			tmpt = token;
+		fprintf(stdout, "\n %s \n",token);
+		
+			if(token != NULL){
+			while(*tmpt != '\0'){
+				//sprintf(function_names[i],"%s%c",function_names[i],*tmpt);
+				tmpt++;
+			}
+	  
+			}
+		
+	}
 		
 		
 	for( i = 0 ; i < statement_number; i++){
