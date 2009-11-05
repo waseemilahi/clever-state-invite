@@ -8,6 +8,11 @@
 
 # define MAX_LENGTH 256
 
+typedef struct globals {
+	char type[1024];
+	char vars[1024];
+}GlobalVars;
+
 extern int findsubstr(char *string , char *substring);
 extern int get_input(char (*statements)[MAX_LENGTH], char *filename);
 extern void print_output(char (*strings)[MAX_LENGTH], int string_number);
