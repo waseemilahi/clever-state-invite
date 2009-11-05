@@ -6,12 +6,17 @@
 # include <string.h>
 # include <stddef.h>
 
-# define MAX_LENGTH 256
+# define MAX_LENGTH 65536
 
 typedef struct globals {
 	char type[1024];
 	char vars[1024];
 }GlobalVars;
+
+typedef struct funcs{
+	char name[1024];
+	char definition[MAX_LENGTH];
+}Functions;
 
 extern int findsubstr(char *string , char *substring);
 extern int get_input(char (*statements)[MAX_LENGTH], char *filename);
