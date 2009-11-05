@@ -64,12 +64,62 @@ int main(int argc, char **argv)
     	}
 
 	/* Get the input from the file. */
- 	if((statement_number = get_input(statements,argv[1])) == -1)exit(1);
+ 	statement_number = get_input(statements,argv[1]);
 	
-	/* Set the Global Constants and Variables. */
-	total_constants = set_global_constants(statements,global_constants,statement_number);
-	total_globals = set_global_variables(statements,global_variables,statement_number);
-
+	
+	
+	if(statement_number == -1)exit(1);
+	
+	for(i = 0; i < statement_number; i++){
+		if( (findsubstr(statements[i],"define") == 1)){
+			running = strdup(statements[i]);
+			token = strtok(running , " ");
+			token = strtok(NULL , " ");
+			token = strtok(NULL , " ");
+			tmpt = token;
+			if(token != NULL){
+				while(*tmpt != '\0'){
+					sprintf(global_constants[total_constants],"%s%c",global_constants[total_constants],*tmpt);
+					
+					tmpt++;
+				}
+			}
+			total_constants++;
+			strcpy(statements[i],"\0");
+		}
+		else if(findsubstr(statements[i],"{") == 0){
+		
+			running = strdup(statements[i]);
+			token = strtok(running , " ;");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+			int tmpy = 0;
+				while(*tmpt != '\0'){
+					global_variables[total_globals].type[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}			
+			
+			token = strtok(NULL , " ;");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+			int tmpy = 0;
+				while(*tmpt != '\0'){
+					global_variables[total_globals].vars[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}
+			total_globals++;
+			strcpy(statements[i],"\0");
+		}
+		
+	}
 		
 	for( i = 0 ; i < statement_number; i++){
 		if((  ((findsubstr(statements[i] , "int")) == 1) || ((findsubstr(statements[i] , "float")) == 1) || ((findsubstr(statements[i] , "double")) == 1)
