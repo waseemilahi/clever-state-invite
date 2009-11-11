@@ -195,11 +195,12 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
 				int tmpy = 0;
 			while(*tmpt != '\0'){
 				function_list[function_number].name[tmpy]=*tmpt;
-				strcpy(function_list[function_number].definition,statements[i]);
 				tmpt++;
 				tmpy++;
 			}
-	  
+			
+			strcpy(function_list[function_number].definition,statements[i]);
+			
 			}
 			function_number++;
 		}
