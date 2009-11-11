@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stddef.h>
+# include <ctype.h>
 
 # define MAX_NUMBER 128
 # define MAX_LENGTH 2048
