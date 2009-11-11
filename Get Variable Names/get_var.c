@@ -88,13 +88,22 @@ int main(int argc, char **argv)
 	function_number = set_functions(statements,function_list,statement_number);
 	
 	char funcs[MAX_LENGTH];
+	char lower[MAX_LENGTH];
 	int function_found = 0;
-	for(i = 0; i < MAX_LENGTH; i++)funcs[i] = '\0';
+	for(i = 0; i < MAX_LENGTH; i++)
+	  {
+	    lower[i] = '\0';
+	    funcs[i] = '\0';
+	  }
 	while(1){
 		function_found = 0;
-		fprintf(stdout,"\n Please enter the name of the Function/Test you want to check: ");
+		fprintf(stdout,"\n Please enter the name of the Function/Test you want to check or type quit to exit: ");
 		fscanf(stdin,"%s", funcs);
 		fprintf(stdout, "\n");
+
+		for(i = 0; i < strlen(funcs); i++)lower[i] = tolower(funcs[i]);
+
+		if(strcmp("quit",lower) == 0)fprintf(stdout,"\n Exiting......\n\n");
 		
 		for(i = 0; i < function_number; i++){
 			if(strcmp(funcs,function_list[i].name) == 0){
@@ -107,8 +116,14 @@ int main(int argc, char **argv)
 			fprintf(stderr,"\n No Such Function/Test in this File. \n");
 			fprintf(stdout," Try Again!\n");
 		}
+
+		for(i = 0; i < MAX_LENGTH; i++){
+		  lower[i] = '\0';
+		  funcs[i] = '\0';
+		}
+
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------
 	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.
 	
@@ -372,4 +387,3 @@ int main(int argc, char **argv)
   fprintf(stdout, "\n");
   
   return 0;
-}
