@@ -103,8 +103,11 @@ int main(int argc, char **argv)
 
 		for(i = 0; i < strlen(funcs); i++)lower[i] = tolower(funcs[i]);
 
-		if(strcmp("quit",lower) == 0)fprintf(stdout,"\n Exiting......\n\n");
-		
+		if(strcmp("quit",lower) == 0){
+		  fprintf(stdout,"\n Exiting......\n\n");
+		  exit(0);
+		}
+
 		for(i = 0; i < function_number; i++){
 			if(strcmp(funcs,function_list[i].name) == 0){
 				function_found = 1;
