@@ -11,7 +11,7 @@ double     xy;
 
 int first(int a, double b, char c);
 void second(int a, double b, char c);
-void third(int d);
+int third(int d);
 void fourth(void);
 int fifth(int e);
 
@@ -36,7 +36,7 @@ void second(int a, double b, char c)
 
 }
 
-void third(int d)
+int third(int d)
 {
 
   return d + 10;
