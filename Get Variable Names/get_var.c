@@ -87,6 +87,12 @@ int main(int argc, char **argv)
 		
 	function_number = set_functions(statements,function_list,statement_number);
 	
+	    print_output(statements,statement_number);
+	print_output(global_constants, total_constants);
+	print_global_vars(global_variables, total_globals);
+	print_functions(function_list, function_number);
+
+
 	char funcs[MAX_LENGTH];
 	char lower[MAX_LENGTH];
 	int function_found = 0;
@@ -96,12 +102,13 @@ int main(int argc, char **argv)
 	    funcs[i] = '\0';
 	  }
 	while(1){
+	  
 		function_found = 0;
 		fprintf(stdout,"\n Please enter the name of the Function/Test you want to check or type quit to exit: ");
 		fscanf(stdin,"%s", funcs);
 		fprintf(stdout, "\n");
 
-		for(i = 0; i < strlen(funcs); i++)lower[i] = tolower(funcs[i]);
+		for(j = 0; j < strlen(funcs); j++)lower[j] = tolower(funcs[j]);
 
 		if(strcmp("quit",lower) == 0){
 		  fprintf(stdout,"\n Exiting......\n\n");

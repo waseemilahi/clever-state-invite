@@ -12,17 +12,6 @@ double     xy;
 int first(int a, double b, char c);
 void second(int a, double b, char c);
 
-void second(int a, double b, char c)
-{
-	int t = 128;
-	a = 2 * t;
-	t = b + c + t;
-	fprintf(stdout, "\n T = %d \n", t);
-
-	return ;
-
-}
-
 int first(int a, double b, char c)
 {
 	int t;
@@ -33,3 +22,13 @@ int first(int a, double b, char c)
 
 }
 
+void second(int a, double b, char c)
+{
+	int t = 128;
+	a = 2 * t;
+	t = b + c + t;
+	fprintf(stdout, "\n T = %d \n", t);
+
+	return ;
+
+}
