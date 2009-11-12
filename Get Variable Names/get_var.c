@@ -256,12 +256,19 @@ int main(int argc, char **argv)
 							}
 						}
 						
-						// Now go into each function to get the variables from each. */
+						/* Go into each function to get the variables from each. */
+						k = find_function(function_number, dependent_variables[j], function_list);
+						
+						if( k == -1){
+							continue;
+						}
+						else{
+							//code goes here............
+							
+						}
 						
 						
-					}
-					
-					
+					}					
 					
 					/* Print the Variables, the Function depends upon. */
 					fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
@@ -279,8 +286,7 @@ int main(int argc, char **argv)
 								dependent_variables[j][k] = '\0';
 
 						total_dependent_variables = 0;
-						total_variables = 0;
-					
+						total_variables = 0;					
 			
 		}
 		
