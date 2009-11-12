@@ -7,7 +7,7 @@
 # include <stddef.h>
 # include <ctype.h>
 
-# define MAX_NUMBER 128
+# define MAX_NUMBER 64
 # define MAX_LENGTH 2048
 
 typedef struct globals {
@@ -32,9 +32,11 @@ extern void print_global_vars(GlobalVar g_vars[], int total);
 extern void print_functions(Functions func_list[], int total);
 extern int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variables[], int statement_number);
 extern int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int statement_number);
+extern int find_function(int function_number,char *funcs, Functions function_list[]);
 extern int set_global_constants(char (*statements)[MAX_LENGTH],char (*global_constants)[MAX_LENGTH], int statement_number);
 extern int set_parameters(char *definition, Parameter parameters[]);
 extern int set_function_statements(char *definition,char (*function_statements)[MAX_LENGTH]);
 extern void print_params(Parameter parameters[], int total_params);
+extern int set_dependency(char *statement,char (*dependent_variables)[28],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH]);
 
 #endif
