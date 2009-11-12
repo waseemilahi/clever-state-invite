@@ -359,8 +359,80 @@ int set_parameters(char *definition, Parameter parameters[])
 	
 	if( (strlen(tmp_dec) == 0) || (strcmp(tmp_dec, "void") == 0) )return params;
 	
-	fprintf(stdout, "\n\n token === %s \n\n",tmp_dec);
+	if( findsubstr(tmp_dec,",") == 0)
+	{
+		running = strdup(tmp_dec);
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		token = strtok(running," [");
 	
+		tmpt = token;
+			
+		if(token != NULL){
+			int tmpy = 0;
+			while(*tmpt != '\0'){
+				tmp_dec[tmpy]=*tmpt;
+				tmpy++;
+				tmpt++;
+			}
+		}
+		
+		strcpy(parameters[params].type,tmp_dec);
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		if(strcmp(parameters[params].type,"struct") == 0)
+		{
+		
+			token = strtok(NULL , " [");
+					if(token != NULL){
+						tmpt = token;
+						parameters[params].type[tmpy] = ' ';
+						tmpy++;
+						while(*tmpt != '\0'){
+							tmp_dec[tmpy]=*tmpt;
+							tmpy++;
+							tmpt++;
+						}
+				
+					}
+					
+			strcpy(parameters[params].type,tmp_dec);			
+		
+		}
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		token = strtok(NULL," [");
+	
+		tmpt = token;
+			
+		if(token != NULL){
+			int tmpy = 0;
+			while(*tmpt != '\0'){
+				tmp_dec[tmpy]=*tmpt;
+				tmpy++;
+				tmpt++;
+			}
+		}
+		strcpy(parameters[params++].vars,tmp_dec);
+		
+		return params;
+		
+	}
+	else {
+	
+	}
 	
 	
 	
