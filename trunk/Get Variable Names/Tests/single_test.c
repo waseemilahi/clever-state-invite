@@ -10,8 +10,8 @@
 double     xy;
 
 typedef struct params {
-	char type[MAX_NUMBER];
-	char vars[MAX_NUMBER];
+	char type[1024];
+	char vars[1024];
 }Parameter;
 
 Parameter parameters[1024];
@@ -20,7 +20,7 @@ int first(int a, double b, char c);
 void second(int a, double b, char c);
 int third(int d);
 void fourth(void);
-int fifth(int e);
+int fifth(Parameter e);
 void sixth();
 
 int first(int a, double b, char c)
@@ -33,7 +33,7 @@ int first(int a, double b, char c)
 
 }
 
-void second(int a[1024], struct double b, char c)
+void second(int a, double b, char c)
 {
 	int t = 128;
 	a = 2 * t;
@@ -58,14 +58,16 @@ void fourth(void)
 
 }
 
-int fifth(struct parameter e)
+int fifth(Parameter p)
 {
 
-  return e - 10;
+  return strlen(p.vars);
 
 }
 
 void sixth()
 {
+	
+	return ;
 
 }
