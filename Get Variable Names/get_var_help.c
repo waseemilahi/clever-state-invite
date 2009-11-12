@@ -715,7 +715,7 @@ int set_dependency(int total_dependent_variables,char *statement,char (*dependen
 	
 	running = strdup(tmp_dec);
 	
-	token = strtok(running, "=*+-%/!><&|(), ");
+	token = strtok(running, "=*+-%/!><&|(),[] ");
 	
 	while(token != NULL)
 		{
@@ -763,7 +763,7 @@ int set_dependency(int total_dependent_variables,char *statement,char (*dependen
 				strcpy(dependent_variables[total_dependent_variables + statement_number++],ptr);
 			}
 		
-			token = strtok(NULL,"=*+-%/!><&|(),");
+			token = strtok(NULL,"=*+-%/!><&|(),[]");
 		}
 		
 	return statement_number;
@@ -789,3 +789,151 @@ char *trimwhitespace(char *str)
 
 }
 
+int set_variables(int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[28],Variable variables[])
+{
+
+	int j,k,l = 0;
+	int var_found = 0;
+		
+	for(j = 0; j < total_dependent_variables; j++){
+		for(k = 0; k < total_params; k++){
+			if( strcmp(dependent_variables[j] , parameters[k].vars) == 0){
+				var_found = 0;
+				for(l = 0; l < total_variables; l++){
+					if( strcmp(variables[l].name , dependent_variables[j]) == 0){
+						var_found = 1;
+						break;
+					}										
+				}
+							
+				if(var_found == 1){
+					break;
+				}
+				else {
+					strcpy(variables[total_variables].type , parameters[k].type);
+					strcpy(variables[total_variables].name , parameters[k].vars);
+					total_variables++;
+					break;
+				}
+			}
+		}
+						
+		/* Check the Globals Variables Now. */					
+		for(k = 0; k < total_globals; k++){
+			if( strcmp(dependent_variables[j] , global_variables[k].vars) == 0){
+				var_found = 0;
+				for(l = 0; l < total_variables; l++){
+					if( strcmp(variables[l].name , dependent_variables[j]) == 0){
+						var_found = 1;
+						break;
+					}										
+				}
+								
+				if(var_found == 1){
+					break;
+				}
+				else {
+					strcpy(variables[total_variables].type , global_variables[k].type);
+					strcpy(variables[total_variables].name , global_variables[k].vars);
+					total_variables++;
+					break;
+				}
+			}
+		}
+						
+		/* Check the Globals Constants Now. */						
+		for(k = 0; k < total_constants; k++){
+			if( strcmp(dependent_variables[j] , global_constants[k]) == 0){
+				var_found = 0;
+				for(l = 0; l < total_variables; l++){
+					if( strcmp(variables[l].name , dependent_variables[j]) == 0){
+						var_found = 1;
+						break;
+					}										
+				}
+						
+				if(var_found == 1){
+					break;
+				}
+				else {
+					strcpy(variables[total_variables].type , "constant");
+					strcpy(variables[total_variables].name , global_constants[k]);
+					total_variables++;
+					break;
+				}
+			}
+		}
+						
+		/* Go into each function to get the variables from each. */
+		k = find_function(function_number, dependent_variables[j], function_list);
+				
+		if( k == -1){
+			continue;
+		}
+		else{
+			
+			int tmp_num = get_func_vars(dependent_variables[j],function_number,total_globals,total_constants,function_list[k].definition,total_dependent_variables,dependent_variables,total_variables,variables,function_list,global_variables,global_constants);
+
+			total_variables += tmp_num;
+				
+		}
+					
+						
+	}
+		
+	return total_variables;
+
+}
+
+int get_func_vars(char *func,int function_number,int total_globals,int total_constants,char *definition,int total_dependent_variables,char (*dependent_variables)[28],int total_variables,Variable variables[],Functions function_list[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+{
+	int total_params = 0;
+	int new_variables = 0;
+	Parameter parameters[5];
+	int total_function_statements = 0;
+	char function_statements[MAX_NUMBER][MAX_LENGTH];
+	char new_dependents[10][28];
+	int new_total_dependent = 0;
+	int i,j,k;
+	
+	for(i = 0; i < 10; i++)
+		for(k = 0; k < 28; k++)
+			new_dependents[i][k] = '\0';
+		
+	for(i = 0; i < MAX_NUMBER; i++)
+		for(k = 0; k < MAX_LENGTH; k++)
+			function_statements[i][k] = '\0';
+	
+	for(i = 0; i < 5; i++){
+		strcpy(parameters[i].type,"");
+		strcpy(parameters[i].vars,"");
+	}
+
+	total_params = set_parameters(definition, parameters);
+	
+	for(j = 0; j < total_dependent_variables; j++){
+		if(strcmp(func,dependent_variables[j]) == 0)break;
+	}
+	j = j + 1;
+		
+	if( (total_function_statements = set_function_statements(definition,function_statements)) == 0)
+	{
+		return 0;
+	}
+	
+	for(k = 0; k < total_params; k++){
+		strcpy(parameters[k].vars, dependent_variables[j++]);
+	}
+									
+	for(j = 0; j < total_function_statements; j++)
+	{
+		k =  set_dependency(new_total_dependent,function_statements[j],new_dependents,function_list, parameters, global_variables, global_constants );					
+		new_total_dependent = new_total_dependent + k;
+	}
+									
+	/* Get all the variables the function depends upon. */
+	if(new_total_dependent > 0)
+		new_variables = set_variables(total_variables,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,new_total_dependent,new_dependents,variables);					
+					
+	return new_variables;
+}

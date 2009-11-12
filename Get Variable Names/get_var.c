@@ -32,47 +32,7 @@ int main(int argc, char **argv)
 	Parameter parameters[MAX_NUMBER];
 	Variable variables[MAX_NUMBER];
 	char function_statements[MAX_NUMBER][MAX_LENGTH];
-	char dependent_variables[10][28];
-	
-	
-	/*
-	
-	
-	int t = 0 ;
-	
-	
-	int total_tokens = 0;
-	int t_statements_number = 0;
-	int truncated_number = 0;
-  	int d_truncated_number = 0;
- 	int d_statements_number = 0;
-	int declared_vars = 0;
-	int total_real_vars = 0;
-	int total_vars = 0;
-	int unique_real_vars = 0;
-  	int found = 0;
-	int dd_truncated_number = 0;
-	int external_unique_vars = 0;	
-  	char tokens[MAX_NUMBER][MAX_LENGTH];
-  	char declare_vars[MAX_NUMBER][MAX_LENGTH];
-	char all_vars[MAX_NUMBER][MAX_LENGTH];  	
-	
-  	
-  	char *running;
-  	char *token;
-  	char *tmpt;
-  	char *tmp;
-  	char tmpstr[MAX_LENGTH];
-  	const char delim[] = " ,*"; 
-  	const char del[] = "=";  
-	*/
-	//const char delims[] = "=-+*/% \\\"\'";
-	//char *pp;
-	//const char de[] = "[];";  
-	
-	
-	
-	
+	char dependent_variables[10][28];	
 	
 	/* Initioalize the Variables. */	
 	for(i = 0; i < MAX_NUMBER; i++){
@@ -127,12 +87,12 @@ int main(int argc, char **argv)
 	/* Set the function names and the definition. */
 	function_number = set_functions(statements,function_list,statement_number);
 	
-	/* Print the output. */
+	/* Print the output. 
     print_output(statements,statement_number);
 	print_output(global_constants, total_constants);
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
-	
+	*/
 	while(1){
 	  
 		function_found = 0;
@@ -156,10 +116,7 @@ int main(int argc, char **argv)
 					fprintf(stdout,"\n Function Found. Processing...... \n\n");
 					
 					total_params = set_parameters(function_list[i].definition, parameters);
-					
-					/* Print the arguments. */
-					print_params(parameters, total_params);
-					
+										
 					if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
 					{
 						fprintf(stderr,"\n Empty Function Definition. \n");
@@ -173,107 +130,24 @@ int main(int argc, char **argv)
 						continue ;
 					}
 					
-					/* Print Function Statements. */
-					print_output(function_statements,total_function_statements);
-					
 					for(j = 0; j < total_function_statements; j++)
 					{
 						k =  set_dependency(total_dependent_variables,function_statements[j],dependent_variables,function_list, parameters, global_variables, global_constants );					
 						total_dependent_variables = total_dependent_variables + k;
 					}
 					
-					/* Print all the dependent variables. */
-					print_dependent_variables(dependent_variables, total_dependent_variables);
-					
-					int l = 0;
-					int var_found = 0;
-					for(j = 0; j < total_dependent_variables; j++){
-						for(k = 0; k < total_params; k++){
-							if( strcmp(dependent_variables[j] , parameters[k].vars) == 0){
-									var_found = 0;
-									for(l = 0; l < total_variables; l++){
-											if( strcmp(variables[l].name , dependent_variables[j]) == 0){
-												var_found = 1;
-												break;
-											}										
-									}
-									
-									if(var_found == 1){
-										break;
-									}
-									else {
-										strcpy(variables[total_variables].type , parameters[k].type);
-										strcpy(variables[total_variables].name , parameters[k].vars);
-										total_variables++;
-										break;
-									}
-							}
-						}
-						
-						/* Check the Globals Variables Now. */						
-						for(k = 0; k < total_globals; k++){
-							if( strcmp(dependent_variables[j] , global_variables[k].vars) == 0){
-									var_found = 0;
-									for(l = 0; l < total_variables; l++){
-											if( strcmp(variables[l].name , dependent_variables[j]) == 0){
-												var_found = 1;
-												break;
-											}										
-									}
-									
-									if(var_found == 1){
-										break;
-									}
-									else {
-										strcpy(variables[total_variables].type , global_variables[k].type);
-										strcpy(variables[total_variables].name , global_variables[k].vars);
-										total_variables++;
-										break;
-									}
-							}
-						}
-						
-						/* Check the Globals Constants Now. */						
-						for(k = 0; k < total_constants; k++){
-							if( strcmp(dependent_variables[j] , global_constants[k]) == 0){
-									var_found = 0;
-									for(l = 0; l < total_variables; l++){
-											if( strcmp(variables[l].name , dependent_variables[j]) == 0){
-												var_found = 1;
-												break;
-											}										
-									}
-									
-									if(var_found == 1){
-										break;
-									}
-									else {
-										strcpy(variables[total_variables].type , "constant");
-										strcpy(variables[total_variables].name , global_constants[k]);
-										total_variables++;
-										break;
-									}
-							}
-						}
-						
-						/* Go into each function to get the variables from each. */
-						k = find_function(function_number, dependent_variables[j], function_list);
-						
-						if( k == -1){
-							continue;
-						}
-						else{
-							//code goes here............
-							
-						}
-						
-						
-					}					
+					/* Get all the variables the function depends upon. */
+					total_variables = set_variables(0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
 					
 					/* Print the Variables, the Function depends upon. */
-					fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
-					print_variables(variables,total_variables);					
-															
+					if(total_variables > 0){
+						fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
+						print_variables(variables,total_variables);					
+					}
+					else{
+						fprintf(stdout,"\n\n No Known Dependency. \n\n");
+					}
+					
 					fprintf(stdout, "\n .......done.\n");
 					
 						for(j = 0; j < MAX_NUMBER; j++){
@@ -307,223 +181,6 @@ int main(int argc, char **argv)
 
 	}/* End While. */
 
-	//------------------------------------------------------------------------------------------------------------------
-	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.			
-  /*
-  	char token_statements[total_tokens][MAX_LENGTH];
-	char declare_statements[total_tokens][MAX_LENGTH];
-
-  	for (i = 0; i < total_tokens; i++)
-    	for(j = 0; j < MAX_LENGTH; j++){
-      		token_statements[i][j] = '\0';
-			declare_statements[i][j] = '\0';
-		}
-    
-  for(i = 0; i < total_tokens; i++){
-    if( ( ((findsubstr(tokens[i] , "int")) == 1) || ((findsubstr(tokens[i] , "float")) == 1) || ((findsubstr(tokens[i] , "double")) == 1)
-	  ||((findsubstr(tokens[i] , "char")) == 1) || ((findsubstr(tokens[i] , "long")) == 1) || ((findsubstr(tokens[i] , "short")) == 1)
-	  ||((findsubstr(tokens[i] , "struct")) == 1)		) &&(findsubstr(tokens[i] , "(")) == 0){
-      strcpy(declare_statements[d_statements_number] , tokens[i]);
-      d_statements_number++;
-    }
-  }
-
- 
-  for(i = 0; i < total_tokens; i++){
-    if( (findsubstr(tokens[i] , "=")) == 1){
-      strcpy(token_statements[t_statements_number] , tokens[i]);
-      t_statements_number++;
-    }
-  }
-
-	char truncated_statements[t_statements_number][MAX_LENGTH];
-  
-  for (i = 0; i < t_statements_number; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      truncated_statements[i][j] = '\0';
-
-  for(i = 0; i < MAX_LENGTH; i++)
-    tmpstr[i] = '\0';
-
-  
-   
-  for( i = 0; i < t_statements_number; i++){
-    strcpy(tmpstr ,token_statements[i]);
-    if( ((j = findsubstr(tmpstr,"(")) == 0) && ((k = findsubstr(tmpstr,",")) == 0)){     
-      tmp = strstr(tmpstr,"=");
-      tmp++;
-      strcpy(truncated_statements[truncated_number],tmp);
-      truncated_number++;
-    }
-  }  
-   
-  for(i = 0; i < truncated_number; i++){
-    
-    running = strdup(truncated_statements[i]);
-    
-    token = strtok(running , delims);
-    while(token != NULL){
-      
-      tmpt = token;
-      if(token != NULL){
-	while(*tmpt != '\0'){
-	  sprintf(all_vars[total_vars],"%s%c",all_vars[total_vars],*tmpt);
-	  tmpt++;
-	}
-	total_vars++;
-      }
-      token = strtok(NULL,delims);
-    }
-  }
-  
-	char d_truncated_statements[d_statements_number][MAX_LENGTH];
-
-  for (i = 0; i < d_statements_number; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      d_truncated_statements[i][j] = '\0';
-  
-  for( i = 0; i < d_statements_number; i++){
-    strcpy(tmpstr ,declare_statements[i]);
-    tmp = strtok(tmpstr,del);t =0;
-    
-    strcpy(d_truncated_statements[d_truncated_number],tmp);
-    d_truncated_number++;
-    
-  }  
-
-  for(i = 0; i < d_truncated_number; i++){
-    
-    running = strdup(d_truncated_statements[i]);
-    
-    token = strtok(running , delim);
-    while(token != NULL){
-      if( (strcmp(token , "int") != 0) && (strcmp(token , "char") != 0) && (strcmp(token , "float") != 0)
-	  &&(strcmp(token , "double") != 0) && (strcmp(token , "long") != 0) && (strcmp(token , "short") != 0)
-	  &&(strcmp(token , "struct") != 0) &&(strcmp(token , "*") != 0)   ){
-	tmpt = token;
-	if(token != NULL){
-	  while(*tmpt != '\0'){
-	    sprintf(declare_vars[declared_vars],"%s%c",declare_vars[declared_vars],*tmpt);
-	    tmpt++;
-	  }
-	  declared_vars++;
-	}
-      }
-      
-      token = strtok(NULL,delim);
-    }
-  }  
-  
-  for (i = 0; i < total_vars; i++){
-    for(j = 0; j < MAX_LENGTH; j++){
-      if(all_vars[i][j] == ' '){
-	continue;
-      }
-      else if( (all_vars[i][j] < 48) || (all_vars[i][j] > 57)){
-	total_real_vars++;
-	break;
-      }
-      else break;
-    }
-  }
-
-	char real_vars[total_real_vars][MAX_LENGTH];
-	char real_unique_vars[total_real_vars][MAX_LENGTH];
-  
-  for (i = 0; i < total_real_vars; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      real_vars[i][j] = '\0';
-  
-  
-  k = 0;
-  for(i = 0 ; i < total_vars; i++){
-    pp = all_vars[i];
-    for(j = 0; j < MAX_LENGTH; j++){
-      
-      if(all_vars[i][j] == ' '){
-	pp++;continue;
-      }
-      else if((all_vars[i][j] < 48) || (all_vars[i][j] > 57)){
-	strcpy(real_vars[k++],pp);//all_vars[i]);
-	break;
-      }
-      else break;
-    }
-  }
-  
-  for (i = 0; i < total_real_vars; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      real_unique_vars[i][j] = '\0';
-  
-  for(i = 0; i < total_real_vars; i++){
-    found = 0;
-    for(j = 0; j < total_real_vars; j++){
-      if( (strcmp(real_unique_vars[j],real_vars[i])) == 0){
-	found = 1;
-	break;
-      }
-    }
-    if(found == 1)continue;
-    else strcpy(real_unique_vars[unique_real_vars++] , real_vars[i]);
-    
-  }
-
-	char dd_truncated_statements[declared_vars][MAX_LENGTH];
-	char external_vars[unique_real_vars][MAX_LENGTH];
-
-  for (i = 0; i < declared_vars; i++)
-    for(j = 0; j < MAX_LENGTH; j++)
-      dd_truncated_statements[i][j] = '\0';
-
-	for (i = 0; i < unique_real_vars; i++)
-    	for(j = 0; j < MAX_LENGTH; j++)
-      		external_vars[i][j] = '\0';
- 
-  for( i = 0; i < declared_vars; i++){
-    strcpy(tmpstr ,declare_vars[i]);
-    tmp = strtok(tmpstr,de);
-    
-    strcpy(dd_truncated_statements[dd_truncated_number],tmp);
-    dd_truncated_number++;
-    
-  }   
-  
-  for(i = 0; i < unique_real_vars; i++){
-    found = 0;
-    for(j = 0; j < dd_truncated_number; j++){
-      if( (strcmp(real_unique_vars[i],dd_truncated_statements[j])) == 0){
-	found = 1;
-	break;
-      }
-    }
-    if(found == 1)continue;
-    else strcpy(external_vars[external_unique_vars++] , real_unique_vars[i]);
-    
-  }
-
-    print_output(statements,statement_number);
-	print_output(global_constants, total_constants);
-	print_global_vars(global_variables, total_globals);
-	print_functions(function_list, function_number);
-	fprintf(stdout, "\n total_tokens = %d \n\n",total_tokens);
-	print_output(tokens,total_tokens);
-	print_output(token_statements,t_statements_number);
-	print_output(truncated_statements,t_statements_number);
-   	print_output(all_vars,total_vars);
-	print_output(real_vars,total_real_vars);
-    print_output(declare_vars,declared_vars);
-    print_output(dd_truncated_statements,dd_truncated_number);
-   	print_output(real_unique_vars,unique_real_vars);
-	
-
-  	fprintf(stdout, "\n\n --------------------------------------\n\n");
-  	fprintf(stdout, "\n");
-  
-  for(i = 0; i < external_unique_vars; i++ )
-    fprintf(stdout, "%d: %s  \n\n",i+1,external_vars[i]);
-  
-  fprintf(stdout, "\n Total External(required) Variable(s) = %d \n",external_unique_vars);
-  */
   fprintf(stdout, "\n");
   
   return 0;
