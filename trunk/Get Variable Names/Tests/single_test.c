@@ -46,7 +46,10 @@ void second(int a, double b, char c)
 
 int third(int d)
 {
-  return d + 10;
+	int a;
+	a = first( d, d, d);
+	
+  return a;
 }
 
 void fourth(void)
