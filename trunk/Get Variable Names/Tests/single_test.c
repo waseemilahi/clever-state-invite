@@ -9,11 +9,19 @@
      int xx;
 double     xy;
 
+typedef struct params {
+	char type[MAX_NUMBER];
+	char vars[MAX_NUMBER];
+}Parameter;
+
+Parameter parameters[1024];
+
 int first(int a, double b, char c);
 void second(int a, double b, char c);
 int third(int d);
 void fourth(void);
 int fifth(int e);
+void sixth();
 
 int first(int a, double b, char c)
 {
@@ -54,5 +62,10 @@ int fifth(int e)
 {
 
   return e - 10;
+
+}
+
+void sixth()
+{
 
 }
