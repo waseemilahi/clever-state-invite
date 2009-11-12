@@ -178,7 +178,7 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
 
 	for( i = 0 ; i < statement_number; i++){
 		
-		if(strlen(statements[i]) > 5){
+		if( (strlen(statements[i]) > 5) && (findsubstr(statements[i],"(") == 1) && (findsubstr(statements[i], "{") == 1)){
 		
 			running = strdup(statements[i]);
    
@@ -209,7 +209,7 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
 	return function_number;
 }
 
-int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVars global_variables[], int statement_number)
+int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variables[], int statement_number)
 {
 	int i;
 	char *running;
@@ -221,20 +221,34 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVars global_variab
 		if((findsubstr(statements[i],"{") == 0) && (strlen(statements[i]) > 2)){
 		
 			running = strdup(statements[i]);
-			token = strtok(running , " ;");
+			token = strtok(running , " =[;");
 			
 			tmpt = token;
 			
 			if(token != NULL){
-			int tmpy = 0;
+				int tmpy = 0;
 				while(*tmpt != '\0'){
 					global_variables[total_globals].type[tmpy]=*tmpt;
 					tmpy++;
 					tmpt++;
 				}
-			}			
+				if(strcmp(global_variables[total_globals].type,"struct") == 0){
+					token = strtok(NULL , " =};");
+					if(token != NULL){
+						tmpt = token;
+						global_variables[total_globals].type[tmpy] = ' ';
+						tmpy++;
+						while(*tmpt != '\0'){
+							global_variables[total_globals].type[tmpy]=*tmpt;
+							tmpy++;
+							tmpt++;
+						}
+				
+					}
+				}
+			}	
 			
-			token = strtok(NULL , " ;");
+			token = strtok(NULL , " =[;");
 			
 			tmpt = token;
 			
@@ -246,6 +260,12 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVars global_variab
 					tmpt++;
 				}
 			}
+			if(token == NULL)
+			{
+				strcpy(global_variables[total_globals].type , "");
+				total_globals--;
+			}
+			
 			total_globals++;
 			strcpy(statements[i],"\0");
 		}
@@ -283,5 +303,67 @@ int set_global_constants(char (*statements)[MAX_LENGTH],char (*global_constants)
 	
 	return total_constants;
 	
+
+}
+
+int set_parameters(char *definition, Parameter parameters[])
+{
+
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;	
+	int params = 0;
+	char tmp_dec[MAX_LENGTH];
+	
+	for(i = 0; i < MAX_LENGTH; i++)
+	{
+		tmp_dec[i] = '\0';
+	}
+	
+	running = strdup(definition);
+	
+	token = strtok(running, "{");
+	
+	tmpt = token;
+			
+	if(token != NULL){
+		int tmpy = 0;
+		while(*tmpt != '\0'){
+			tmp_dec[tmpy]=*tmpt;
+			tmpy++;
+			tmpt++;
+		}
+	}
+	
+	running = strdup(tmp_dec);
+	
+	for(i = 0; i < MAX_LENGTH; i++)
+	{
+		tmp_dec[i] = '\0';
+	}
+	
+	token = strtok(running, "()");
+	token = strtok(NULL, "()");
+	
+	tmpt = token;
+			
+	if(token != NULL){
+		int tmpy = 0;
+		while(*tmpt != '\0'){
+			tmp_dec[tmpy]=*tmpt;
+			tmpy++;
+			tmpt++;
+		}
+	}
+	
+	if( (strlen(tmp_dec) == 0) || (strcmp(tmp_dec, "void") == 0) )return params;
+	
+	fprintf(stdout, "\n\n token === %s \n\n",tmp_dec);
+	
+	
+	
+	
+	return params;
 
 }

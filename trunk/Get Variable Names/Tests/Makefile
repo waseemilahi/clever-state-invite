@@ -1,7 +1,7 @@
-all:	test
+all:	test.exe
 
-test:	test.c
-	gcc -Wall -o test test.c test1.c test2.c single_test.c
+test.exe:	test.c
+	gcc -Wall -o test.exe test.c test1.c test2.c single_test.c
 
 clean:
-	rm test
+	rm test.exe
