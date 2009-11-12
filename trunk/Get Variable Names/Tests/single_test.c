@@ -49,6 +49,11 @@ int third(int d)
 	int a;
 	a = first( d, d, d);
 	
+	for(i = 0; i > 5; i++){
+	;
+	}
+	
+	
   return a;
 }
 
