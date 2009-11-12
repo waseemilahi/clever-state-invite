@@ -184,6 +184,7 @@ int main(int argc, char **argv)
 					
 					/* Print all the dependent variables. */
 					print_dependent_variables(dependent_variables, total_dependent_variables);
+					
 					int l = 0;
 					int var_found = 0;
 					for(j = 0; j < total_dependent_variables; j++){
@@ -255,13 +256,16 @@ int main(int argc, char **argv)
 							}
 						}
 						
+						// Now go into each function to get the variables from each. */
+						
+						
 					}
+					
+					
 					
 					/* Print the Variables, the Function depends upon. */
 					fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
-					print_variables(variables,total_variables);
-															
-					// Now go into each function to get the variables from each. */
+					print_variables(variables,total_variables);					
 															
 					fprintf(stdout, "\n .......done.\n");
 					
