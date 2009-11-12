@@ -532,14 +532,75 @@ int set_parameters(char *definition, Parameter parameters[])
 			
 			token = strtok(NULL, " ,");
 			
-		}
-		
-		
+		}		
 		
 		return params;
-		
-		
-	
+			
 	}
 	
+}
+
+int set_function_statements(char *definition,char (*function_statements)[MAX_LENGTH])
+{
+
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;		
+	int statements = 0;
+	char tmp_dec[MAX_LENGTH];
+	
+	for(i = 0; i < MAX_LENGTH; i++)
+	{
+		tmp_dec[i] = '\0';
+	}
+	
+	running = strdup(definition);
+	
+	token = strtok(running, "{}");
+	token = strtok(NULL, "");
+	
+	tmpt = token;
+			
+	if(token != NULL){
+		int tmpy = 0;
+		while(*tmpt != '\0'){
+			tmp_dec[tmpy]=*tmpt;
+			tmpy++;
+			tmpt++;
+		}
+		tmp_dec[tmpy-1] = '\0';
+	}
+	
+	running = strdup(tmp_dec);
+	
+	token = strtok(running, ";{}");
+	
+	while(token != NULL)
+	{
+		tmpt = token;
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		if(token != NULL){
+			int tmpy = 0;
+			while(*tmpt != '\0'){
+				tmp_dec[tmpy]=*tmpt;
+				tmpy++;
+				tmpt++;
+			}
+		}
+		
+		if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0))
+			strcpy(function_statements[statements++],tmp_dec);
+		
+		token = strtok(NULL, ";{}");
+		
+	}
+		
+	return statements;
+
 }

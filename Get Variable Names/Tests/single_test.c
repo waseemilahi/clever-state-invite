@@ -53,21 +53,24 @@ int third(int d)
 
 void fourth(void)
 {
-
+ if(0 == 1){
+ ;
+ }
+ else {
+	return ;
+ }
+ 
   return ;
 
 }
 
 int fifth(Parameter p)
 {
-
   return strlen(p.vars);
 
 }
 
 void sixth()
 {
-	
-	return ;
-
+	fourth();
 }

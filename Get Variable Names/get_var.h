@@ -34,6 +34,7 @@ extern int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_
 extern int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int statement_number);
 extern int set_global_constants(char (*statements)[MAX_LENGTH],char (*global_constants)[MAX_LENGTH], int statement_number);
 extern int set_parameters(char *definition, Parameter parameters[]);
+extern int set_function_statements(char *definition,char (*function_statements)[MAX_LENGTH]);
 extern void print_params(Parameter parameters[], int total_params);
 
 #endif

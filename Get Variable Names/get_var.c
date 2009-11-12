@@ -18,6 +18,7 @@ int main(int argc, char **argv)
 	int total_functions = 0;
 	int function_number = 0;
 	int total_params = 0;
+	int total_function_statements = 0;
 	int function_found = 0;
 	
 	char funcs[MAX_LENGTH];
@@ -26,6 +27,7 @@ int main(int argc, char **argv)
 	char global_constants[MAX_NUMBER][MAX_LENGTH];
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
+	char function_statements[MAX_NUMBER][MAX_LENGTH];
 	
 	
 	
@@ -78,6 +80,7 @@ int main(int argc, char **argv)
 			all_vars[i][j] = '\0';
       		global_constants[i][j]='\0';      		
 			function_names[i][j]='\0';
+			function_statements[i][j] = '\0';
 			lower[j] = '\0';
 			funcs[j] = '\0';
     	}
@@ -129,7 +132,7 @@ int main(int argc, char **argv)
 
 		if(strcmp("quit",lower) == 0){
 		  fprintf(stdout,"\n Exiting........done\n\n");
-		  exit(0);
+		  return 0;
 		}
 
 		/* Found the function, now work on it. */
@@ -143,11 +146,24 @@ int main(int argc, char **argv)
 				/* Print the arguments. */
 				print_params(parameters, total_params);
 				
+				if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
+				{
+					fprintf(stderr,"\n Empty Function Definition. \n");
+					fprintf(stdout," Try Another!\n");
+					
+					/* Reset lower and funcs. */
+					for(i = 0; i < MAX_LENGTH; i++){
+						lower[i] = '\0';
+						funcs[i] = '\0';
+					}
+					continue ;
+				}
 				
+				/* Print Function Statements. */
+				print_output(function_statements,total_function_statements);
 				
 				fprintf(stdout, "\n .......done.\n");
 				
-				//Do the stuff here...............
 			}
 		}
 		
@@ -166,34 +182,12 @@ int main(int argc, char **argv)
 	}/* End While. */
 
 	//------------------------------------------------------------------------------------------------------------------
-	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.
-	
-	for( i = 0 ; i < statement_number; i++){
-		if((  ((findsubstr(statements[i] , "int")) == 1) || ((findsubstr(statements[i] , "float")) == 1) || ((findsubstr(statements[i] , "double")) == 1)
-	  ||((findsubstr(statements[i] , "char")) == 1) || ((findsubstr(statements[i] , "long")) == 1) ||((findsubstr(statements[i] , "void")) == 1)
-	  || ((findsubstr(statements[i] , "short")) == 1)
-	  ||((findsubstr(statements[i] , "struct")) == 1)		) &&(((findsubstr(statements[i] , "(")) == 1) &&((findsubstr(statements[i] , ")")) == 1))){
-				 running = strdup(statements[i]);
-   // fprintf(stdout, "\n %s \n",running);
-    token = strtok(running , "(");
-	if((token!=NULL) && (strcmp(token,"struct")))token = strtok(NULL,"(");
-	//token = strtok(NULL," ");
-	tmpt = token;
-	//fprintf(stdout, "\n %s \n",token);
-	if(token != NULL){
-	  while(*tmpt != '\0'){
-	    sprintf(function_names[i],"%s%c",function_names[i],*tmpt);
-	    tmpt++;
-	  }
-	  
-	}
-	  }
-			
-	}
-			
+	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.			
   
   for(i = 0; i <  statement_number; i++){
     
+	if(strlen(statements[i]) > 5){
+	
     running = strdup(statements[i]);
     
     token = strtok(running , delimeters);
@@ -209,6 +203,7 @@ int main(int argc, char **argv)
       }
       token = strtok(NULL,delimeters);
     }
+  }
   }
   
 	char token_statements[total_tokens][MAX_LENGTH];
@@ -406,9 +401,9 @@ int main(int argc, char **argv)
 	print_output(global_constants, total_constants);
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
-	/*
+	fprintf(stdout, "\n total_tokens = %d \n\n",total_tokens);
 	print_output(tokens,total_tokens);
-	print_output(token_statements,t_statements_number);
+	/*print_output(token_statements,t_statements_number);
 	print_output(truncated_statements,t_statements_number);
    	print_output(all_vars,total_vars);
 	print_output(real_vars,total_real_vars);
