@@ -40,8 +40,8 @@ void print_params(Parameter parameters[], int total_params)
 int i;
 	
 	for(i = 0; i < total_params; i++){
-		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(parameters[i].type),parameters[i].type);
-		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(parameters[i].vars),parameters[i].vars);
+		 fprintf(stdout, " %d. %d. %s  \n\n",i,strlen(parameters[i].type),parameters[i].type);
+		 fprintf(stdout, " %d. %d. %s  \n\n",i,strlen(parameters[i].vars),parameters[i].vars);
 	}
 
 return ;
@@ -54,8 +54,10 @@ void print_variables(Variable variables[], int total_variables)
 int i;
 	
 	for(i = 0; i < total_variables; i++){
-		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(variables[i].type),variables[i].type);
-		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(variables[i].name),variables[i].name);
+		if( (strlen(variables[i].type) > 0 ) && (strlen(variables[i].name) > 0)){
+			fprintf(stdout, " %d. %d. %s  \n\n",i,strlen(variables[i].type),variables[i].type);
+			fprintf(stdout, " %d. %d. %s  \n\n",i,strlen(variables[i].name),variables[i].name);
+		}
 	}
 
 return ;
