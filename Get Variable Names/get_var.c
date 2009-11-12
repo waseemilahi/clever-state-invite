@@ -129,9 +129,7 @@ int main(int argc, char **argv)
 	
 	/* Print the output. */
     print_output(statements,statement_number);
-	fprintf(stdout,"\n\n------\n\n");
 	print_output(global_constants, total_constants);
-	fprintf(stdout,"\n\n------\n\n");
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
 	
