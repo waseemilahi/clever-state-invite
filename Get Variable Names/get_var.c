@@ -44,11 +44,7 @@ int main(int argc, char **argv)
 		strcpy(variables[i].name ,"");				
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
-			//tokens[i][j] = '\0';
-			//declare_vars[i][j] = '\0';
-			//all_vars[i][j] = '\0';
-      		global_constants[i][j]='\0';      		
-			
+			global_constants[i][j]='\0';      		
 			function_statements[i][j] = '\0';
 			lower[j] = '\0';
 			funcs[j] = '\0';
@@ -93,6 +89,14 @@ int main(int argc, char **argv)
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
 	*/
+	
+	char done_func[function_number][128];
+	int total_done = 0;
+	
+	for(i = 0; i < function_number; i++)
+		for(j = 0; j < 128; j++)
+			done_func[i][j] = '\0';
+	
 	while(1){
 	  
 		function_found = 0;
@@ -136,8 +140,10 @@ int main(int argc, char **argv)
 						total_dependent_variables = total_dependent_variables + k;
 					}
 					
+					strcpy(done_func[total_done++],funcs);
+					
 					/* Get all the variables the function depends upon. */
-					total_variables = set_variables(0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
+					total_variables = set_variables(done_func,total_done,0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
 					
 					/* Print the Variables, the Function depends upon. */
 					if(total_variables > 0){
@@ -163,6 +169,11 @@ int main(int argc, char **argv)
 						total_variables = 0;					
 			
 		}
+		for(i = 0; i < function_number; i++)
+			for(j = 0; j < 128; j++)
+				done_func[i][j] = '\0';
+		
+		total_done = 0;		
 		
 		k = 0;
 		total_dependent_variables = 0;

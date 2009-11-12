@@ -36,9 +36,11 @@ int first(int a, double b, char c)
 void second(int a, double b, char c)
 {
 	double t = xy;
-	a = xx * t;
+	int i;
 	t = b + c + t;
-	fprintf(stdout, "\n T = %f \n", t);
+	fourth();
+	for( i = 0; i < xx; i++)
+		fprintf(stdout, "\n T = %f \n", t);
 
 	return ;
 
