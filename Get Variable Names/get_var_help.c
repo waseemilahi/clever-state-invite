@@ -369,7 +369,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec[i] = '\0';
 		}
 		
-		token = strtok(running," [");
+		token = strtok(running," *[");
 	
 		tmpt = token;
 			
@@ -393,7 +393,7 @@ int set_parameters(char *definition, Parameter parameters[])
 		if(strcmp(parameters[params].type,"struct") == 0)
 		{
 		
-			token = strtok(NULL , " [");
+			token = strtok(NULL , " *[");
 			
 					if(token != NULL){
 						int tmpy = 0;
@@ -416,7 +416,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec[i] = '\0';
 		}
 		
-		token = strtok(NULL," [");
+		token = strtok(NULL," *[");
 	
 		tmpt = token;
 			
@@ -442,7 +442,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec[i] = '\0';
 		}
 		
-		token = strtok(running," ,");
+		token = strtok(running," *,");
 		
 		while(token != NULL)
 		{
@@ -461,7 +461,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			
 			if( findsubstr(tmp_dec, "]") == 1){ 
 				
-				token = strtok(NULL," ,");
+				token = strtok(NULL," *,");
 				
 				for(i = 0; i < MAX_LENGTH; i++)
 				{
@@ -492,7 +492,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			if(strcmp(parameters[params].type,"struct") == 0)
 			{
 		
-				token = strtok(NULL , " ");
+				token = strtok(NULL , " *");
 			
 					if(token != NULL){
 						int tmpy = 0;
@@ -515,7 +515,7 @@ int set_parameters(char *definition, Parameter parameters[])
 				tmp_dec[i] = '\0';
 			}
 		
-			token = strtok(NULL," [,");
+			token = strtok(NULL," *[,");
 	
 			tmpt = token;
 			
