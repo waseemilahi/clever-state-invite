@@ -33,7 +33,7 @@ int first(int a, double b, char c)
 
 }
 
-void second(int a, double b, char c)
+void second(int a[1024], struct double b, char c)
 {
 	int t = 128;
 	a = 2 * t;
@@ -58,7 +58,7 @@ void fourth(void)
 
 }
 
-int fifth(int[] e)
+int fifth(struct parameter e)
 {
 
   return e - 10;

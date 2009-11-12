@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 		for(i = 0; i < function_number; i++){
 			if(strcmp(funcs,function_list[i].name) == 0){
 				function_found = 1;
-				fprintf(stdout,"\n Function Found. Processing...... \n ");
+				fprintf(stdout,"\n Function Found. Processing...... \n\n");
 				
 				total_params = set_parameters(function_list[i].definition, parameters);
 				

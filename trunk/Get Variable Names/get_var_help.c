@@ -313,6 +313,7 @@ int set_parameters(char *definition, Parameter parameters[])
 	char *running;
   	char *token;
   	char *tmpt;	
+	int tmpyy = 0;
 	int params = 0;
 	char tmp_dec[MAX_LENGTH];
 	
@@ -379,6 +380,7 @@ int set_parameters(char *definition, Parameter parameters[])
 				tmpy++;
 				tmpt++;
 			}
+			tmpyy = tmpy;
 		}
 		
 		strcpy(parameters[params].type,tmp_dec);
@@ -392,10 +394,11 @@ int set_parameters(char *definition, Parameter parameters[])
 		{
 		
 			token = strtok(NULL , " [");
+			
 					if(token != NULL){
+						int tmpy = 0;
 						tmpt = token;
-						parameters[params].type[tmpy] = ' ';
-						tmpy++;
+						parameters[params].type[tmpyy] = ' ';
 						while(*tmpt != '\0'){
 							tmp_dec[tmpy]=*tmpt;
 							tmpy++;
@@ -404,9 +407,9 @@ int set_parameters(char *definition, Parameter parameters[])
 				
 					}
 					
-			strcpy(parameters[params].type,tmp_dec);			
+			strcat(parameters[params].type,tmp_dec);			
 		
-		}
+		} 
 		
 		for(i = 0; i < MAX_LENGTH; i++)
 		{
@@ -432,10 +435,111 @@ int set_parameters(char *definition, Parameter parameters[])
 	}
 	else {
 	
+		running = strdup(tmp_dec);
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		token = strtok(running," ,");
+		
+		while(token != NULL)
+		{
+		
+			tmpt = token;
+		
+			if(token != NULL){
+				int tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+				tmpyy = tmpy;
+			}
+			
+			if( findsubstr(tmp_dec, "]") == 1){ 
+				
+				token = strtok(NULL," ,");
+				
+				for(i = 0; i < MAX_LENGTH; i++)
+				{
+					tmp_dec[i] = '\0';
+				}
+				
+				tmpt = token;
+		
+				if(token != NULL){
+					int tmpy = 0;
+					while(*tmpt != '\0'){
+						tmp_dec[tmpy]=*tmpt;
+						tmpy++;
+						tmpt++;
+					}
+					tmpyy = tmpy;
+				}				
+				
+			}			
+		
+			strcpy(parameters[params].type,tmp_dec);
+		
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_dec[i] = '\0';
+			}
+		
+			if(strcmp(parameters[params].type,"struct") == 0)
+			{
+		
+				token = strtok(NULL , " ");
+			
+					if(token != NULL){
+						int tmpy = 0;
+						tmpt = token;
+						parameters[params].type[tmpyy] = ' ';
+						while(*tmpt != '\0'){
+							tmp_dec[tmpy]=*tmpt;
+							tmpy++;
+							tmpt++;
+						}
+				
+					}
+					
+				strcat(parameters[params].type,tmp_dec);			
+		
+			} 
+		
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_dec[i] = '\0';
+			}
+		
+			token = strtok(NULL," [,");
+	
+			tmpt = token;
+			
+			if(token != NULL){
+				int tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}
+		
+			strcpy(parameters[params++].vars,tmp_dec);
+			
+			token = strtok(NULL, " ,");
+			
+		}
+		
+		
+		
+		return params;
+		
+		
+	
 	}
 	
-	
-	
-	return params;
-
 }
