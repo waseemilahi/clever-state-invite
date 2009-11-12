@@ -22,6 +22,7 @@ int main(int argc, char **argv)
 	int total_function_statements = 0;
 	int total_dependent_variables = 0;
 	int function_found = 0;
+	int total_variables = 0;
 	
 	char funcs[MAX_LENGTH];
 	char lower[MAX_LENGTH];	
@@ -29,6 +30,7 @@ int main(int argc, char **argv)
 	char global_constants[MAX_NUMBER][MAX_LENGTH];
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
+	Variable variables[MAX_NUMBER];
 	char function_statements[MAX_NUMBER][MAX_LENGTH];
 	char dependent_variables[10][28];
 	
@@ -77,7 +79,9 @@ int main(int argc, char **argv)
 		strcpy(global_variables[i].type, "");
 		strcpy(global_variables[i].vars ,"");
 		strcpy(parameters[i].type, "");
-		strcpy(parameters[i].vars ,"");		
+		strcpy(parameters[i].vars ,"");
+		strcpy(variables[i].type, "");
+		strcpy(variables[i].name ,"");				
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
 			//tokens[i][j] = '\0';
@@ -125,7 +129,9 @@ int main(int argc, char **argv)
 	
 	/* Print the output. */
     print_output(statements,statement_number);
+	fprintf(stdout,"\n\n------\n\n");
 	print_output(global_constants, total_constants);
+	fprintf(stdout,"\n\n------\n\n");
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
 	
@@ -180,11 +186,98 @@ int main(int argc, char **argv)
 					
 					/* Print all the dependent variables. */
 					print_dependent_variables(dependent_variables, total_dependent_variables);
+					int l = 0;
+					int var_found = 0;
+					for(j = 0; j < total_dependent_variables; j++){
+						for(k = 0; k < total_params; k++){
+							if( strcmp(dependent_variables[j] , parameters[k].vars) == 0){
+									var_found = 0;
+									for(l = 0; l < total_variables; l++){
+											if( strcmp(variables[l].name , dependent_variables[j]) == 0){
+												var_found = 1;
+												break;
+											}										
+									}
+									
+									if(var_found == 1){
+										break;
+									}
+									else {
+										strcpy(variables[total_variables].type , parameters[k].type);
+										strcpy(variables[total_variables].name , parameters[k].vars);
+										total_variables++;
+										break;
+									}
+							}
+						}
+						
+						/* Check the Globals Variables Now. */						
+						for(k = 0; k < total_globals; k++){
+							if( strcmp(dependent_variables[j] , global_variables[k].vars) == 0){
+									var_found = 0;
+									for(l = 0; l < total_variables; l++){
+											if( strcmp(variables[l].name , dependent_variables[j]) == 0){
+												var_found = 1;
+												break;
+											}										
+									}
+									
+									if(var_found == 1){
+										break;
+									}
+									else {
+										strcpy(variables[total_variables].type , global_variables[k].type);
+										strcpy(variables[total_variables].name , global_variables[k].vars);
+										total_variables++;
+										break;
+									}
+							}
+						}
+						
+						/* Check the Globals Constants Now. */						
+						for(k = 0; k < total_constants; k++){
+							if( strcmp(dependent_variables[j] , global_constants[k]) == 0){
+									var_found = 0;
+									for(l = 0; l < total_variables; l++){
+											if( strcmp(variables[l].name , dependent_variables[j]) == 0){
+												var_found = 1;
+												break;
+											}										
+									}
+									
+									if(var_found == 1){
+										break;
+									}
+									else {
+										strcpy(variables[total_variables].type , "constant");
+										strcpy(variables[total_variables].name , global_constants[k]);
+										total_variables++;
+										break;
+									}
+							}
+						}
+						
+					}
+					
+					/* Print the Variables, the Function depends upon. */
+					fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
+					print_variables(variables,total_variables);
 															
-					// We have the dependent variables from the statements. Now we need to go over each to 
-					// complete the process.
+					// Now go into each function to get the variables from each. */
 															
 					fprintf(stdout, "\n .......done.\n");
+					
+						for(j = 0; j < MAX_NUMBER; j++){
+							strcpy(variables[j].type , "");
+							strcpy(variables[j].name , "");
+						}
+						
+						for(j = 0; j < 10; j++)
+							for(k = 0; k < 28; k++)
+								dependent_variables[j][k] = '\0';
+
+						total_dependent_variables = 0;
+						total_variables = 0;
 					
 			
 		}

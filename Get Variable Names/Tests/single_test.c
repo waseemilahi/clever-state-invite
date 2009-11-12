@@ -35,10 +35,10 @@ int first(int a, double b, char c)
 
 void second(int a, double b, char c)
 {
-	int t = 128;
-	a = 2 * t;
+	double t = xy;
+	a = xx * t;
 	t = b + c + t;
-	fprintf(stdout, "\n T = %d \n", t);
+	fprintf(stdout, "\n T = %f \n", t);
 
 	return ;
 
@@ -48,6 +48,10 @@ int third(int d)
 {
 	int a;
 	a = first( d, d, d);
+	
+	second(d,d,a);
+	
+	fprintf(stderr, "\n Quit \n");
 	
   return a;
 }

@@ -48,6 +48,20 @@ return ;
 
 }
 
+void print_variables(Variable variables[], int total_variables)
+{
+
+int i;
+	
+	for(i = 0; i < total_variables; i++){
+		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(variables[i].type),variables[i].type);
+		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(variables[i].name),variables[i].name);
+	}
+
+return ;
+
+}
+
 void print_functions(Functions func_list[], int total)
 {
 	int i;
