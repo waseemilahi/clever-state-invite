@@ -12,12 +12,14 @@ int main(int argc, char **argv)
 	
 	/* Variable declarations. */
 	int i,j;
+	int k = -1;	
 	int statement_number;
 	int total_constants = 0;
 	int total_globals = 0;
 	int total_functions = 0;
 	int function_number = 0;
 	int total_params = 0;
+	int total_function_statements = 0;
 	int function_found = 0;
 	
 	char funcs[MAX_LENGTH];
@@ -26,13 +28,15 @@ int main(int argc, char **argv)
 	char global_constants[MAX_NUMBER][MAX_LENGTH];
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
+	char function_statements[MAX_NUMBER][MAX_LENGTH];
+	char dependent_variables[MAX_NUMBER][MAX_LENGTH];
 	
 	
 	
 	
 	
 	int t = 0 ;
-	int k;	
+	
 	int total_tokens = 0;
 	int t_statements_number = 0;
 	int truncated_number = 0;
@@ -48,8 +52,8 @@ int main(int argc, char **argv)
   	char tokens[MAX_NUMBER][MAX_LENGTH];
   	char declare_vars[MAX_NUMBER][MAX_LENGTH];
 	char all_vars[MAX_NUMBER][MAX_LENGTH];  	
-	char function_names[MAX_NUMBER][MAX_LENGTH];
-  	const char delimeters[] = "";
+	
+  	
   	char *running;
   	char *token;
   	char *tmpt;
@@ -77,12 +81,14 @@ int main(int argc, char **argv)
 			declare_vars[i][j] = '\0';
 			all_vars[i][j] = '\0';
       		global_constants[i][j]='\0';      		
-			function_names[i][j]='\0';
+			
+			function_statements[i][j] = '\0';
+			dependent_variables[i][j] = '\0';
 			lower[j] = '\0';
 			funcs[j] = '\0';
     	}
 	}
-	
+		
 	/* Get the input from the file. */
  	if((statement_number = get_input(statements,argv[1])) == -1)exit(1);
 	
@@ -129,26 +135,54 @@ int main(int argc, char **argv)
 
 		if(strcmp("quit",lower) == 0){
 		  fprintf(stdout,"\n Exiting........done\n\n");
-		  exit(0);
+		  return 0;
 		}
 
-		/* Found the function, now work on it. */
-		for(i = 0; i < function_number; i++){
-			if(strcmp(funcs,function_list[i].name) == 0){
-				function_found = 1;
-				fprintf(stdout,"\n Function Found. Processing...... \n\n");
-				
-				total_params = set_parameters(function_list[i].definition, parameters);
-				
-				/* Print the arguments. */
-				print_params(parameters, total_params);
-				
-				
-				
-				fprintf(stdout, "\n .......done.\n");
-				
-				//Do the stuff here...............
-			}
+		i = find_function(function_number, funcs, function_list);
+		
+		if( i >= 0){
+		
+			/* Found the function, now work on it. */			
+					function_found = 1;
+					fprintf(stdout,"\n Function Found. Processing...... \n\n");
+					
+					total_params = set_parameters(function_list[i].definition, parameters);
+					
+					/* Print the arguments. */
+					print_params(parameters, total_params);
+					
+					if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
+					{
+						fprintf(stderr,"\n Empty Function Definition. \n");
+						fprintf(stdout," Try Another!\n");
+						
+						/* Reset lower and funcs. */
+						for(i = 0; i < MAX_LENGTH; i++){
+							lower[i] = '\0';
+							funcs[i] = '\0';
+						}
+						continue ;
+					}
+					
+					/* Print Function Statements. */
+					print_output(function_statements,total_function_statements);
+					
+					for(j = 0; j < total_function_statements; j++)
+					{
+						//parse each statement to get the exact variables......
+						k = set_dependency(function_statements[i],dependent_variables, parameters, global_variables, global_constants );
+						if( k == 0){
+							fprintf(stdout, "\n\n hellooo\n");
+							continue;
+						}
+						
+						
+					
+					}
+															
+					fprintf(stdout, "\n .......done.\n");
+					
+			
 		}
 		
 		/* If no such function, then go back again. */
@@ -166,52 +200,9 @@ int main(int argc, char **argv)
 	}/* End While. */
 
 	//------------------------------------------------------------------------------------------------------------------
-	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.
-	
-	for( i = 0 ; i < statement_number; i++){
-		if((  ((findsubstr(statements[i] , "int")) == 1) || ((findsubstr(statements[i] , "float")) == 1) || ((findsubstr(statements[i] , "double")) == 1)
-	  ||((findsubstr(statements[i] , "char")) == 1) || ((findsubstr(statements[i] , "long")) == 1) ||((findsubstr(statements[i] , "void")) == 1)
-	  || ((findsubstr(statements[i] , "short")) == 1)
-	  ||((findsubstr(statements[i] , "struct")) == 1)		) &&(((findsubstr(statements[i] , "(")) == 1) &&((findsubstr(statements[i] , ")")) == 1))){
-				 running = strdup(statements[i]);
-   // fprintf(stdout, "\n %s \n",running);
-    token = strtok(running , "(");
-	if((token!=NULL) && (strcmp(token,"struct")))token = strtok(NULL,"(");
-	//token = strtok(NULL," ");
-	tmpt = token;
-	//fprintf(stdout, "\n %s \n",token);
-	if(token != NULL){
-	  while(*tmpt != '\0'){
-	    sprintf(function_names[i],"%s%c",function_names[i],*tmpt);
-	    tmpt++;
-	  }
-	  
-	}
-	  }
-			
-	}
-			
+	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.			
   
-  for(i = 0; i <  statement_number; i++){
-    
-    running = strdup(statements[i]);
-    
-    token = strtok(running , delimeters);
-    while(token != NULL){
-      
-      tmpt = token;
-      if(token != NULL){
-	while(*tmpt != '\0'){
-	  sprintf(tokens[total_tokens],"%s%c",tokens[total_tokens],*tmpt);
-	  tmpt++;
-	}
-	total_tokens++;
-      }
-      token = strtok(NULL,delimeters);
-    }
-  }
-  
-	char token_statements[total_tokens][MAX_LENGTH];
+  	char token_statements[total_tokens][MAX_LENGTH];
 	char declare_statements[total_tokens][MAX_LENGTH];
 
   	for (i = 0; i < total_tokens; i++)
@@ -406,9 +397,9 @@ int main(int argc, char **argv)
 	print_output(global_constants, total_constants);
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
-	/*
+	fprintf(stdout, "\n total_tokens = %d \n\n",total_tokens);
 	print_output(tokens,total_tokens);
-	print_output(token_statements,t_statements_number);
+	/*print_output(token_statements,t_statements_number);
 	print_output(truncated_statements,t_statements_number);
    	print_output(all_vars,total_vars);
 	print_output(real_vars,total_real_vars);

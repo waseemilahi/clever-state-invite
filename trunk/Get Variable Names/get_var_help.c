@@ -604,3 +604,72 @@ int set_function_statements(char *definition,char (*function_statements)[MAX_LEN
 	return statements;
 
 }
+
+int find_function(int function_number,char *funcs, Functions function_list[])
+{
+	int i;
+	
+	for(i = 0; i < function_number; i++)
+		if(strcmp(funcs,function_list[i].name) == 0)
+			return i;
+
+	return -1;
+	
+}
+
+int set_dependency(char *statement,char (*dependent_variables)[28],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+{
+
+	if( (findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, " case ") == 0) )return 0;
+	
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;	
+	char tmp_dec[MAX_LENGTH];
+	char tmp_stats[MAX_NUMBER][MAX_LENGTH];
+	int statement_number = 0;
+	int j;
+	
+	for(i = 0; i < MAX_NUMBER ; i++)
+		for(j = 0; j < MAX_LENGTH; j++)
+			tmp_stats[i][j] = '\0';
+
+	running = strdup(statement);
+	
+	token = strtok(running," *()=+-%/!><&|,");
+	
+	while(token != NULL)
+	{
+	
+		tmpt = token;
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		if(token != NULL){
+			int tmpy = 0;
+			while(*tmpt != '\0'){
+				tmp_dec[tmpy]=*tmpt;
+				tmpy++;
+				tmpt++;
+			}
+		}
+	
+		if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0))
+			if( (findsubstr(tmp_dec, "while") == 0) && (findsubstr(tmp_dec, "for") == 0) && (findsubstr(tmp_dec, "if") == 0) && (findsubstr(tmp_dec, "switch") == 0)
+				&& (findsubstr(tmp_dec, "case") == 0) && (findsubstr(tmp_dec, "else") == 0) && (findsubstr(tmp_dec, "return") == 0) 
+				&& (findsubstr(tmp_dec, "stdout") == 0))
+				strcpy(tmp_stats[statement_number++],tmp_dec);
+	
+		token = strtok(NULL," *()=+-%/!><&|,");
+	}
+	if(statement_number > 0)
+	for(i = 0; i <statement_number;i++)
+		fprintf(stdout, "\n\n tmp_stat ==>> %s \n\n",tmp_stats[i]);
+		
+	return statement_number;
+
+}

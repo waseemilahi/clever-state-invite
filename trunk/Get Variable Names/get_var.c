@@ -12,6 +12,7 @@ int main(int argc, char **argv)
 	
 	/* Variable declarations. */
 	int i,j;
+	int k = -1;	
 	int statement_number;
 	int total_constants = 0;
 	int total_globals = 0;
@@ -28,13 +29,14 @@ int main(int argc, char **argv)
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
 	char function_statements[MAX_NUMBER][MAX_LENGTH];
+	char dependent_variables[10][28];
 	
 	
-	
+	/*
 	
 	
 	int t = 0 ;
-	int k;	
+	
 	int total_tokens = 0;
 	int t_statements_number = 0;
 	int truncated_number = 0;
@@ -50,8 +52,8 @@ int main(int argc, char **argv)
   	char tokens[MAX_NUMBER][MAX_LENGTH];
   	char declare_vars[MAX_NUMBER][MAX_LENGTH];
 	char all_vars[MAX_NUMBER][MAX_LENGTH];  	
-	char function_names[MAX_NUMBER][MAX_LENGTH];
-  	const char delimeters[] = "";
+	
+  	
   	char *running;
   	char *token;
   	char *tmpt;
@@ -59,9 +61,10 @@ int main(int argc, char **argv)
   	char tmpstr[MAX_LENGTH];
   	const char delim[] = " ,*"; 
   	const char del[] = "=";  
-	const char delims[] = "=-+*/% \\\"\'";
-	char *pp;
-	const char de[] = "[];";  
+	*/
+	//const char delims[] = "=-+*/% \\\"\'";
+	//char *pp;
+	//const char de[] = "[];";  
 	
 	
 	
@@ -75,17 +78,21 @@ int main(int argc, char **argv)
 		strcpy(parameters[i].vars ,"");		
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
-			tokens[i][j] = '\0';
-			declare_vars[i][j] = '\0';
-			all_vars[i][j] = '\0';
+			//tokens[i][j] = '\0';
+			//declare_vars[i][j] = '\0';
+			//all_vars[i][j] = '\0';
       		global_constants[i][j]='\0';      		
-			function_names[i][j]='\0';
+			
 			function_statements[i][j] = '\0';
+			//dependent_variables[i][j] = '\0';
 			lower[j] = '\0';
 			funcs[j] = '\0';
     	}
 	}
-	
+	for(i = 0; i < 10; i++)
+		for(j = 0; j < 28; j++)
+			dependent_variables[i][j] = '\0';
+		
 	/* Get the input from the file. */
  	if((statement_number = get_input(statements,argv[1])) == -1)exit(1);
 	
@@ -135,36 +142,51 @@ int main(int argc, char **argv)
 		  return 0;
 		}
 
-		/* Found the function, now work on it. */
-		for(i = 0; i < function_number; i++){
-			if(strcmp(funcs,function_list[i].name) == 0){
-				function_found = 1;
-				fprintf(stdout,"\n Function Found. Processing...... \n\n");
-				
-				total_params = set_parameters(function_list[i].definition, parameters);
-				
-				/* Print the arguments. */
-				print_params(parameters, total_params);
-				
-				if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
-				{
-					fprintf(stderr,"\n Empty Function Definition. \n");
-					fprintf(stdout," Try Another!\n");
+		i = find_function(function_number, funcs, function_list);
+		
+		if( i >= 0){
+		
+			/* Found the function, now work on it. */			
+					function_found = 1;
+					fprintf(stdout,"\n Function Found. Processing...... \n\n");
 					
-					/* Reset lower and funcs. */
-					for(i = 0; i < MAX_LENGTH; i++){
-						lower[i] = '\0';
-						funcs[i] = '\0';
+					total_params = set_parameters(function_list[i].definition, parameters);
+					
+					/* Print the arguments. */
+					print_params(parameters, total_params);
+					
+					if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
+					{
+						fprintf(stderr,"\n Empty Function Definition. \n");
+						fprintf(stdout," Try Another!\n");
+						
+						/* Reset lower and funcs. */
+						for(i = 0; i < MAX_LENGTH; i++){
+							lower[i] = '\0';
+							funcs[i] = '\0';
+						}
+						continue ;
 					}
-					continue ;
-				}
-				
-				/* Print Function Statements. */
-				print_output(function_statements,total_function_statements);
-				
-				fprintf(stdout, "\n .......done.\n");
-				
-			}
+					
+					/* Print Function Statements. */
+					print_output(function_statements,total_function_statements);
+					
+					for(j = 0; j < total_function_statements; j++)
+					{
+						//parse each statement to get the exact variables......
+						k = set_dependency(function_statements[j],dependent_variables, parameters, global_variables, global_constants );
+						if( k == 0){
+							fprintf(stdout, "\n\n %d hellooo\n",k);
+							continue;
+						}
+						
+						
+					
+					}
+															
+					fprintf(stdout, "\n .......done.\n");
+					
+			
 		}
 		
 		/* If no such function, then go back again. */
@@ -183,30 +205,8 @@ int main(int argc, char **argv)
 
 	//------------------------------------------------------------------------------------------------------------------
 	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.			
-  
-  for(i = 0; i <  statement_number; i++){
-    
-	if(strlen(statements[i]) > 5){
-	
-    running = strdup(statements[i]);
-    
-    token = strtok(running , delimeters);
-    while(token != NULL){
-      
-      tmpt = token;
-      if(token != NULL){
-	while(*tmpt != '\0'){
-	  sprintf(tokens[total_tokens],"%s%c",tokens[total_tokens],*tmpt);
-	  tmpt++;
-	}
-	total_tokens++;
-      }
-      token = strtok(NULL,delimeters);
-    }
-  }
-  }
-  
-	char token_statements[total_tokens][MAX_LENGTH];
+  /*
+  	char token_statements[total_tokens][MAX_LENGTH];
 	char declare_statements[total_tokens][MAX_LENGTH];
 
   	for (i = 0; i < total_tokens; i++)
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
     tmpstr[i] = '\0';
 
   
-  /* We have all the '=' statements. Lets remove the left hand side of each. */
+  /* We have all the '=' statements. Lets remove the left hand side of each. 
   for( i = 0; i < t_statements_number; i++){
     strcpy(tmpstr ,token_statements[i]);
     if( ((j = findsubstr(tmpstr,"(")) == 0) && ((k = findsubstr(tmpstr,",")) == 0)){     
@@ -410,7 +410,7 @@ int main(int argc, char **argv)
     print_output(declare_vars,declared_vars);
     print_output(dd_truncated_statements,dd_truncated_number);
    	print_output(real_unique_vars,unique_real_vars);
-	*/
+	
 
   	fprintf(stdout, "\n\n --------------------------------------\n\n");
   	fprintf(stdout, "\n");
@@ -419,7 +419,7 @@ int main(int argc, char **argv)
     fprintf(stdout, "%d: %s  \n\n",i+1,external_vars[i]);
   
   fprintf(stdout, "\n Total External(required) Variable(s) = %d \n",external_unique_vars);
-  
+  */
   fprintf(stdout, "\n");
   
   return 0;
