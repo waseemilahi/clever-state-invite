@@ -58,7 +58,7 @@ void fourth(void)
 
 }
 
-int fifth(int e)
+int fifth(int[] e)
 {
 
   return e - 10;
