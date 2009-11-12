@@ -28,6 +28,7 @@ typedef struct funcs{
 extern int findsubstr(char *string , char *substring);
 extern int get_input(char (*statements)[MAX_LENGTH], char *filename);
 extern void print_output(char (*strings)[MAX_LENGTH], int string_number);
+extern void print_dependent_variables(char (*dependent_variables)[28],int total_dependent_variables);
 extern void print_global_vars(GlobalVar g_vars[], int total);
 extern void print_functions(Functions func_list[], int total);
 extern int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variables[], int statement_number);
@@ -37,6 +38,7 @@ extern int set_global_constants(char (*statements)[MAX_LENGTH],char (*global_con
 extern int set_parameters(char *definition, Parameter parameters[]);
 extern int set_function_statements(char *definition,char (*function_statements)[MAX_LENGTH]);
 extern void print_params(Parameter parameters[], int total_params);
-extern int set_dependency(char *statement,char (*dependent_variables)[28],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH]);
+extern int set_dependency(int total_dependent_variables,char *statement,char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH]);
+extern char *trimwhitespace(char *str);
 
 #endif

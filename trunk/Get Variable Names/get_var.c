@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	
 	/* Variable declarations. */
 	int i,j;
-	int k = -1;	
+	int k = 0;	
 	int statement_number;
 	int total_constants = 0;
 	int total_globals = 0;
@@ -20,6 +20,7 @@ int main(int argc, char **argv)
 	int function_number = 0;
 	int total_params = 0;
 	int total_function_statements = 0;
+	int total_dependent_variables = 0;
 	int function_found = 0;
 	
 	char funcs[MAX_LENGTH];
@@ -36,6 +37,7 @@ int main(int argc, char **argv)
 	
 	
 	int t = 0 ;
+	
 	
 	int total_tokens = 0;
 	int t_statements_number = 0;
@@ -84,7 +86,6 @@ int main(int argc, char **argv)
       		global_constants[i][j]='\0';      		
 			
 			function_statements[i][j] = '\0';
-			//dependent_variables[i][j] = '\0';
 			lower[j] = '\0';
 			funcs[j] = '\0';
     	}
@@ -173,21 +174,23 @@ int main(int argc, char **argv)
 					
 					for(j = 0; j < total_function_statements; j++)
 					{
-						//parse each statement to get the exact variables......
-						k = set_dependency(function_statements[j],dependent_variables, parameters, global_variables, global_constants );
-						
-						fprintf(stdout, "\n\n %d hellooo\n",k);
-							
-							
-											
-						
-					
+						k =  set_dependency(total_dependent_variables,function_statements[j],dependent_variables,function_list, parameters, global_variables, global_constants );					
+						total_dependent_variables = total_dependent_variables + k;
 					}
+					
+					/* Print all the dependent variables. */
+					print_dependent_variables(dependent_variables, total_dependent_variables);
+															
+					// We have the dependent variables from the statements. Now we need to go over each to 
+					// complete the process.
 															
 					fprintf(stdout, "\n .......done.\n");
 					
 			
 		}
+		
+		k = 0;
+		total_dependent_variables = 0;
 		
 		/* If no such function, then go back again. */
 		if(function_found == 0){
@@ -242,7 +245,7 @@ int main(int argc, char **argv)
     tmpstr[i] = '\0';
 
   
-  /* We have all the '=' statements. Lets remove the left hand side of each. 
+   
   for( i = 0; i < t_statements_number; i++){
     strcpy(tmpstr ,token_statements[i]);
     if( ((j = findsubstr(tmpstr,"(")) == 0) && ((k = findsubstr(tmpstr,",")) == 0)){     
@@ -403,7 +406,7 @@ int main(int argc, char **argv)
 	print_functions(function_list, function_number);
 	fprintf(stdout, "\n total_tokens = %d \n\n",total_tokens);
 	print_output(tokens,total_tokens);
-	/*print_output(token_statements,t_statements_number);
+	print_output(token_statements,t_statements_number);
 	print_output(truncated_statements,t_statements_number);
    	print_output(all_vars,total_vars);
 	print_output(real_vars,total_real_vars);
