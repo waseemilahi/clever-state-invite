@@ -22,6 +22,18 @@ void print_global_vars(GlobalVar g_vars[], int total)
 return ;
 }
 
+void print_dependent_variables(char (*dependent_variables)[28],int total_dependent_variables)
+{
+
+	int i;
+
+	for(i = 0; i < total_dependent_variables; i++ )
+	    fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(dependent_variables[i]),dependent_variables[i]);
+	
+	return ;
+
+}
+
 void print_params(Parameter parameters[], int total_params)
 {
 

@@ -640,10 +640,10 @@ int find_function(int function_number,char *funcs, Functions function_list[])
 	
 }
 
-int set_dependency(char *statement,char (*dependent_variables)[28],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+int set_dependency(int total_dependent_variables,char *statement,char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
 {
 
-	if( (findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, "case ") == 0)  )return 0;
+	if( (findsubstr(statement, ">") == 0) &&(findsubstr(statement, "<") == 0) &&(findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, "case ") == 0)  )return 0;
 	
 	if( strcmp(statement, "else") == 0)return 0;
 	
@@ -651,17 +651,14 @@ int set_dependency(char *statement,char (*dependent_variables)[28],Parameter par
 	char *running;
   	char *token;
   	char *tmpt;	
-	char tmp_dec[MAX_LENGTH];
-	char tmp_stats[MAX_NUMBER][MAX_LENGTH];
+	int condition = 0;
+	char tmp_dec[MAX_LENGTH];	
 	int statement_number = 0;
-	int j;
 	
-	for(i = 0; i < MAX_NUMBER ; i++)
-		for(j = 0; j < MAX_LENGTH; j++)
-			tmp_stats[i][j] = '\0';
-
 	if( (findsubstr(statement, "while(") == 1) || (findsubstr(statement, "for(") == 1) || (findsubstr(statement, "if(") == 1) || (findsubstr(statement, "switch(") ==  1)
 		 || (findsubstr(statement, "else(") == 1) ){
+				
+		condition = 1;
 				
 		running = strdup(statement);
 	
@@ -689,39 +686,106 @@ int set_dependency(char *statement,char (*dependent_variables)[28],Parameter par
 	}
 	else strcpy(tmp_dec, statement);
 	
-	running = strdup(tmp_dec);
+	char key1[] = "=";
+	char key2[] = "()"; 
+	if(condition == 0  && ( strcspn(tmp_dec,key1) < strcspn(tmp_dec,key2)) ){
 	
-	token = strtok(running, " *()+-%/!><&|,");
+		running = strdup(tmp_dec);
 	
-	while(token != NULL)
-	{
-	
-		tmpt = token;
+		token = strtok(running, "=");
 		
-		for(i = 0; i < MAX_LENGTH; i++)
-		{
-			tmp_dec[i] = '\0';
-		}
+		token = strtok(NULL, "=");
+	
+			tmpt = token;
 		
-		if(token != NULL){
-			int tmpy = 0;
-			while(*tmpt != '\0'){
-				tmp_dec[tmpy]=*tmpt;
-				tmpy++;
-				tmpt++;
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_dec[i] = '\0';
 			}
-		}
-	
-		if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0))
-			strcpy(tmp_stats[statement_number++],tmp_dec);
-	
-		token = strtok(NULL," *()+-%/!><&|,");
+			
+			if(token != NULL){
+				int tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}		
 	}
 	
-	if(statement_number > 0)
-	for(i = 0; i <statement_number;i++)
-		fprintf(stdout, "\n\n tmp_stat ==>> %s \n\n",tmp_stats[i]);
+	running = strdup(tmp_dec);
+	
+	token = strtok(running, "=*+-%/!><&|(), ");
+	
+	while(token != NULL)
+		{
+	
+			tmpt = token;
+		
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_dec[i] = '\0';
+			}
+			
+			if(token != NULL){
+				int tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			}
+		
+			if( ((strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0) ) && (strcmp("return",tmp_dec) != 0)
+				&& (strcmp("stdout",tmp_dec) != 0)&& (strcmp("stderr",tmp_dec) != 0)&& (strcmp("stdin",tmp_dec) != 0)){
+				if(findsubstr(tmp_dec,".") == 1){
+					char key3[] = ".";
+					char tmp_tmp[MAX_LENGTH];	
+			
+					for(i = 0; i < MAX_LENGTH; i++)
+					{
+						tmp_tmp[i] = '\0';
+					}
+					
+					strcpy(tmp_tmp,tmp_dec);			
+		
+					for(i = 0; i < MAX_LENGTH; i++)
+					{
+						tmp_dec[i] = '\0';
+					}
+			
+					for(i = 0; i < (strlen(tmp_tmp) - (strlen(tmp_tmp) - strcspn(tmp_tmp,key3) ) );i++){
+						tmp_dec[i] = tmp_tmp[i];
+					}
+			
+				}
+				char *ptr = trimwhitespace(tmp_dec);
+				strcpy(dependent_variables[total_dependent_variables + statement_number++],ptr);
+			}
+		
+			token = strtok(NULL,"=*+-%/!><&|(),");
+		}
 		
 	return statement_number;
 
 }
+
+/* Acquired from online blog. */
+char *trimwhitespace(char *str)
+{
+  char *end;
+
+  // Trim leading space
+  while(isspace(*str)) str++;
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && isspace(*end)) end--;
+
+  // Write new null terminator
+  *(end+1) = 0;
+
+  return str;
+
+}
+
