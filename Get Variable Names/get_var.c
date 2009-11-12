@@ -175,11 +175,11 @@ int main(int argc, char **argv)
 					{
 						//parse each statement to get the exact variables......
 						k = set_dependency(function_statements[j],dependent_variables, parameters, global_variables, global_constants );
-						if( k == 0){
-							fprintf(stdout, "\n\n %d hellooo\n",k);
-							continue;
-						}
 						
+						fprintf(stdout, "\n\n %d hellooo\n",k);
+							
+							
+											
 						
 					
 					}
