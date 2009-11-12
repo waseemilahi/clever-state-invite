@@ -46,9 +46,7 @@ void second(int a, double b, char c)
 
 int third(int d)
 {
-
   return d + 10;
-
 }
 
 void fourth(void)
