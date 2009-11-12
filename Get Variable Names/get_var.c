@@ -3,15 +3,36 @@
 
 int main(int argc, char **argv)
 {
-  
+
+	/* Check the arguments. */  
 	if(argc != 2){
 	    fprintf(stderr, "\n Usage: get_var file_name.\n\n");
     	exit(1);
  	}
 	
-	int i,j,k;
-	int t = 0 ;
+	/* Variable declarations. */
+	int i,j;
 	int statement_number;
+	int total_constants = 0;
+	int total_globals = 0;
+	int total_functions = 0;
+	int function_number = 0;
+	int total_params = 0;
+	int function_found = 0;
+	
+	char funcs[MAX_LENGTH];
+	char lower[MAX_LENGTH];	
+	char statements[MAX_NUMBER][MAX_LENGTH];
+	char global_constants[MAX_NUMBER][MAX_LENGTH];
+  	GlobalVar global_variables[MAX_NUMBER];
+	Parameter parameters[MAX_NUMBER];
+	
+	
+	
+	
+	
+	int t = 0 ;
+	int k;	
 	int total_tokens = 0;
 	int t_statements_number = 0;
 	int truncated_number = 0;
@@ -23,20 +44,11 @@ int main(int argc, char **argv)
 	int unique_real_vars = 0;
   	int found = 0;
 	int dd_truncated_number = 0;
-	int external_unique_vars = 0;
-	int total_constants = 0;
-	int total_globals = 0;
-	int total_functions = 0;
-	int function_number = 0;
-
-  	char statements[MAX_NUMBER][MAX_LENGTH];
+	int external_unique_vars = 0;	
   	char tokens[MAX_NUMBER][MAX_LENGTH];
   	char declare_vars[MAX_NUMBER][MAX_LENGTH];
-	char all_vars[MAX_NUMBER][MAX_LENGTH];
-  	char global_constants[MAX_NUMBER][MAX_LENGTH];
-  	GlobalVars global_variables[MAX_NUMBER];
+	char all_vars[MAX_NUMBER][MAX_LENGTH];  	
 	char function_names[MAX_NUMBER][MAX_LENGTH];
-
   	const char delimeters[] = "";
   	char *running;
   	char *token;
@@ -49,10 +61,16 @@ int main(int argc, char **argv)
 	char *pp;
 	const char de[] = "[];";  
 	
+	
+	
+	
+	
+	/* Initioalize the Variables. */	
 	for(i = 0; i < MAX_NUMBER; i++){
 		strcpy(global_variables[i].type, "");
 		strcpy(global_variables[i].vars ,"");
-			
+		strcpy(parameters[i].type, "");
+		strcpy(parameters[i].vars ,"");		
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
 			tokens[i][j] = '\0';
@@ -60,9 +78,11 @@ int main(int argc, char **argv)
 			all_vars[i][j] = '\0';
       		global_constants[i][j]='\0';      		
 			function_names[i][j]='\0';
+			lower[j] = '\0';
+			funcs[j] = '\0';
     	}
 	}
-
+	
 	/* Get the input from the file. */
  	if((statement_number = get_input(statements,argv[1])) == -1)exit(1);
 	
@@ -70,37 +90,34 @@ int main(int argc, char **argv)
 	total_constants = set_global_constants(statements,global_constants,statement_number);
 	total_globals = set_global_variables(statements,global_variables,statement_number);
 
+	/* Total "Possible" Funcion definitions. */
 	for(i = 0; i < statement_number; i++)
 		if(strlen(statements[i]) > 5)total_functions++;
 			
+	/* No Functions in the file. */
 	if(total_functions == 0){
 		fprintf(stderr, "\n No Function Definitions in the File. \n");
 		exit(1);
 	}	
 			
+	/* The data structure for holding the function names and their definition. */
 	Functions function_list[total_functions];
 	
+	/* Initialize the structure to empty. */
 	for(i = 0; i < total_functions; i++){
 		strcpy(function_list[i].name, "");
 		strcpy(function_list[i].definition, "");
 	}
 		
+	/* Set the function names and the definition. */
 	function_number = set_functions(statements,function_list,statement_number);
 	
-	    print_output(statements,statement_number);
+	/* Print the output. */
+    print_output(statements,statement_number);
 	print_output(global_constants, total_constants);
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
-
-
-	char funcs[MAX_LENGTH];
-	char lower[MAX_LENGTH];
-	int function_found = 0;
-	for(i = 0; i < MAX_LENGTH; i++)
-	  {
-	    lower[i] = '\0';
-	    funcs[i] = '\0';
-	  }
+	
 	while(1){
 	  
 		function_found = 0;
@@ -111,28 +128,40 @@ int main(int argc, char **argv)
 		for(j = 0; j < strlen(funcs); j++)lower[j] = tolower(funcs[j]);
 
 		if(strcmp("quit",lower) == 0){
-		  fprintf(stdout,"\n Exiting......\n\n");
+		  fprintf(stdout,"\n Exiting........done\n\n");
 		  exit(0);
 		}
 
+		/* Found the function, now work on it. */
 		for(i = 0; i < function_number; i++){
 			if(strcmp(funcs,function_list[i].name) == 0){
 				function_found = 1;
 				fprintf(stdout,"\n Function Found. Processing...... \n ");
+				
+				total_params = set_parameters(function_list[i].definition, parameters);
+				
+				/* Print the arguments. */
+				print_params(parameters, total_params);
+				
+				fprintf(stdout, "\n .......done.\n");
+				
 				//Do the stuff here...............
 			}
 		}
+		
+		/* If no such function, then go back again. */
 		if(function_found == 0){
 			fprintf(stderr,"\n No Such Function/Test in this File. \n");
 			fprintf(stdout," Try Again!\n");
 		}
 
+		/* Reset lower and funcs. */
 		for(i = 0; i < MAX_LENGTH; i++){
 		  lower[i] = '\0';
 		  funcs[i] = '\0';
 		}
 
-	}
+	}/* End While. */
 
 	//------------------------------------------------------------------------------------------------------------------
 	//We have global vars/constants and the function names and their def.(s). now parse the func. defs. to get the vars.
@@ -158,7 +187,7 @@ int main(int argc, char **argv)
 	}
 	  }
 			
-}
+	}
 			
   
   for(i = 0; i <  statement_number; i++){

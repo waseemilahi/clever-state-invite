@@ -10,7 +10,7 @@ void print_output(char (*strings)[MAX_LENGTH], int string_number)
 return ;
 }
 
-void print_global_vars(GlobalVars g_vars[], int total)
+void print_global_vars(GlobalVar g_vars[], int total)
 {
 	int i;
 	
@@ -22,6 +22,19 @@ void print_global_vars(GlobalVars g_vars[], int total)
 return ;
 }
 
+void print_params(Parameter parameters[], int total_params)
+{
+
+int i;
+	
+	for(i = 0; i < total_params; i++){
+		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(parameters[i].type),parameters[i].type);
+		 fprintf(stdout, "%d. %d. %s  \n\n",i,strlen(parameters[i].vars),parameters[i].vars);
+	}
+
+return ;
+
+}
 
 void print_functions(Functions func_list[], int total)
 {
