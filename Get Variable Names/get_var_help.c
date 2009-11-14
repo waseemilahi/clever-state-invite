@@ -792,7 +792,7 @@ char *trimwhitespace(char *str)
 int set_variables(char (*done_func)[128], int total_done,int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[28],Variable variables[])
 {
 
-	int j,k,l = 0;
+	int j,k,l = 0, done,m;
 	int var_found = 0;
 		
 	for(j = 0; j < total_dependent_variables; j++){
@@ -871,22 +871,21 @@ int set_variables(char (*done_func)[128], int total_done,int total_variables,int
 			continue;
 		}
 		else{
-		/*
-			int done = 0;
-			for(k = 0; k < total_done; k++)
-				if( strcmp(done_func[k],dependent_variables[j]) == 0){
+		
+			done = 0;
+			for(m = 0; m < total_done; m++)
+				if( strcmp(done_func[m],dependent_variables[j]) == 0){
 					done = 1;
 				}
 			
-			if(done != 1){
+			if(done == 1)continue;
 			
 			strcpy(done_func[total_done++],dependent_variables[j]);
 			
-			*/	int tmp_num = get_func_vars(done_func,total_done,dependent_variables[j],function_number,total_globals,total_constants,function_list[k].definition,total_dependent_variables,dependent_variables,total_variables,variables,function_list,global_variables,global_constants);
+			int tmp_num = get_func_vars(done_func,total_done,dependent_variables[j],function_number,total_globals,total_constants,function_list[k].definition,total_dependent_variables,dependent_variables,total_variables,variables,function_list,global_variables,global_constants);
 
 				total_variables += tmp_num;
 			
-			//}	
 		}
 					
 						
