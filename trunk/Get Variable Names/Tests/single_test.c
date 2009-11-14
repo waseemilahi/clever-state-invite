@@ -39,6 +39,7 @@ void second(int a, double b, char c)
 	int i;
 	t = b + c + t;
 	fourth();
+	third(t);
 	for( i = 0; i < xx; i++)
 		fprintf(stdout, "\n T = %f \n", t);
 

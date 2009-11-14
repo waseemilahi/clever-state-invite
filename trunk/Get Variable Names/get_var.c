@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 	int total_dependent_variables = 0;
 	int function_found = 0;
 	int total_variables = 0;
+	int total_unique_variables = 0;
 	
 	char funcs[MAX_LENGTH];
 	char lower[MAX_LENGTH];	
@@ -31,6 +32,7 @@ int main(int argc, char **argv)
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
 	Variable variables[MAX_NUMBER];
+	Variable unique_variables[MAX_NUMBER];
 	char function_statements[MAX_NUMBER][MAX_LENGTH];
 	char dependent_variables[10][28];	
 	
@@ -41,7 +43,9 @@ int main(int argc, char **argv)
 		strcpy(parameters[i].type, "");
 		strcpy(parameters[i].vars ,"");
 		strcpy(variables[i].type, "");
-		strcpy(variables[i].name ,"");				
+		strcpy(variables[i].name ,"");
+		strcpy(unique_variables[i].type, "");
+		strcpy(unique_variables[i].name ,"");		
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
 			global_constants[i][j]='\0';      		
@@ -145,10 +149,28 @@ int main(int argc, char **argv)
 					/* Get all the variables the function depends upon. */
 					total_variables = set_variables(done_func,total_done,0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
 					
+					int var_found;
+										
+					for(i = 0; i < total_variables; i++){
+						var_found = 0;
+						for(j = 0; j < total_unique_variables; j++){
+							if( (strcmp(variables[i].name,unique_variables[j].name)) == 0){
+								var_found = 1;
+								break;
+							}
+						}
+						if(var_found == 1)continue;
+						else {
+							strcpy(unique_variables[total_unique_variables].name , variables[i].name);
+							strcpy(unique_variables[total_unique_variables].type , variables[i].type);
+							total_unique_variables++;
+						}
+					}					
+					
 					/* Print the Variables, the Function depends upon. */
 					if(total_variables > 0){
 						fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
-						print_variables(variables,total_variables);					
+						print_variables(unique_variables,total_unique_variables);					
 					}
 					else{
 						fprintf(stdout,"\n\n No Known Dependency. \n\n");
@@ -159,6 +181,8 @@ int main(int argc, char **argv)
 						for(j = 0; j < MAX_NUMBER; j++){
 							strcpy(variables[j].type , "");
 							strcpy(variables[j].name , "");
+							strcpy(unique_variables[j].type , "");
+							strcpy(unique_variables[j].name , "");							
 						}
 						
 						for(j = 0; j < 10; j++)
@@ -166,7 +190,8 @@ int main(int argc, char **argv)
 								dependent_variables[j][k] = '\0';
 
 						total_dependent_variables = 0;
-						total_variables = 0;					
+						total_variables = 0;
+						total_unique_variables = 0;
 			
 		}
 		for(i = 0; i < function_number; i++)
