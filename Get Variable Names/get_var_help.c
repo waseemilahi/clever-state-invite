@@ -942,8 +942,8 @@ int get_func_vars(char (*done_func)[128], int total_done,char *func,int function
 	}
 									
 	/* Get all the variables the function depends upon. */
-	if(new_total_dependent > 0)
+	if(new_total_dependent > 0){
 		new_variables = set_variables(done_func,total_done,total_variables,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,new_total_dependent,new_dependents,variables);					
-					
+	}				
 	return new_variables;
 }
