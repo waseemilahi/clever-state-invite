@@ -144,8 +144,6 @@ int main(int argc, char **argv)
 						continue ;
 					}
 					
-					print_output(function_statements,total_function_statements);
-					
 					for(j = 0; j < total_function_statements; j++)
 					{
 						k =  set_dependency(total_dependent_variables,function_statements[j],dependent_variables,function_list, parameters, global_variables, global_constants );					
