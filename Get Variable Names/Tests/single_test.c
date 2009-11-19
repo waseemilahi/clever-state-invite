@@ -43,19 +43,20 @@ void second(int a, double b, char c)
 	double t = xy;
 	int i,j;
 	t = b + c + t;
-	fourth();
-	third(t);
+	//fourth();
+	//third(t);
 	for( i = 0; i < xx; i++){
 		for(j = 0; j < xx; j++){
-			fprintf(stdout, "\n T = %f \n", t);
+			int a;
+			fprintf(stdout, "\n T = %d \n",  a );
 		}
 	}
-	if( a = third(a) == 1){
-		return ;
-	}
+	//if( a = third(a) == 1){
+	//	return ;
+	//}
 		
-	if( if(ab == b) == if(b == c) )
-		return;
+	//if( if(a == b) == if(b == c) )
+		//return;
 	
 	return ;
 
