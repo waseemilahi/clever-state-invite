@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 	/* Set the Global Constants and Variables. */
 	total_constants = set_global_constants(statements,global_constants,statement_number);
 	total_globals = set_global_variables(statements,global_variables,statement_number);
-
+	
 	/* Total "Possible" Funcion definitions. */
 	for(i = 0; i < statement_number; i++)
 		if(strlen(statements[i]) > 5)total_functions++;
@@ -110,21 +110,22 @@ int main(int argc, char **argv)
 
 		for(j = 0; j < strlen(funcs); j++)lower[j] = tolower(funcs[j]);
 
-		if(strcmp("quit",lower) == 0){
+		if(strcmp(lower,"quit") == 0){
 		  fprintf(stdout,"\n Exiting........done\n\n");
 		  return 0;
 		}
-
-		i = find_function(function_number, funcs, function_list);
+		else{
 		
-		if( i >= 0){
+			i = find_function(function_number, funcs, function_list);
 		
-			/* Found the function, now work on it. */			
+			if( i >= 0){
+		
+				/* Found the function, now work on it. */			
 					function_found = 1;
 					fprintf(stdout,"\n Function Found. Processing...... \n\n");
 					
 					total_params = set_parameters(function_list[i].definition, parameters);
-										
+						print_params(parameters, total_params);
 					if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
 					{
 						fprintf(stderr,"\n Empty Function Definition. \n");
@@ -193,22 +194,29 @@ int main(int argc, char **argv)
 						total_variables = 0;
 						total_unique_variables = 0;
 			
+			}
+			for(i = 0; i < function_number; i++)
+				for(j = 0; j < 128; j++)
+					done_func[i][j] = '\0';
+		
+			total_done = 0;		
+		
+			k = 0;
+			total_dependent_variables = 0;
+				
 		}
-		for(i = 0; i < function_number; i++)
-			for(j = 0; j < 128; j++)
-				done_func[i][j] = '\0';
-		
-		total_done = 0;		
-		
-		k = 0;
-		total_dependent_variables = 0;
-		
 		/* If no such function, then go back again. */
 		if(function_found == 0){
+		
+			if(strcmp(lower,"quit") == 0){
+				fprintf(stdout,"\n Exiting........done\n\n");
+				return 0;
+			}
+		
 			fprintf(stderr,"\n No Such Function/Test in this File. \n");
 			fprintf(stdout," Try Again!\n");
 		}
-
+		
 		/* Reset lower and funcs. */
 		for(i = 0; i < MAX_LENGTH; i++){
 		  lower[i] = '\0';
