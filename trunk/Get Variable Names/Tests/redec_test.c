@@ -1,5 +1,7 @@
 # include <stdio.h>
 
+int c = 1;
+
 int f(int a, int b);
 
 int main(){
@@ -12,6 +14,10 @@ int main(){
 
 int f(int a, int b){
 
+	char c = '\0';
+	
+	fprintf(stdout, "\n\n c == %d \n\n",c);
+	
 	a = b;
 	b = a + 2;
 	

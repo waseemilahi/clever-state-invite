@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 	int total_dependent_variables = 0;
 	int function_found = 0;
 	int total_variables = 0;
+	int total_locals = 0;
 	int total_unique_variables = 0;
 	
 	char funcs[MAX_LENGTH];
@@ -32,6 +33,7 @@ int main(int argc, char **argv)
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
 	Variable variables[MAX_NUMBER];
+	Variable local_variables[MAX_NUMBER];
 	Variable unique_variables[MAX_NUMBER];
 	char function_statements[MAX_NUMBER][MAX_LENGTH];
 	char dependent_variables[10][28];	
@@ -44,6 +46,8 @@ int main(int argc, char **argv)
 		strcpy(parameters[i].vars ,"");
 		strcpy(variables[i].type, "");
 		strcpy(variables[i].name ,"");
+		strcpy(local_variables[i].type, "");
+		strcpy(local_variables[i].name ,"");
 		strcpy(unique_variables[i].type, "");
 		strcpy(unique_variables[i].name ,"");		
     	for(j =0; j < MAX_LENGTH; j++){
@@ -144,6 +148,8 @@ int main(int argc, char **argv)
 						continue ;
 					}
 					
+					//need to check local redeclarations.......
+					
 					for(j = 0; j < total_function_statements; j++)
 					{
 						k =  set_dependency(total_dependent_variables,function_statements[j],dependent_variables,function_list, parameters, global_variables, global_constants );					
@@ -184,10 +190,7 @@ int main(int argc, char **argv)
 							}
 						}
 					}
-					
-					
-					
-					
+										
 					/* Print the Variables, the Function depends upon. */
 					if(total_variables > 0){
 						fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
@@ -202,6 +205,8 @@ int main(int argc, char **argv)
 						for(j = 0; j < MAX_NUMBER; j++){
 							strcpy(variables[j].type , "");
 							strcpy(variables[j].name , "");
+							strcpy(local_variables[j].type , "");
+							strcpy(local_variables[j].name , "");
 							strcpy(unique_variables[j].type , "");
 							strcpy(unique_variables[j].name , "");							
 						}
@@ -212,6 +217,7 @@ int main(int argc, char **argv)
 
 						total_dependent_variables = 0;
 						total_variables = 0;
+						total_locals = 0;
 						total_unique_variables = 0;
 			
 			}
