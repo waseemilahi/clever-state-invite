@@ -52,7 +52,11 @@ int third(int d)
 	int a;
 	a = first( d, d, d);
 	
-	second(d,xab,a);
+	second(d,xy,a);
+	
+	first(d , d , d);
+	
+	first(xx ,d, xy);
 	
 	fprintf(stderr, "\n Quit \n");
 	

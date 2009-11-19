@@ -1086,7 +1086,7 @@ int get_func_vars(char (*done_func)[128], int total_done,char *func,int function
 		strcpy(parameters[i].vars,"");
 	}
 
-	total_params = set_parameters(definition, parameters);
+	//total_params = set_parameters(definition, parameters);
 	
 	for(j = 0; j < total_dependent_variables; j++){
 		if(strcmp(func,dependent_variables[j]) == 0)break;
@@ -1098,9 +1098,9 @@ int get_func_vars(char (*done_func)[128], int total_done,char *func,int function
 		return 0;
 	}
 	
-	for(k = 0; k < total_params; k++){
-		strcpy(parameters[k].vars, dependent_variables[j++]);
-	}
+	//for(k = 0; k < total_params; k++){
+		//strcpy(parameters[k].vars, dependent_variables[j++]);
+	//}
 									
 	for(j = 0; j < total_function_statements; j++)
 	{
