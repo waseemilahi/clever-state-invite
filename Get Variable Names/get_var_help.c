@@ -837,7 +837,7 @@ int set_dependency(int total_dependent_variables,char *statement,char (*dependen
 	
 		token = strtok(running,"("); 
 	
-		token = strtok(NULL,"(");
+		token = strtok(NULL,"");
 	
 		while( (token != NULL) &&  ((strcmp(token , " ") == 0) || (strlen(token) == 0))  )
 			token = strtok(NULL,"(");		
@@ -858,7 +858,7 @@ int set_dependency(int total_dependent_variables,char *statement,char (*dependen
 			}
 			//tmp_dec[tmpy-1] = '\0';
 		}
-		fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
+		//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
 	}
 	else strcpy(tmp_dec, statement);
 	
