@@ -9,20 +9,21 @@
 
 # define MAX_NUMBER 12
 # define MAX_LENGTH 2048
+# define VAR_LENGTH 255
 
 typedef struct globals {
-	char type[MAX_NUMBER];
-	char vars[MAX_NUMBER];
+	char type[VAR_LENGTH];
+	char vars[VAR_LENGTH];
 }GlobalVar;
 
 typedef struct params {
-	char type[MAX_NUMBER];
-	char vars[MAX_NUMBER];
+	char type[VAR_LENGTH];
+	char vars[VAR_LENGTH];
 }Parameter;
 
 typedef struct final {
-	char type[MAX_NUMBER];
-	char name[MAX_NUMBER];
+	char type[VAR_LENGTH];
+	char name[VAR_LENGTH];
 }Variable;
 
 typedef struct funcs{
