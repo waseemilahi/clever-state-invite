@@ -743,7 +743,7 @@ int set_function_statements(char *definition,char (*function_statements)[MAX_LEN
 	
 	strcpy(tmp_dec2 , tmp_dec);
 	
-	//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
+	fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
 	
 	running = strdup(tmp_dec);
 	
