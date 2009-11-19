@@ -6,8 +6,8 @@
 
        #      define     Global_Variable      1
 	   
-     int xx;
-double     xy;
+ unsigned  int xx[1024] ;
+double   *xy   ;
 
 typedef struct params {
 	char type[1024];
@@ -52,7 +52,7 @@ int third(int d)
 	int a;
 	a = first( d, d, d);
 	
-	second(d,d,a);
+	second(d,xab,a);
 	
 	fprintf(stderr, "\n Quit \n");
 	
