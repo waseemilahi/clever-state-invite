@@ -716,10 +716,12 @@ int set_function_statements(char *definition,char (*function_statements)[MAX_LEN
   	char *tmpt;		
 	int statements = 0;
 	char tmp_dec[MAX_LENGTH];
+	char tmp_dec2[MAX_LENGTH];
 	
 	for(i = 0; i < MAX_LENGTH; i++)
 	{
 		tmp_dec[i] = '\0';
+		tmp_dec2[i] = '\0';
 	}
 	
 	running = strdup(definition);
@@ -739,9 +741,13 @@ int set_function_statements(char *definition,char (*function_statements)[MAX_LEN
 		tmp_dec[tmpy-1] = '\0';
 	}
 	
+	strcpy(tmp_dec2 , tmp_dec);
+	
+	//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
+	
 	running = strdup(tmp_dec);
 	
-	token = strtok(running, ";{}");
+	token = strtok(running, "\r\n\t;{}");
 	
 	while(token != NULL)
 	{
@@ -787,7 +793,7 @@ int set_function_statements(char *definition,char (*function_statements)[MAX_LEN
 			if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0) )
 				strcpy(function_statements[statements++],tmp_dec);
 		
-		token = strtok(NULL, ";{}");
+		token = strtok(NULL, "\r\n\t;{}");
 		
 	}
 		
@@ -833,6 +839,9 @@ int set_dependency(int total_dependent_variables,char *statement,char (*dependen
 	
 		token = strtok(NULL,"(");
 	
+		while( (token != NULL) &&  ((strcmp(token , " ") == 0) || (strlen(token) == 0))  )
+			token = strtok(NULL,"(");		
+	
 		tmpt = token;
 		
 		for(i = 0; i < MAX_LENGTH; i++)
@@ -847,9 +856,9 @@ int set_dependency(int total_dependent_variables,char *statement,char (*dependen
 				tmpy++;
 				tmpt++;
 			}
-			tmp_dec[tmpy-1] = '\0';
+			//tmp_dec[tmpy-1] = '\0';
 		}
-		
+		fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
 	}
 	else strcpy(tmp_dec, statement);
 	
