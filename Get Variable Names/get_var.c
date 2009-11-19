@@ -123,9 +123,14 @@ int main(int argc, char **argv)
 				/* Found the function, now work on it. */			
 					function_found = 1;
 					fprintf(stdout,"\n Function Found. Processing...... \n\n");
+					int i5;
+					for(i5 = 0; i5 < MAX_NUMBER; i5++){
+						strcpy(parameters[i5].type, "");
+						strcpy(parameters[i5].vars ,"");
+					}
 					
 					total_params = set_parameters(function_list[i].definition, parameters);
-						print_params(parameters, total_params);
+						//print_params(parameters, total_params);
 					if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
 					{
 						fprintf(stderr,"\n Empty Function Definition. \n");

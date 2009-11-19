@@ -33,11 +33,11 @@ int first(int* a, double *b, char **c)
 
 }
 
-void second(int** a, double[10] b, char c[100])
+void second(int** a, double[10][10000] b,unsigned char c[100])
 {
 	double t = xy;
 	int i;
-	t = b + c + t;
+	t = **b + c[100] + t;
 	fourth();
 	third(t);
 	for( i = 0; i < xx; i++)
