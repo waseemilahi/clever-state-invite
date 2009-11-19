@@ -297,6 +297,23 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 					global_variables[total_globals].type[tmpty++] = ']';
 					
 				}
+				
+				token = strtok(NULL , "[]");				
+			
+				if( (token != NULL) && (findsubstr(token,";") == 0)){
+					
+					tmpt = token;			
+					global_variables[total_globals].type[tmpty++] = '[';
+				
+					while(*tmpt != '\0'){
+						global_variables[total_globals].type[tmpty]=*tmpt;
+						tmpty++;
+						tmpt++;
+					}
+					
+					global_variables[total_globals].type[tmpty++] = ']';
+					
+				}
 			
 			
 			

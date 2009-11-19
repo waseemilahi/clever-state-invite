@@ -6,7 +6,7 @@
 
        #      define     Global_Variable      1
 	   
- unsigned  int xx[1024] ;
+ unsigned  int xx[1024][11] ;
 double   *xy   ;
 
 typedef struct params {
@@ -23,7 +23,7 @@ void fourth(void);
 int fifth(Parameter e);
 void sixth();
 
-int first(int a, double b, char c)
+int first(int* a, double *b, char **c)
 {
 	int t;
 	a = b + c;
@@ -33,7 +33,7 @@ int first(int a, double b, char c)
 
 }
 
-void second(int a, double b, char c)
+void second(int** a, double[10] b, char c[100])
 {
 	double t = xy;
 	int i;
