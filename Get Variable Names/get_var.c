@@ -172,6 +172,21 @@ int main(int argc, char **argv)
 							total_unique_variables++;
 						}
 					}					
+					/* Set the array length for variables. */
+					int i6,i7;
+					int sub_size;
+					for(i6 = 0; i6 < total_unique_variables; i6++){
+						if( (findsubstr(unique_variables[i6].type,"*") == 1) && (findsubstr(unique_variables[i6].type,"[") == 1) ){
+							strcat(unique_variables[i6].name,strchr(unique_variables[i6].type,'['));
+							sub_size = strlen(unique_variables[i6].type) - strlen(strchr(unique_variables[i6].type,'['));
+							for(i7 = sub_size; i7 <= strlen(unique_variables[i6].type); i7++){
+								unique_variables[i6].type[i7] = '\0';
+							}
+						}
+					}
+					
+					
+					
 					
 					/* Print the Variables, the Function depends upon. */
 					if(total_variables > 0){

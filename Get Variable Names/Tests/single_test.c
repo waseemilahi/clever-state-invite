@@ -5,9 +5,12 @@
 # include <string.h>
 
        #      define     Global_Variable      1
-	   
- unsigned  int xx[1024][11] ;
-double   *xy   ;
+	  
+	int xx ;
+	
+	int *ab[10];
+		
+double   xy   ;
 
 typedef struct params {
 	char type[1024];
@@ -23,21 +26,23 @@ void fourth(void);
 int fifth(Parameter e);
 void sixth();
 
-int first(int* a, double *b, char **c)
+int first(int a, double b, char c)
 {
 	int t;
 	a = b + c;
 	t = a + t;
+	
+	int ta = *(ab[2]);
 
-	return a + t +( b * c);
+	return ta + a + t +( b * c);
 
 }
 
-void second(int** a, double[10][10000] b,unsigned char c[100])
+void second(int a, double b, char c)
 {
 	double t = xy;
 	int i;
-	t = **b + c[100] + t;
+	t = b + c + t;
 	fourth();
 	third(t);
 	for( i = 0; i < xx; i++)
@@ -52,11 +57,12 @@ int third(int d)
 	int a;
 	a = first( d, d, d);
 	
-	second(d,xy,a);
+	char c = 'c';
+	second(d,xy,c);
 	
 	first(d , d , d);
 	
-	first(xx ,d, xy);
+	first(xx ,d, xx);
 	
 	fprintf(stderr, "\n Quit \n");
 	
