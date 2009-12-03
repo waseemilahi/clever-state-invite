@@ -236,10 +236,30 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 				
 				//fprintf(stdout, "\n\n token = %s\n\n",token);
 				
-				if( (strcmp(global_variables[total_globals].type,"struct") == 0) || (strcmp(global_variables[total_globals].type,"unsigned") == 0)){
+				if( (strcmp(global_variables[total_globals].type,"static") == 0) || (strcmp(global_variables[total_globals].type,"volatile") == 0)
+					|| (strcmp(global_variables[total_globals].type,"extern") == 0)){
 					token = strtok(NULL , " ");
 					//fprintf(stdout, "\n\n token = %s\n\n",token);
 					if(token != NULL){
+						tmpt = token;
+						global_variables[total_globals].type[tmpy++] = ' ';
+						
+						while(*tmpt != '\0'){
+							global_variables[total_globals].type[tmpy++]=*tmpt;
+							
+							tmpt++;
+						}
+				
+					}
+				}
+				
+				
+				if( (strcmp(token,"struct") == 0) || (strcmp(token,"unsigned") == 0)){
+					token = strtok(NULL , " ");
+					
+					if(token != NULL){
+					
+						//fprintf(stdout, "\n\n token = %s\n\n",token);
 						tmpt = token;
 						global_variables[total_globals].type[tmpy++] = ' ';
 						

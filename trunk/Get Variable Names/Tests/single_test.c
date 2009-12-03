@@ -6,9 +6,9 @@
 
        #      define     Global_Variable      1
 	  
-	int xx ;
+	static unsigned int xx , xz;
 	
-	int *ab[10];
+	volatile unsigned int *ab[10];
 		
 double   xy   ;
 
