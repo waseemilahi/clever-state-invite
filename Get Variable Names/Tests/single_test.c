@@ -102,3 +102,26 @@ void sixth()
 {
 	fourth();
 }
+
+int seventh(int a, int b)
+{
+	//xx = b + 2;
+	
+	int i;
+	
+	for(i = 0; i < 1; i++){
+		int a = 0;
+		int b = 1;
+		
+		if(a == b){
+		
+			int xx = a + b;
+			//xx = b + 1;
+			//fprintf(stdout, "\n xx = %d\n",xx);
+		}
+		
+		int a = 2;
+	}
+	
+	return i;
+}
