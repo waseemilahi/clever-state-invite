@@ -43,6 +43,7 @@ void second(int a, double b, char c)
 	double t = xy;
 	int i,j;
 	t = b + c + t;
+	++ t;
 	//fourth();
 	//third(t);
 	for( i = 0; i < xx; i++){
@@ -51,12 +52,6 @@ void second(int a, double b, char c)
 			fprintf(stdout, "\n T = %d \n",  a );
 		}
 	}
-	//if( a = third(a) == 1){
-	//	return ;
-	//}
-		
-	//if( if(a == b) == if(b == c) )
-		//return;
 	
 	return ;
 
@@ -114,13 +109,13 @@ int seventh(int a, int b)
 		int b = 1;
 		
 		if(a == b){
-		
+			int (*c);
 			int xx = a + b;
-			//xx = b + 1;
-			//fprintf(stdout, "\n xx = %d\n",xx);
+			xx = b + 1;
+			fprintf(stdout, "\n xx = %d\n",xx);
 		}
 		
-		int a = 2;
+		//int a = 2;
 	}
 	
 	return i;
