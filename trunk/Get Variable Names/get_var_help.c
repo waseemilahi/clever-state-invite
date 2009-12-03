@@ -1171,7 +1171,7 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 		
 	strcpy(tmp_dec2 , sub2);
 	strcpy(tmp_dec , sub1);
-	
+	//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
 	running = strdup(tmp_dec);
 	
 	token = strtok(running, "\r\n\t;");
@@ -1225,6 +1225,9 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 		token = strtok(NULL, "\r\n\t;");
 		
 	}
+	
+	//fprintf(stdout, "\n\n orig = %d , running = %d \n\n",original_scope , running_scope);
+	
 	original_scope = running_scope;
 	/* if there are other blocks. */
 	while( running_scope != -1){
@@ -1239,6 +1242,7 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 		
 		strcpy(tmp_dec2 , sub2);
 		strcpy(tmp_dec , sub1);
+		//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
 	
 		running = strdup(tmp_dec);
 	
@@ -1290,15 +1294,195 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 					function_scoped_statements[statement++].scope = original_scope;					
 				}
 		
-			token = strtok(NULL, "\r\n\t;");
-			
-			if(running_scope != -1)original_scope = running_scope;
+			token = strtok(NULL, "\r\n\t;");			
 		
 		}
+	//fprintf(stdout, "\n\n orig = %d , running = %d \n\n",original_scope , running_scope);
+		if(running_scope != -1)original_scope = running_scope;
 	
 	}
 		
 	return statement;
+}
+
+int set_declared_scoped_variables(Scoped_Statements function_scoped_statements[], int total_scoped_statements, ScopedVar declared_scoped_variables[],Parameter parameters[],int total_params, GlobalVar global_variables[], int total_globals, char (*global_constants)[MAX_LENGTH], int total_constants)
+{
+	int i,k,l;
+	char *running;
+  	char *token;
+  	char *tmpt;
+	int var_found = -1;
+	int total_variables = 0;
+	int tmpty = 0;
+	char tmp_dec[MAX_LENGTH];
+	char tmp_dec2[MAX_LENGTH];
+	
+	for(i = 0; i < MAX_LENGTH; i++){
+		tmp_dec[i] = '\0';
+		tmp_dec2[i] = '\0';
+	}
+	
+	int tmpy = 0;
+	
+	for(i = 0; i < total_scoped_statements; i++){
+				tmpy = 0;
+				
+				
+				
+			running = strdup(function_scoped_statements[i].statements);			
+			
+			token = strtok(running , "=");
+			
+			tmpt = token;
+			
+			if(token != NULL){
+				tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+				
+				running = strdup(tmp_dec);
+			}
+			else continue;
+			
+			token = strtok(running , " ");
+			
+			tmpt = token;
+			
+			
+			
+			if(token != NULL){
+				tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+			
+				
+				
+				if( (findsubstr(tmp_dec, "if") == 1) || (findsubstr(tmp_dec, "else") == 1))continue;
+				
+				if( (strcmp(tmp_dec , "++") == 0) || (strcmp(tmp_dec , "--") == 0))continue;
+				
+				if( (findsubstr(tmp_dec,"struct") == 1) || (findsubstr(tmp_dec,"unsigned") == 1)){
+					token = strtok(NULL , " ");
+					//fprintf(stdout, "\n\n token = %s\n\n",token);
+					if(token != NULL){
+						tmpt = token;
+						tmp_dec[tmpy++] = ' ';
+						
+						while(*tmpt != '\0'){
+							tmp_dec[tmpy++]=*tmpt;
+							
+							tmpt++;
+						}
+				
+					}
+				}
+				tmpty = tmpy;
+			}
+			
+			tmpy = 0;
+			
+			token = strtok(NULL, " *[]");
+				
+							
+			if(token != NULL){
+			
+				tmpt = token;
+								
+				while(*tmpt != '\0'){
+					tmp_dec2[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}						
+							
+		for(k = 0; k < total_params; k++){
+			if( strcmp(tmp_dec2 , parameters[k].vars) == 0){
+				var_found = 0;
+				for(l = 0; l < total_variables; l++){
+					if( strcmp(declared_scoped_variables[l].name , tmp_dec2) == 0){
+						var_found = 1;
+						break;
+					}										
+				}
+							
+				if(var_found == 1){
+					break;
+				}
+				else {
+					strcpy(declared_scoped_variables[l].type , tmp_dec);
+					strcpy(declared_scoped_variables[l].name , tmp_dec2);
+					declared_scoped_variables[l].scope = function_scoped_statements[i].scope;
+					total_variables++;
+					break;
+				}
+				
+				break;
+			}
+		}
+						
+		/* Check the Globals Variables Now. */					
+		for(k = 0; k < total_globals; k++){
+			if( strcmp(tmp_dec2 , global_variables[k].vars) == 0){
+				var_found = 0;
+				for(l = 0; l < total_variables; l++){
+					if(  strcmp(declared_scoped_variables[l].name , tmp_dec2) == 0){
+						var_found = 1;
+						break;
+					}										
+				}
+								
+				if(var_found == 1){
+					break;
+				}
+				else {
+					strcpy(declared_scoped_variables[l].type , tmp_dec);
+					strcpy(declared_scoped_variables[l].name , tmp_dec2);
+					declared_scoped_variables[l].scope = function_scoped_statements[i].scope;
+					total_variables++;
+					break;
+				}
+				
+				break;
+			}
+		}
+						
+		/* Check the Globals Constants Now. */						
+		for(k = 0; k < total_constants; k++){
+			if( strcmp(tmp_dec2 , global_constants[k]) == 0){
+				var_found = 0;
+				for(l = 0; l < total_variables; l++){
+					if(  strcmp(declared_scoped_variables[l].name , tmp_dec2) == 0){
+						var_found = 1;
+						break;
+					}										
+				}
+						
+				if(var_found == 1){
+					break;
+				}
+				else {
+					strcpy(declared_scoped_variables[l].type , tmp_dec);
+					strcpy(declared_scoped_variables[l].name , tmp_dec2);
+					declared_scoped_variables[l].scope = function_scoped_statements[i].scope;
+					total_variables++;
+					break;
+				}
+				break;
+			}
+		}
+				
+				
+				}
+				
+				}
+				
+	return total_variables;
+	
 }
 
 /* Split the string in two. */
