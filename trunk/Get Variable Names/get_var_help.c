@@ -211,12 +211,20 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
 
 int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variables[], int statement_number)
 {
-	int i;
+	int i,j;
 	char *running;
+	char *running2;
   	char *token;
   	char *tmpt;
 	int total_globals = 0;
+	char tmp_dec[MAX_LENGTH];
+	char tmp_dec2[MAX_LENGTH];
 	int tmpty = 0;
+	int tmpy = 0;
+	for(i = 0; i < MAX_LENGTH; i++){
+		tmp_dec[i] = '\0';
+		tmp_dec2[i] = '\0';
+	}
 	
 	for(i = 0; i < statement_number; i++){
 		if((findsubstr(statements[i],"{") == 0) && (strlen(statements[i]) > 2)){
@@ -227,7 +235,7 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 			tmpt = token;
 			
 			if(token != NULL){
-				int tmpy = 0;
+				 tmpy = 0;
 				while(*tmpt != '\0'){
 					global_variables[total_globals].type[tmpy]=*tmpt;
 					tmpy++;
@@ -273,14 +281,140 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 				}
 				tmpty = tmpy;
 			}
+			
+			int tmp_num = total_globals;
+			
+			if( findsubstr( statements[i] , ",") == 1){
+			
+			strcpy(tmp_dec2 , statements[i]);
+			token = strtok(NULL , ",");
+			
 						
-			int tmpy = 0;
-		
-			token = strtok(NULL , " []=;");
+			while(token != NULL){
+			
+				
+							
+				tmpt = token;
+						int tmpp = 0;						
+				while(*tmpt != '\0'){
+					tmp_dec[tmpp++]=*tmpt;
+							
+					tmpt++;
+				}
+				
+				char *tmptt;
+				int tmppy = 0;
+				
+				
+				running2 = strdup(tmp_dec2);
+				for(j = 0; j < MAX_LENGTH; j++)tmp_dec2[j] = '\0';
+				tmptt = strchr(running2 , ',');
+				if(tmptt != NULL){
+				
+				tmptt++;//exit(1);
+				
+				while(*tmptt != '\0'){
+					tmp_dec2[tmppy++]=*tmptt;
+							
+					tmptt++;
+				}
+				fprintf(stdout, "\n\n tmp_dec2 == %s \n\n", tmp_dec2);
+				}
+				else {
+					strcpy(tmp_dec2 , running2);
+					
+					token = strtok(tmp_dec2 , " []=;");
 			
 			if(token != NULL){
 			
 				tmpt = token;
+				
+				strcpy(global_variables[total_globals].type , global_variables[tmp_num].type);
+			
+				if(findsubstr(token,"**") == 1){
+					global_variables[total_globals].type[tmpty++] = '*';
+					global_variables[total_globals].type[tmpty++] = '*';
+					tmpt++;
+					tmpt++;
+				}
+				else if(findsubstr(token,"*") == 1){
+					global_variables[total_globals].type[tmpty++] = '*';
+					tmpt++;
+				}
+						
+				tmpy = 0;
+			
+				while(*tmpt != '\0'){
+					global_variables[total_globals].vars[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+						
+				token = strtok(NULL , "[]");				
+			
+				if( (token != NULL) && (findsubstr(token,";") == 0)){
+					
+					tmpt = token;			
+					global_variables[total_globals].type[tmpty++] = '[';
+				
+					while(*tmpt != '\0'){
+						global_variables[total_globals].type[tmpty]=*tmpt;
+						tmpty++;
+						tmpt++;
+					}
+					
+					global_variables[total_globals].type[tmpty++] = ']';
+					
+				}
+				
+				token = strtok(NULL , "[]");				
+			
+				if( (token != NULL) && (findsubstr(token,";") == 0)){
+					
+					tmpt = token;			
+					global_variables[total_globals].type[tmpty++] = '[';
+				
+					while(*tmpt != '\0'){
+						global_variables[total_globals].type[tmpty]=*tmpt;
+						tmpty++;
+						tmpt++;
+					}
+					
+					global_variables[total_globals].type[tmpty++] = ']';
+					
+				}
+			
+			
+			
+			}
+			else{
+				strcpy(global_variables[total_globals].type , "");
+				continue;
+			}
+			
+			
+			total_globals++;
+			
+					
+					break;
+					
+					
+				}
+				//fprintf(stdout, "\n\n tmp_dec2 == %s \n\n", tmp_dec2);
+				//strcpy(tmp_dec2 , strchr(running , ',') ) ;
+				
+				
+			
+						
+			tmpy = 0;
+		
+			token = strtok(tmp_dec , " []=;");
+			
+			if(token != NULL){
+			
+				tmpt = token;
+				
+				strcpy(global_variables[total_globals].type , global_variables[tmp_num].type);
 			
 				if(findsubstr(token,"**") == 1){
 					global_variables[total_globals].type[tmpty++] = '*';
@@ -342,9 +476,91 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 				strcpy(global_variables[total_globals].type , "");
 				continue;
 			}
+			token = strtok(tmp_dec2 , ",");
+			total_globals++;
+			
+			}
+			}
+			else if( findsubstr( statements[i] , ",") == 0){
+			token = strtok(NULL , " []=;");
+			
+			if(token != NULL){
+			
+				tmpt = token;
+			
+				if(findsubstr(token,"**") == 1){
+					global_variables[total_globals].type[tmpty++] = '*';
+					global_variables[total_globals].type[tmpty++] = '*';
+					tmpt++;
+					tmpt++;
+				}
+				else if(findsubstr(token,"*") == 1){
+					global_variables[total_globals].type[tmpty++] = '*';
+					tmpt++;
+				}
+						
+				tmpy = 0;
+			
+				while(*tmpt != '\0'){
+					global_variables[total_globals].vars[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}
+						
+				token = strtok(NULL , "[]");				
+			
+				if( (token != NULL) && (findsubstr(token,";") == 0)){
+					
+					tmpt = token;			
+					global_variables[total_globals].type[tmpty++] = '[';
+				
+					while(*tmpt != '\0'){
+						global_variables[total_globals].type[tmpty]=*tmpt;
+						tmpty++;
+						tmpt++;
+					}
+					
+					global_variables[total_globals].type[tmpty++] = ']';
+					
+				}
+				
+				token = strtok(NULL , "[]");				
+			
+				if( (token != NULL) && (findsubstr(token,";") == 0)){
+					
+					tmpt = token;			
+					global_variables[total_globals].type[tmpty++] = '[';
+				
+					while(*tmpt != '\0'){
+						global_variables[total_globals].type[tmpty]=*tmpt;
+						tmpty++;
+						tmpt++;
+					}
+					
+					global_variables[total_globals].type[tmpty++] = ']';
+					
+				}
+			
+			
+			
+			}
+			else{
+				strcpy(global_variables[total_globals].type , "");
+				continue;
+			}
+			
 			
 			total_globals++;
-			strcpy(statements[i],"\0");
+			
+			}
+		
+		
+		
+			for(j = 0; j < MAX_LENGTH; j++){
+				tmp_dec[j] = '\0';
+				tmp_dec2[j] = '\0';
+			}
+		strcpy(statements[i],"\0");
 		}
 		
 	}
