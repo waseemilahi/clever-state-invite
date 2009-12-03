@@ -743,8 +743,6 @@ int set_function_statements(char *definition,char (*function_statements)[MAX_LEN
 	
 	strcpy(tmp_dec2 , tmp_dec);
 	
-	fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
-	
 	running = strdup(tmp_dec);
 	
 	token = strtok(running, "\r\n\t;{}");
@@ -1122,4 +1120,228 @@ int get_func_vars(char (*done_func)[128], int total_done,char *func,int function
 		new_variables = set_variables(done_func,total_done,total_variables,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,new_total_dependent,new_dependents,variables);					
 	}				
 	return new_variables;
+}
+
+int set_statement_scopes(char * definition, Scoped_Statements function_scoped_statements[])
+{
+	int i;
+	char *running;
+  	char *token;
+  	char *tmpt;		
+	int statement = 0;
+	int running_scope = 0;
+	int original_scope = 0;
+	char tmp_dec[MAX_LENGTH];
+	char sub1[MAX_LENGTH];
+	char sub2[MAX_LENGTH];
+	char tmp_dec2[MAX_LENGTH];
+	
+	for(i = 0; i < MAX_LENGTH; i++)
+	{
+		tmp_dec[i] = '\0';
+		sub1[i] = '\0';
+		sub2[i] = '\0';
+		tmp_dec2[i] = '\0';
+	}
+	
+	//Need to mutate this function to get appropriate statements.
+	
+	running = strdup(definition);
+	
+	token = strtok(running, "{}");
+	token = strtok(NULL, "");
+	
+	tmpt = token;
+			
+	if(token != NULL){
+		int tmpy = 0;
+		while(*tmpt != '\0'){
+			tmp_dec[tmpy]=*tmpt;
+			tmpy++;
+			tmpt++;
+		}
+		tmp_dec[tmpy-1] = '\0';
+	}
+	
+	strcpy(tmp_dec2 , tmp_dec);
+	
+	//	fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
+	
+	running_scope = split(tmp_dec2 , sub1 , sub2 , original_scope);
+		
+	strcpy(tmp_dec2 , sub2);
+	strcpy(tmp_dec , sub1);
+	
+	running = strdup(tmp_dec);
+	
+	token = strtok(running, "\r\n\t;");
+	
+	while(token != NULL)
+	{
+		tmpt = token;
+		
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_dec[i] = '\0';
+		}
+		
+		if(token != NULL){
+			int tmpy = 0;
+			while(*tmpt != '\0'){
+				tmp_dec[tmpy]=*tmpt;
+				tmpy++;
+				tmpt++;
+			}
+		}
+		
+		char tmp_tmp[MAX_LENGTH];	
+			
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			tmp_tmp[i] = '\0';
+		}
+		strcpy(tmp_tmp,tmp_dec);
+		
+			
+		if( findsubstr(tmp_tmp, "for(") == 1){			
+		
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_dec[i] = '\0';
+			}
+			
+			for(i = 0; i < strlen(tmp_tmp) - 4;i++){
+				tmp_dec[i] = tmp_tmp[i+4];
+			}
+			
+		}
+				
+		if((findsubstr(tmp_dec,"++)") == 0) || (findsubstr(tmp_dec,"--)") == 0))
+			if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0) ){
+				strcpy(function_scoped_statements[statement].statements,tmp_dec);
+				function_scoped_statements[statement++].scope = original_scope;
+			}
+		
+		token = strtok(NULL, "\r\n\t;");
+		
+	}
+	original_scope = running_scope;
+	/* if there are other blocks. */
+	while( running_scope != -1){
+	
+		for(i = 0; i < MAX_LENGTH; i++)
+		{
+			sub1[i] = '\0';
+			sub2[i] = '\0';
+		}	
+	
+		running_scope = split(tmp_dec2 , sub1 , sub2 , original_scope);
+		
+		strcpy(tmp_dec2 , sub2);
+		strcpy(tmp_dec , sub1);
+	
+		running = strdup(tmp_dec);
+	
+		token = strtok(running, "\r\n\t;");
+	
+		while(token != NULL)
+		{
+			tmpt = token;
+		
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_dec[i] = '\0';
+			}
+		
+			if(token != NULL){
+				int tmpy = 0;
+				while(*tmpt != '\0'){
+					tmp_dec[tmpy]=*tmpt;
+					tmpy++;
+					tmpt++;
+				}	
+			}
+		
+			char tmp_tmp[MAX_LENGTH];	
+			
+			for(i = 0; i < MAX_LENGTH; i++)
+			{
+				tmp_tmp[i] = '\0';
+			}
+			strcpy(tmp_tmp,tmp_dec);
+		
+			
+			if( findsubstr(tmp_tmp, "for(") == 1){			
+		
+				for(i = 0; i < MAX_LENGTH; i++)
+				{
+					tmp_dec[i] = '\0';
+				}
+			
+				for(i = 0; i < strlen(tmp_tmp) - 4;i++){
+					tmp_dec[i] = tmp_tmp[i+4];
+				}
+			
+			}
+				
+			if((findsubstr(tmp_dec,"++)") == 0) || (findsubstr(tmp_dec,"--)") == 0))
+				if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0) ){
+					strcpy(function_scoped_statements[statement].statements,tmp_dec);					
+					function_scoped_statements[statement++].scope = original_scope;					
+				}
+		
+			token = strtok(NULL, "\r\n\t;");
+			
+			if(running_scope != -1)original_scope = running_scope;
+		
+		}
+	
+	}
+		
+	return statement;
+}
+
+/* Split the string in two. */
+int split(char *original, char * split1, char * split2 , int scope)
+{
+  int i = 0;
+  int j = 0;
+  int flag = 0;
+
+  while (original[i] != '\0')
+  {
+		if (flag == 0)
+		{
+			if ((original[i] == '{') || (original[i] == '}'))
+			{
+				flag = 1;
+				split1[i] = '\0';
+				
+				if(original[i] == '{')
+				{
+					scope = scope + 1;
+				}
+				else if(original[i] == '}')
+				{
+					scope = scope - 1;
+				}
+			}
+			else
+			{
+				split1[i] = original[i];
+			}
+		}
+		else
+		{
+			split2[j++] = original[i];
+		}
+		i++;
+  }
+  if(flag == 0)
+  {
+	split1[i] = '\0';
+	return -1;
+  }
+
+  return scope;
 }

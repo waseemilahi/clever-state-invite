@@ -22,6 +22,17 @@ void print_global_vars(GlobalVar g_vars[], int total)
 return ;
 }
 
+void print_scoped_statements(Scoped_Statements statements[], int total)
+{
+	int i;
+	
+	for(i = 0; i < total; i++){
+		 fprintf(stdout, "%d. %d. %s  \n\n",statements[i].scope,strlen(statements[i].statements),statements[i].statements);
+	}
+
+return ;
+}
+
 void print_dependent_variables(char (*dependent_variables)[28],int total_dependent_variables)
 {
 
