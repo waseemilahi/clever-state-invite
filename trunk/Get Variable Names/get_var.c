@@ -28,10 +28,9 @@ int main(int argc, char **argv)
 	int total_locals = 0;
 	int total_unique_variables = 0;
 	
-	char funcs[MAX_LENGTH];
-	char lower[MAX_LENGTH];	
 	char statements[MAX_NUMBER][MAX_LENGTH];
-	char global_constants[MAX_NUMBER][MAX_LENGTH];
+	char funcs[VAR_LENGTH];
+	char lower[VAR_LENGTH];	
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
 	Variable variables[MAX_NUMBER];
@@ -61,11 +60,13 @@ int main(int argc, char **argv)
 		declared_scoped_variables[i].scope = -1;
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
-			global_constants[i][j]='\0';      		
+			    		
 			function_statements[i][j] = '\0';
-			lower[j] = '\0';
-			funcs[j] = '\0';
     	}
+	}
+	for(i = 0 ; i < VAR_LENGTH; i++){
+		lower[i] = '\0';
+		funcs[i] = '\0';
 	}
 	for(i = 0; i < 10; i++)
 		for(j = 0; j < 28; j++)
@@ -73,10 +74,27 @@ int main(int argc, char **argv)
 		
 	/* Get the input from the file. */
  	if((statement_number = get_input(statements,argv[1])) == -1)exit(1);
+		
+	int possible_constants = get_possible_constants(statements, statement_number);
+	
+	char global_constants[possible_constants][MAX_LENGTH];
+	
+	for( i = 0; i < possible_constants; i++)
+		for( j = 0; j < MAX_LENGTH; j++)
+			global_constants[i][j]='\0';
+			
 	
 	/* Set the Global Constants and Variables. */
 	total_constants = set_global_constants(statements,global_constants,statement_number);
+		
 	total_globals = set_global_variables(statements,global_variables,statement_number);
+	
+	//print_output(global_constants, total_constants);
+	print_global_vars(global_variables, total_globals);
+	
+	
+	
+	
 	
 	/* Total "Possible" Funcion definitions. */
 	for(i = 0; i < statement_number; i++)
@@ -150,7 +168,7 @@ int main(int argc, char **argv)
 						fprintf(stdout," Try Another!\n");
 						
 						/* Reset lower and funcs. */
-						for(i = 0; i < MAX_LENGTH; i++){
+						for(i = 0; i < VAR_LENGTH; i++){
 							lower[i] = '\0';
 							funcs[i] = '\0';
 						}
