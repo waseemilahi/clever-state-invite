@@ -90,11 +90,7 @@ int main(int argc, char **argv)
 	total_globals = set_global_variables(statements,global_variables,statement_number);
 	
 	//print_output(global_constants, total_constants);
-	print_global_vars(global_variables, total_globals);
-	
-	
-	
-	
+	//print_global_vars(global_variables, total_globals);	
 	
 	/* Total "Possible" Funcion definitions. */
 	for(i = 0; i < statement_number; i++)
@@ -124,7 +120,7 @@ int main(int argc, char **argv)
 	print_global_vars(global_variables, total_globals);
 	print_functions(function_list, function_number);
 	*/
-	print_global_vars(global_variables, total_globals);
+	//print_global_vars(global_variables, total_globals);
 	char done_func[function_number][128];
 	int total_done = 0;
 	
@@ -181,8 +177,8 @@ int main(int argc, char **argv)
 					
 					//get the redeclared variable statements.
 					total_declared_scoped_variables = set_declared_scoped_variables(function_scoped_statements, total_scoped_statements, declared_scoped_variables,parameters, total_params, global_variables, total_globals, global_constants,total_constants);
-					fprintf(stdout, "\n\n tdss == %d \n\n",total_declared_scoped_variables);
-					print_scoped_variables(declared_scoped_variables, total_declared_scoped_variables);
+					//fprintf(stdout, "\n\n tdss == %d \n\n",total_declared_scoped_variables);
+					//print_scoped_variables(declared_scoped_variables, total_declared_scoped_variables);
 					
 					//need to check local redeclarations.......
 					
