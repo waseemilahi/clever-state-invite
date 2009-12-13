@@ -1171,7 +1171,7 @@ int find_function(int function_number,char *funcs, Functions function_list[])
 int set_dependency(int total_dependent_variables,char *statement, int scope ,int number, int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
 {
 
-	if( (findsubstr(statement, ">") == 0) &&(findsubstr(statement, "<") == 0) &&(findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, "case ") == 0)  )return 0;
+	if( (findsubstr(statement, "return") == 0) && (findsubstr(statement, ">") == 0) &&(findsubstr(statement, "<") == 0) &&(findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, "case ") == 0)  )return 0;
 	
 	if( strcmp(statement, "else") == 0)return 0;
 	
@@ -2143,7 +2143,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				
 				
 				
-				printf("\n\n tmp_dec -->> %s \n\n",tmp_dec);
+				//printf("\n\n tmp_dec -->> %s \n\n",tmp_dec);
 		each_running = strdup(tmp_dec);
 				
 		for(j = 0; j < MAX_LENGTH; j++)

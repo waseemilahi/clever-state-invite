@@ -8,7 +8,7 @@
 	  
 	unsigned int xx = 1 , xxx = 2,xxxx,xxxxx = 55,xxxxxx[122] , xz;
 	
-	unsigned int *ab[10];// , ba;
+	unsigned int *ab[10];
 	
 	long int it;
 		
@@ -46,8 +46,7 @@ void second(int a, double b, char c)
 	int i,j;
 	t = b + c + t;
 	++ t;
-	//fourth();
-	//third(t);
+	
 	for( i = 0; i < xx; i++){
 		for(j = 0; j < xx; j++){
 			int a;
@@ -91,14 +90,6 @@ void fourth(void)
 
 int fifth(Parameter p)
 {
-  int i;
-  int j;
- 
-  
-  int xy;
-   int ab;
- //int p; 
-  int xx;
   return strlen(p.vars);
 
 }
@@ -109,25 +100,16 @@ void sixth()
 }
 
 int seventh(int a, int b)
-{
-	//xx = b + 2;
-	
+{	
 	int i;
 	
 	for(i = 0; i < 1; i++){
-		int a = 0 ,  b = 1;
-				
+		int a = 0 ,  b = 1;				
 		if(a == b){
-			int (*c);
-			int xx = a + b;
-			int ab;
-			
+			int xx = a + b;			
 			xx = xx + 1;
 			fprintf(stdout, "\n xx = %d\n",xx);
-		}
-		
-		//int a = 2;
-	}
-	
-	return i;
+		}		
+	}	
+	return a;
 }

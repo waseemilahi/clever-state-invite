@@ -190,7 +190,7 @@ int main(int argc, char **argv)
 						total_dependent_variables = total_dependent_variables + k;
 					}
 					
-					print_dependent_variables(dependent_variables, total_dependent_variables);
+					//print_dependent_variables(dependent_variables, total_dependent_variables);
 					
 					strcpy(done_func[total_done++],funcs);
 					
