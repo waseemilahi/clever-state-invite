@@ -55,9 +55,11 @@ int main(int argc, char **argv)
 		strcpy(unique_variables[i].name ,"");		
 		strcpy(function_scoped_statements[i].statements,"");
 		function_scoped_statements[i].scope = -1;
+		function_scoped_statements[i].number = -1;
 		strcpy(declared_local_variables[i].type,"");
 		strcpy(declared_local_variables[i].name,"");
 		declared_local_variables[i].scope = -1;
+		declared_local_variables[i].number = -1;
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
 			    		
@@ -178,13 +180,13 @@ int main(int argc, char **argv)
 					//get the redeclared variable statements.
 					total_declared_local_variables = set_declared_local_variables(function_scoped_statements, total_scoped_statements, declared_local_variables,parameters, total_params, global_variables, total_globals, global_constants,total_constants);
 					//fprintf(stdout, "\n\n tdss == %d \n\n",total_declared_local_variables);
-					print_Local_variables(declared_local_variables, total_declared_local_variables);
+					//print_Local_variables(declared_local_variables, total_declared_local_variables);
 					
 					//need to check local redeclarations.......
 					
 					for(j = 0; j < total_scoped_statements; j++)
 					{
-						k =  set_dependency(total_dependent_variables,function_scoped_statements[j].statements,function_scoped_statements[j].scope,total_declared_local_variables,declared_local_variables,dependent_variables,function_list, parameters, global_variables, global_constants );					
+						k =  set_dependency(total_dependent_variables,function_scoped_statements[j].statements,function_scoped_statements[j].scope,function_scoped_statements[j].number,total_declared_local_variables,declared_local_variables,dependent_variables,function_list, parameters, global_variables, global_constants );					
 						total_dependent_variables = total_dependent_variables + k;
 					}
 					
@@ -245,9 +247,11 @@ int main(int argc, char **argv)
 							strcpy(unique_variables[j].name , "");			
 							strcpy(function_scoped_statements[i].statements,"");
 							function_scoped_statements[i].scope = -1;
+							function_scoped_statements[i].number = -1;
 							strcpy(declared_local_variables[i].type,"");
 							strcpy(declared_local_variables[i].name,"");
 							declared_local_variables[i].scope = -1;
+							declared_local_variables[i].number = -1;
 						}
 						
 						for(j = 0; j < 10; j++)

@@ -1168,7 +1168,7 @@ int find_function(int function_number,char *funcs, Functions function_list[])
 	
 }
 
-int set_dependency(int total_dependent_variables,char *statement, int scope , int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+int set_dependency(int total_dependent_variables,char *statement, int scope ,int number, int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
 {
 
 	if( (findsubstr(statement, ">") == 0) &&(findsubstr(statement, "<") == 0) &&(findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, "case ") == 0)  )return 0;
@@ -1294,7 +1294,7 @@ int set_dependency(int total_dependent_variables,char *statement, int scope , in
 				int ii;
 				int varFound = 0;
 				for( ii = 0; ii < total_local_variables; ii++){
-					if((strcmp(ptr , local_variables[ii].name) == 0) && (local_variables[ii].scope <= scope) ){
+					if((strcmp(ptr , local_variables[ii].name) == 0) && (local_variables[ii].scope <= scope) &&  (local_variables[ii].number <= number) ){
 						varFound = 1;
 						break;
 					}
@@ -1490,7 +1490,7 @@ int get_func_vars(char (*done_func)[128], int total_done,char *func,int function
 									
 	for(j = 0; j < total_function_statements; j++)
 	{
-		k =  set_dependency(new_total_dependent,function_statements[j].statements , function_statements[j].scope, total_declared_local_variables,declared_local_variables,new_dependents,function_list, parameters, global_variables, global_constants );					
+		k =  set_dependency(new_total_dependent,function_statements[j].statements , function_statements[j].scope,function_statements[j].number, total_declared_local_variables,declared_local_variables,new_dependents,function_list, parameters, global_variables, global_constants );					
 		new_total_dependent = new_total_dependent + k;
 	}
 									
@@ -1555,6 +1555,8 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 	
 	token = strtok(running, "\r\n\t;");
 	
+	int number = 0;
+	
 	while(token != NULL)
 	{
 		tmpt = token;
@@ -1598,7 +1600,8 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 		if((findsubstr(tmp_dec,"++)") == 0) || (findsubstr(tmp_dec,"--)") == 0))
 			if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0) ){
 				strcpy(function_scoped_statements[statement].statements,tmp_dec);
-				function_scoped_statements[statement++].scope = original_scope;
+				function_scoped_statements[statement].scope = original_scope;
+				function_scoped_statements[statement++].number = number++;
 			}
 		
 		token = strtok(NULL, "\r\n\t;");
@@ -1670,7 +1673,8 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 			if((findsubstr(tmp_dec,"++)") == 0) || (findsubstr(tmp_dec,"--)") == 0))
 				if( (strlen(tmp_dec) > 1) || (strcmp(tmp_dec, " ") != 0) ){
 					strcpy(function_scoped_statements[statement].statements,tmp_dec);					
-					function_scoped_statements[statement++].scope = original_scope;					
+					function_scoped_statements[statement].scope = original_scope;
+					function_scoped_statements[statement++].number = number++;
 				}
 		
 			token = strtok(NULL, "\r\n\t;");			
@@ -1842,6 +1846,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[l].type , tmp_dec);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -1868,6 +1873,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[l].type , tmp_dec);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -1892,6 +1898,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[l].type , tmp_dec);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -2057,6 +2064,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[l].type , tmp_dec);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -2083,6 +2091,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[l].type , tmp_dec);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -2107,6 +2116,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[l].type , tmp_dec);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -2174,6 +2184,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[total_variables].type , declared_local_variables[total_variables - 1].type);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -2200,6 +2211,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[total_variables].type , declared_local_variables[total_variables - 1].type);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}
@@ -2224,6 +2236,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 					strcpy(declared_local_variables[total_variables].type , declared_local_variables[total_variables - 1].type);
 					strcpy(declared_local_variables[l].name , ptr);
 					declared_local_variables[l].scope = function_scoped_statements[i].scope;
+					declared_local_variables[l].number = function_scoped_statements[i].number;
 					total_variables++;
 					break;
 				}

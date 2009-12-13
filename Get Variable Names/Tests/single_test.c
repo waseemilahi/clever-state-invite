@@ -97,7 +97,7 @@ int fifth(Parameter p)
   
   int xy;
    int ab;
- int p; 
+ //int p; 
   int xx;
   return strlen(p.vars);
 
@@ -115,11 +115,11 @@ int seventh(int a, int b)
 	int i;
 	
 	for(i = 0; i < 1; i++){
-		//int a = 0 ,  b = 1;
+		int a = 0 ,  b = 1;
 				
 		if(a == b){
 			int (*c);
-			//int xx = a + b;
+			int xx = a + b;
 			int ab;
 			
 			xx = xx + 1;
