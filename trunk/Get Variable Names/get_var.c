@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	int total_params = 0;
 	int total_function_statements = 0;
 	int total_scoped_statements = 0;
-	int total_declared_scoped_variables = 0;
+	int total_declared_local_variables = 0;
 	int total_dependent_variables = 0;
 	int function_found = 0;
 	int total_variables = 0;
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	Variable local_variables[MAX_NUMBER];
 	Variable unique_variables[MAX_NUMBER];
 	Scoped_Statements function_scoped_statements[MAX_NUMBER];
-	ScopedVar declared_scoped_variables[MAX_NUMBER];
+	LocalVar declared_local_variables[MAX_NUMBER];
 	char function_statements[MAX_NUMBER][MAX_LENGTH];
 	char dependent_variables[10][28];	
 	
@@ -55,9 +55,9 @@ int main(int argc, char **argv)
 		strcpy(unique_variables[i].name ,"");		
 		strcpy(function_scoped_statements[i].statements,"");
 		function_scoped_statements[i].scope = -1;
-		strcpy(declared_scoped_variables[i].type,"");
-		strcpy(declared_scoped_variables[i].name,"");
-		declared_scoped_variables[i].scope = -1;
+		strcpy(declared_local_variables[i].type,"");
+		strcpy(declared_local_variables[i].name,"");
+		declared_local_variables[i].scope = -1;
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
 			    		
@@ -173,20 +173,22 @@ int main(int argc, char **argv)
 					
 					total_scoped_statements = set_statement_scopes(function_list[i].definition, function_scoped_statements);					
 					
-					print_scoped_statements(function_scoped_statements, total_scoped_statements);
+					//print_scoped_statements(function_scoped_statements, total_scoped_statements);
 					
 					//get the redeclared variable statements.
-					total_declared_scoped_variables = set_declared_scoped_variables(function_scoped_statements, total_scoped_statements, declared_scoped_variables,parameters, total_params, global_variables, total_globals, global_constants,total_constants);
-					//fprintf(stdout, "\n\n tdss == %d \n\n",total_declared_scoped_variables);
-					//print_scoped_variables(declared_scoped_variables, total_declared_scoped_variables);
+					total_declared_local_variables = set_declared_local_variables(function_scoped_statements, total_scoped_statements, declared_local_variables,parameters, total_params, global_variables, total_globals, global_constants,total_constants);
+					//fprintf(stdout, "\n\n tdss == %d \n\n",total_declared_local_variables);
+					print_Local_variables(declared_local_variables, total_declared_local_variables);
 					
 					//need to check local redeclarations.......
 					
-					for(j = 0; j < total_function_statements; j++)
+					for(j = 0; j < total_scoped_statements; j++)
 					{
-						k =  set_dependency(total_dependent_variables,function_statements[j],dependent_variables,function_list, parameters, global_variables, global_constants );					
+						k =  set_dependency(total_dependent_variables,function_scoped_statements[j].statements,function_scoped_statements[j].scope,total_declared_local_variables,declared_local_variables,dependent_variables,function_list, parameters, global_variables, global_constants );					
 						total_dependent_variables = total_dependent_variables + k;
 					}
+					
+					print_dependent_variables(dependent_variables, total_dependent_variables);
 					
 					strcpy(done_func[total_done++],funcs);
 					
@@ -243,9 +245,9 @@ int main(int argc, char **argv)
 							strcpy(unique_variables[j].name , "");			
 							strcpy(function_scoped_statements[i].statements,"");
 							function_scoped_statements[i].scope = -1;
-							strcpy(declared_scoped_variables[i].type,"");
-							strcpy(declared_scoped_variables[i].name,"");
-							declared_scoped_variables[i].scope = -1;
+							strcpy(declared_local_variables[i].type,"");
+							strcpy(declared_local_variables[i].name,"");
+							declared_local_variables[i].scope = -1;
 						}
 						
 						for(j = 0; j < 10; j++)
