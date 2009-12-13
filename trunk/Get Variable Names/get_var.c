@@ -19,7 +19,6 @@ int main(int argc, char **argv)
 	int total_functions = 0;
 	int function_number = 0;
 	int total_params = 0;
-	int total_function_statements = 0;
 	int total_scoped_statements = 0;
 	int total_declared_local_variables = 0;
 	int total_dependent_variables = 0;
@@ -34,11 +33,10 @@ int main(int argc, char **argv)
   	GlobalVar global_variables[MAX_NUMBER];
 	Parameter parameters[MAX_NUMBER];
 	Variable variables[MAX_NUMBER];
-	Variable local_variables[MAX_NUMBER];
 	Variable unique_variables[MAX_NUMBER];
 	Scoped_Statements function_scoped_statements[MAX_NUMBER];
 	LocalVar declared_local_variables[MAX_NUMBER];
-	char function_statements[MAX_NUMBER][MAX_LENGTH];
+	
 	char dependent_variables[10][28];	
 	
 	/* Initioalize the Variables. */	
@@ -49,8 +47,6 @@ int main(int argc, char **argv)
 		strcpy(parameters[i].vars ,"");
 		strcpy(variables[i].type, "");
 		strcpy(variables[i].name ,"");
-		strcpy(local_variables[i].type, "");
-		strcpy(local_variables[i].name ,"");
 		strcpy(unique_variables[i].type, "");
 		strcpy(unique_variables[i].name ,"");		
 		strcpy(function_scoped_statements[i].statements,"");
@@ -62,8 +58,6 @@ int main(int argc, char **argv)
 		declared_local_variables[i].number = -1;
     	for(j =0; j < MAX_LENGTH; j++){
       		statements[i][j] = '\0';
-			    		
-			function_statements[i][j] = '\0';
     	}
 	}
 	for(i = 0 ; i < VAR_LENGTH; i++){
@@ -160,7 +154,7 @@ int main(int argc, char **argv)
 					
 					total_params = set_parameters(function_list[i].definition, parameters);
 						//print_params(parameters, total_params);
-					if( (total_function_statements = set_function_statements(function_list[i].definition,function_statements)) == 0)
+					if( (total_scoped_statements = set_statement_scopes(function_list[i].definition, function_scoped_statements)) == 0)
 					{
 						fprintf(stderr,"\n Empty Function Definition. \n");
 						fprintf(stdout," Try Another!\n");
@@ -171,9 +165,7 @@ int main(int argc, char **argv)
 							funcs[i] = '\0';
 						}
 						continue ;
-					}
-					
-					total_scoped_statements = set_statement_scopes(function_list[i].definition, function_scoped_statements);					
+					}			
 					
 					//print_scoped_statements(function_scoped_statements, total_scoped_statements);
 					
@@ -241,8 +233,6 @@ int main(int argc, char **argv)
 						for(j = 0; j < MAX_NUMBER; j++){
 							strcpy(variables[j].type , "");
 							strcpy(variables[j].name , "");
-							strcpy(local_variables[j].type , "");
-							strcpy(local_variables[j].name , "");
 							strcpy(unique_variables[j].type , "");
 							strcpy(unique_variables[j].name , "");			
 							strcpy(function_scoped_statements[i].statements,"");
