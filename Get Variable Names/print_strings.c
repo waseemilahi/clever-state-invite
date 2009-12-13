@@ -22,13 +22,13 @@ void print_global_vars(GlobalVar g_vars[], int total)
 return ;
 }
 
-void print_scoped_variables(ScopedVar vars[], int total)
+void print_Local_variables(LocalVar vars[], int total)
 {
 	int i;
 	
 	for(i = 0; i < total; i++){
-		 fprintf(stdout, "%d. %d. %s  \n\n",vars[i].scope,strlen(vars[i].type),vars[i].type);
-		 fprintf(stdout, "%d. %d. %s  \n\n",vars[i].scope,strlen(vars[i].name),vars[i].name);
+		 fprintf(stdout, "%d. %d. %d. %s  \n\n",i,vars[i].scope,strlen(vars[i].type),vars[i].type);
+		 fprintf(stdout, "%d. %d. %d. %s  \n\n",i,vars[i].scope,strlen(vars[i].name),vars[i].name);
 	}
 
 return ;
