@@ -34,11 +34,13 @@ typedef struct funcs{
 typedef struct scoped_statements{
 	char statements[MAX_LENGTH];
 	int scope ;
+	int number;
 }Scoped_Statements;
 
 typedef struct scoped_variables{
 	char type[VAR_LENGTH];
 	char name[VAR_LENGTH];
+	int number;
 	int scope;
 }LocalVar;
 
@@ -59,7 +61,7 @@ extern int set_parameters(char *definition, Parameter parameters[]);
 extern int set_function_statements(char *definition,char (*function_statements)[MAX_LENGTH]);
 extern void print_params(Parameter parameters[], int total_params);
 extern void print_variables(Variable variables[], int total_variables);
-extern int set_dependency(int total_dependent_variables,char *statement,int scope, int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH]);
+extern int set_dependency(int total_dependent_variables,char *statement,int scope,int number, int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH]);
 extern char *trimwhitespace(char *str);
 extern int set_variables(char (*done_func)[128], int total_done,int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[28],Variable variables[]);
 extern int get_func_vars(char (*done_func)[128], int total_done,char *func,int function_number,int total_globals,int total_constants,char *definition,int total_dependent_variables,char (*dependent_variables)[28],int total_variables,Variable variables[],Functions function_list[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH]);

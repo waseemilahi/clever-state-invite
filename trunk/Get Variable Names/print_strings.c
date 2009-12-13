@@ -27,8 +27,8 @@ void print_Local_variables(LocalVar vars[], int total)
 	int i;
 	
 	for(i = 0; i < total; i++){
-		 fprintf(stdout, "%d. %d. %d. %s  \n\n",i,vars[i].scope,strlen(vars[i].type),vars[i].type);
-		 fprintf(stdout, "%d. %d. %d. %s  \n\n",i,vars[i].scope,strlen(vars[i].name),vars[i].name);
+		 fprintf(stdout, "%d. %d. %d. %s  \n\n",vars[i].number,vars[i].scope,strlen(vars[i].type),vars[i].type);
+		 fprintf(stdout, "%d. %d. %d. %s  \n\n",vars[i].number,vars[i].scope,strlen(vars[i].name),vars[i].name);
 	}
 
 return ;
@@ -39,7 +39,7 @@ void print_scoped_statements(Scoped_Statements statements[], int total)
 	int i;
 	
 	for(i = 0; i < total; i++){
-		 fprintf(stdout, "%d. %d. %s  \n\n",statements[i].scope,strlen(statements[i].statements),statements[i].statements);
+		 fprintf(stdout, "%d. %d. %d. %s  \n\n",statements[i].number,statements[i].scope,strlen(statements[i].statements),statements[i].statements);
 	}
 
 return ;
