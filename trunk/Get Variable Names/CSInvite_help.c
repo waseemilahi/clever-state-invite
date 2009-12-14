@@ -1,5 +1,5 @@
 /*
-	This file contains the helper string functions.
+  This file contains the helper string functions.
 */
 #include "CSInvite.h"
 

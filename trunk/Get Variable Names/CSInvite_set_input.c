@@ -1,7 +1,7 @@
 /*
-	This file contains the functions that get called
-	on the input file. These function set the "globals"
-	to be used later on. 
+  This file contains the functions that get called
+  on the input file. These function set the "globals"
+  to be used later on. 
 */
 #include "CSInvite.h"
 
