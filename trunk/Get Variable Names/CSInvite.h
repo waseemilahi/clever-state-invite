@@ -68,17 +68,13 @@ typedef struct scoped_variables{
 	int scope;
 }LocalVar;
 
-/* 
-   The function declarations 
-*/
-
 /*
 	These functions get called once for each time the program executes
 */
 extern int get_input(char (*statements)[MAX_LENGTH], char *filename);
-extern int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variables[], int statement_number);
 extern int get_possible_constants(char (*statements)[MAX_LENGTH], int statement_number);
 extern int set_global_constants(char (*statements)[MAX_LENGTH],char (*global_constants)[MAX_LENGTH], int statement_number);
+extern int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variables[], int statement_number);
 extern int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int statement_number);
 
 /*
