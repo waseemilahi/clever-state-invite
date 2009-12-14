@@ -1,7 +1,7 @@
 # include "CSInvite.h"
 
 
-int set_dependency(int total_dependent_variables,char *statement, int scope ,int number, int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[28],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+int set_dependency(int total_dependent_variables,char *statement, int scope ,int number, int total_local_variables, LocalVar local_variables[],char (*dependent_variables)[VAR_LENGTH],Functions function_list[],Parameter parameters[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
 {
 
 	if( (findsubstr(statement, "return") == 0) && (findsubstr(statement, ">") == 0) &&(findsubstr(statement, "<") == 0) &&(findsubstr(statement, "=") == 0) && (findsubstr(statement, "(") == 0) && (findsubstr(statement, "case ") == 0)  )return 0;
@@ -147,7 +147,7 @@ int set_dependency(int total_dependent_variables,char *statement, int scope ,int
 }
 
 
-int set_variables(char (*done_func)[VAR_LENGTH], int total_done,int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[28],Variable variables[])
+int set_variables(char (*done_func)[VAR_LENGTH], int total_done,int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[VAR_LENGTH],Variable variables[])
 {
 
 	int j,k,l = 0, done,m;
@@ -253,7 +253,7 @@ int set_variables(char (*done_func)[VAR_LENGTH], int total_done,int total_variab
 
 }
 
-int get_func_vars(char (*done_func)[VAR_LENGTH], int total_done,char *func,int function_number,int total_globals,int total_constants,char *definition,int total_dependent_variables,char (*dependent_variables)[28],int total_variables,Variable variables[],Functions function_list[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+int get_func_vars(char (*done_func)[VAR_LENGTH], int total_done,char *func,int function_number,int total_globals,int total_constants,char *definition,int total_dependent_variables,char (*dependent_variables)[VAR_LENGTH],int total_variables,Variable variables[],Functions function_list[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
 {
 	int total_params = 0;
 	int new_variables = 0;
@@ -262,12 +262,12 @@ int get_func_vars(char (*done_func)[VAR_LENGTH], int total_done,char *func,int f
 	int total_declared_local_variables = 0;
 	Scoped_Statements function_statements[MAX_NUMBER];
 	LocalVar declared_local_variables[MAX_NUMBER];
-	char new_dependents[10][28];
+	char new_dependents[MAX_NUMBER][VAR_LENGTH];
 	int new_total_dependent = 0;
 	int i,j,k;
 	
-	for(i = 0; i < 10; i++)
-		for(k = 0; k < 28; k++)
+	for(i = 0; i < MAX_NUMBER; i++)
+		for(k = 0; k < VAR_LENGTH; k++)
 			new_dependents[i][k] = '\0';
 		
 	for(i = 0; i < MAX_NUMBER; i++){
