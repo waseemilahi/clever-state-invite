@@ -7,7 +7,7 @@
 # include <stddef.h>
 # include <ctype.h>
 
-# define MAX_NUMBER 32
+# define MAX_NUMBER 128
 # define MAX_LENGTH 2048
 # define VAR_LENGTH 255
 
