@@ -230,6 +230,7 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
   char tmp_dec2[MAX_LENGTH];
   char *each_running;
   int tmpyy = 0;
+  char tmp_type[VAR_LENGTH];
   
   /* for every statement. */
   for(i = 0; i < statement_number; i++){
@@ -239,6 +240,7 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
       /* reset the tmp arrays. */
       strcpy(tmp_dec , "");
       strcpy(tmp_dec2 , "");
+	  strcpy(tmp_type , "");
       
       /* dublicate the statements.*/
       running = strdup(statements[i]);
@@ -511,6 +513,8 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 		    
 		  } 
 		
+			strcpy(tmp_type , global_variables[total_globals].type);
+		
 		for(j = 0; j < MAX_LENGTH; j++)
 		  {
 		    tmp_dec[j] = '\0';
@@ -588,8 +592,9 @@ int set_global_variables(char (*statements)[MAX_LENGTH],GlobalVar global_variabl
 		}
 	      }/* if it is not the first variable, we already have its type so continue after that. */
 	      else if( first == 0){
-		strcpy(global_variables[total_globals].type , global_variables[total_globals - 1].type);
 		
+		strcpy(global_variables[total_globals].type , tmp_type);
+				
 		each_running = strdup(tmp_dec);
 		
 		for(j = 0; j < MAX_LENGTH; j++)

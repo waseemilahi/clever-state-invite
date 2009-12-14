@@ -33,6 +33,7 @@ int first(int a, double b, char c)
 	int t;
 	a = b + c;
 	t = a + t;
+	t = xz;
 	
 	int ta = *(ab[2]);
 
