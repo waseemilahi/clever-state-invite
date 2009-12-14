@@ -1,5 +1,7 @@
+/*
+	This file contains the helper string functions.
+*/
 #include "CSInvite.h"
-
 
 /* The Find Substring Function. (acquired from an online forum
    This function checks if the second char array is a substring 
