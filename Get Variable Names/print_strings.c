@@ -1,5 +1,12 @@
 #include "CSInvite.h"
 
+/* This file contains all the print functions. Anyone of them can be used in the 
+	source to check what the corresponding data structure holds at that moment. 
+*/
+
+/*
+	Generic Two dimensional array with dimensions [string_number][MAX_LENGTH] printer
+*/
 void print_output(char (*strings)[MAX_LENGTH], int string_number)
 {
 	int i;
