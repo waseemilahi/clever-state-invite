@@ -117,11 +117,11 @@ int main(int argc, char **argv)
 	print_functions(function_list, function_number);
 	*/
 	//print_global_vars(global_variables, total_globals);
-	char done_func[total_functions][128];
+	char done_func[total_functions][VAR_LENGTH];
 	int total_done = 0;
 	
 	for(i = 0; i < total_functions; i++)
-		for(j = 0; j < 128; j++)
+		for(j = 0; j < VAR_LENGTH; j++)
 			done_func[i][j] = '\0';
 	
 	while(1){
@@ -258,7 +258,7 @@ int main(int argc, char **argv)
 			
 			}
 			for(i = 0; i < total_functions; i++)
-				for(j = 0; j < 128; j++)
+				for(j = 0; j < VAR_LENGTH; j++)
 					done_func[i][j] = '\0';
 		
 			total_done = 0;		
