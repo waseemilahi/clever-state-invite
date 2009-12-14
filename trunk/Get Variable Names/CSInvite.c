@@ -4,28 +4,29 @@
 #include "CSInvite.h"
 
 /*
-	Author:  	 Waseem Ilahi
-	Purpose: 	 To find the variables (in the current file) that a given function/test depends upon.
-	Description: This "Program" takes a "compiled without errors/warnings" c file as its argument
-				 and parses it in such a way that, when the user asks for a function defined in side the
-				 file, this program prints out the "external/non-local" variables that the function depends
-				 upon. This is a small part of a bigger project. These variables are then used by the other
-				 parts of the project to do various tasks. The program hasn't been integrated with other
-				 components, therefore, for now it only prints out the variables, but those variables are
-				 stored inside a structure and can be passed along to any thing to be used.
-	Use Case: 	 The user gives the program a c file as the argument. After that the program asks
-				 the user to give it the name of the function they want to check. the user inputs
-				 the name, if there is a function with that name, the program prints out its dependencies,
-				 if the name is incorrect the program informs the user and asks to input again. The user
-				 can keep doing this, for however long they want, or type "quit" to exit the program.
-	Limitations: As you may have figured out, this parser only works on compilable c code. 
-				 Other than that there are a few other limitations. First of, the number of
-				 max global vairables and the function definations in each file is fixed to 128.
-				 Also, the program requires the length of each function defination to be less than 2048
-				 characters. This is excluding the comments spaces, tabs and new lines.
+  Author:       Waseem Ilahi
+  Purpose:      To find the variables (in the current file) that a given function/test depends upon.
+  Description:  This "Program" takes a "compiled without errors/warnings" c file as its argument
+                and parses it in such a way that, when the user asks for a function defined in side the
+                file, this program prints out the "external/non-local" variables that the function depends
+                upon. This is a small part of a bigger project. These variables are then used by the other
+                parts of the project to do various tasks. The program hasn't been integrated with other
+                components, therefore, for now it only prints out the variables, but those variables are
+                stored inside a structure and can be passed along to any thing to be used.
+  Use Case: 	The user gives the program a c file as the argument. After that the program asks
+                the user to give it the name of the function they want to check. the user inputs
+                the name, if there is a function with that name, the program prints out its dependencies,
+                if the name is incorrect the program informs the user and asks to input again. The user
+                can keep doing this, for however long they want, or type "quit" to exit the program.
+  Limitations:  As you may have figured out, this parser only works on compilable c code. 
+                Other than that there are a few other limitations. First of, the number of
+                max global vairables and the function definations in each file is fixed to 128.
+                Also, the program requires the length of each function defination to be less than 2048
+                characters. This is excluding the comments spaces, tabs and new lines.
 */
+
 /*
-	The Main Function.
+  The Main Function.
 */
 int main(int argc, char **argv)
 {
@@ -155,8 +156,8 @@ int main(int argc, char **argv)
   function_number = set_functions(statements,function_list,statement_number);
   
   /* The array that holds the names of the functions that have been checked
-	 during each pass. (This is used to avoid infinite recursion, when a function calls
-	 the function that calls it or itself.
+     during each pass. (This is used to avoid infinite recursion, when a function calls
+     the function that calls it or itself.
   */
   char done_func[function_number][VAR_LENGTH];
   int total_done = 0;
@@ -168,17 +169,17 @@ int main(int argc, char **argv)
   /* The main loop. This loop contimues, unless the user types in "quit" . */
   while(1){
     
-	/* Flag is set to zero. */
+    /* Flag is set to zero. */
     function_found = 0;
-	/* Prompt. */
+    /* Prompt. */
     fprintf(stdout,"\n Please enter the name of the Function/Test you want to check or type quit to exit: ");
     fscanf(stdin,"%s", funcs);
     fprintf(stdout, "\n");
     
-	/* To accept "Quit , QUIT , qUIT, etc. */
+    /* To accept "Quit , QUIT , qUIT, etc. */
     for(j = 0; j < strlen(funcs); j++)lower[j] = tolower(funcs[j]);
     
-	/* Check for exit condidiotn. */
+    /* Check for exit condidiotn. */
     if(strcmp(lower,"quit") == 0){
       fprintf(stdout,"\n Exiting........done\n\n");
       return 0;
@@ -188,7 +189,7 @@ int main(int argc, char **argv)
 	  /* Is there a function with the name, the user typed in? */
       i = find_function(function_number, funcs, function_list);
       
-	  /* Yes there is. */
+      /* Yes there is. */
       if( i >= 0){
 	
 	/* Found the function, now work on it. */			
@@ -209,7 +210,7 @@ int main(int argc, char **argv)
 	/* Set the Scoped Statements array. */
 	if( (total_scoped_statements = set_statement_scopes(function_list[i].definition, function_scoped_statements)) == 0)
 	  {
-		/* Empty definition: continue */
+	    /* Empty definition: continue */
 	    fprintf(stderr,"\n Empty Function Definition. \n");
 	    fprintf(stdout," Try Another!\n");
 	    
@@ -257,7 +258,7 @@ int main(int argc, char **argv)
 	  }
 	}					
 	/* Set the array length for variables. To "output the actual variables, we need to "convert" them back to original state
-		from their stored staate.*/
+	   from their stored staate.*/
 	int i6,i7;
 	int sub_size;
 	for(i6 = 0; i6 < total_unique_variables; i6++){
