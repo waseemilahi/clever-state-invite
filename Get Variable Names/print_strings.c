@@ -17,6 +17,9 @@ void print_output(char (*strings)[MAX_LENGTH], int string_number)
 return ;
 }
 
+/*
+	This prints out the Global Variables.
+*/
 void print_global_vars(GlobalVar g_vars[], int total)
 {
 	int i;
@@ -29,6 +32,9 @@ void print_global_vars(GlobalVar g_vars[], int total)
 return ;
 }
 
+/*
+	This prints out the Local Variables.
+*/
 void print_Local_variables(LocalVar vars[], int total)
 {
 	int i;
@@ -41,6 +47,9 @@ void print_Local_variables(LocalVar vars[], int total)
 return ;
 }
 
+/*
+	This prints out the scoped statements.
+*/
 void print_scoped_statements(Scoped_Statements statements[], int total)
 {
 	int i;
@@ -52,7 +61,10 @@ void print_scoped_statements(Scoped_Statements statements[], int total)
 return ;
 }
 
-void print_dependent_variables(char (*dependent_variables)[28],int total_dependent_variables)
+/*
+	This prints out the possible variables that the function depends upon.
+*/
+void print_dependent_variables(char (*dependent_variables)[VAR_LENGTH],int total_dependent_variables)
 {
 
 	int i;
@@ -64,6 +76,9 @@ void print_dependent_variables(char (*dependent_variables)[28],int total_depende
 
 }
 
+/*
+	This prints out the Parameters.
+*/
 void print_params(Parameter parameters[], int total_params)
 {
 
@@ -78,6 +93,9 @@ return ;
 
 }
 
+/*
+	This prints out the Final Variables the function depends upon.
+*/
 void print_variables(Variable variables[], int total_variables)
 {
 
@@ -94,6 +112,9 @@ return ;
 
 }
 
+/*
+	This prints out the Entire function definition as stored in the program.
+*/
 void print_functions(Functions func_list[], int total)
 {
 	int i;

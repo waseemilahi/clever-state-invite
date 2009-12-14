@@ -109,6 +109,6 @@ extern void print_params(Parameter parameters[], int total_params);
 extern void print_variables(Variable variables[], int total_variables);
 extern void print_output(char (*strings)[MAX_LENGTH], int string_number);
 extern void print_scoped_statements(Scoped_Statements statements[], int total);
-extern void print_dependent_variables(char (*dependent_variables)[28],int total_dependent_variables);
+extern void print_dependent_variables(char (*dependent_variables)[VAR_LENGTH],int total_dependent_variables);
 
 #endif
