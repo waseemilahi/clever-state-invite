@@ -1,5 +1,11 @@
+/*
+	This file contains the functions that get called once for 
+	every function the user wants to check. These values get 
+	reset for every function.
+*/
 #include "CSInvite.h"
 
+/* Returns a positive number if the function exists, -1 if it doesn't. */
 int find_function(int function_number,char *funcs, Functions function_list[])
 {
 	int i;
@@ -11,10 +17,14 @@ int find_function(int function_number,char *funcs, Functions function_list[])
 	return -1;
 	
 }
-
+/*
+	Take the function definition, parse it to get the parameters,
+	put them in the structure and return the number of paraeters.
+*/
 int set_parameters(char *definition, Parameter parameters[])
 {
 
+	/* The helper veriables. */
 	int i;
 	char *running;
 	char *each_running;
@@ -31,10 +41,9 @@ int set_parameters(char *definition, Parameter parameters[])
 		tmp_dec2[i] = '\0';
 	}
 	
-	running = strdup(definition);
-	
+	running = strdup(definition);	
+	/* get the left hand of the "{" in the function definition, meaning the part with the parameters. */
 	token = strtok(running, "{");
-	
 	tmpt = token;
 			
 	if(token != NULL){
@@ -53,6 +62,7 @@ int set_parameters(char *definition, Parameter parameters[])
 		tmp_dec[i] = '\0';
 	}
 	
+	/* following statements, remove everything but the parameters. */
 	token = strtok(running, "()");
 	token = strtok(NULL, "()");
 	
@@ -66,9 +76,10 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmpt++;
 		}
 	}
-	
+	/* no parameters. */
 	if( (strlen(tmp_dec) == 0) || (strcmp(tmp_dec, "void") == 0) )return params;
 	
+	/* only one parameter. */
 	if( findsubstr(tmp_dec,",") == 0)
 	{
 		running = strdup(tmp_dec);
@@ -78,6 +89,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec[i] = '\0';
 		}
 		
+		/* get the type. (all this process is almost the same for all the functions.)*/
 		token = strtok(running," ");
 	
 		tmpt = token;
@@ -98,11 +110,10 @@ int set_parameters(char *definition, Parameter parameters[])
 		{
 			tmp_dec[i] = '\0';
 		}
-		
+		/* get the next token .*/
 		if( (strcmp(parameters[params].type,"struct") == 0) || (strcmp(parameters[params].type,"unsigned") == 0)
 			|| (strcmp(parameters[params].type,"long") == 0) || (strcmp(parameters[params].type,"short") == 0))
-		{
-		
+		{		
 			token = strtok(NULL , " ");
 			
 					if(token != NULL){
@@ -113,10 +124,8 @@ int set_parameters(char *definition, Parameter parameters[])
 							parameters[params].type[tmpyy]=*tmpt;
 							tmpyy++;
 							tmpt++;
-						}
-				
-					}
-		
+						}				
+					}		
 		} 
 		
 		for(i = 0; i < MAX_LENGTH; i++)
@@ -124,7 +133,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec[i] = '\0';
 		}
 		
-		token = strtok(NULL," []");
+		token = strtok(NULL," ()[]");
 			
 		if(token != NULL){
 		
@@ -148,7 +157,7 @@ int set_parameters(char *definition, Parameter parameters[])
 				tmpt++;
 			}		
 	
-		token = strtok(NULL , "[]");				
+		token = strtok(NULL , "[]()");				
 			
 		if( token != NULL){
 					
@@ -165,7 +174,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			
 		}
 				
-		token = strtok(NULL , "[]");				
+		token = strtok(NULL , "[]()");				
 			
 		if( (token != NULL) && (findsubstr(token,";") == 0)){
 					
@@ -195,14 +204,14 @@ int set_parameters(char *definition, Parameter parameters[])
 		return params;
 		
 	}
-	else {
+	else {/* multiple parameters. */
 	
 		strcpy(tmp_dec2,tmp_dec);
 	
 		running = strdup(tmp_dec);
 				
-		token = strtok(running,",");
-		
+		token = strtok(running,",");/* get the first parameter. */
+		/* do for every parameter. */
 		while(token != NULL)
 		{
 		tmpt = token;
@@ -218,8 +227,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmpy++;
 			tmpt++;
 		}
-		
-		
+				
 		each_running = strdup(tmp_dec);
 		
 		for(i = 0; i < MAX_LENGTH; i++)
@@ -273,7 +281,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec[i] = '\0';
 		}
 		
-		token = strtok(NULL," []");
+		token = strtok(NULL," []()");
 			
 		if(token != NULL){
 		
@@ -297,7 +305,7 @@ int set_parameters(char *definition, Parameter parameters[])
 				tmpt++;
 			}		
 	
-		token = strtok(NULL , "[]");				
+		token = strtok(NULL , "[]()");				
 			
 		if( token != NULL){
 					
@@ -314,7 +322,7 @@ int set_parameters(char *definition, Parameter parameters[])
 			
 		}
 				
-		token = strtok(NULL , "[]");				
+		token = strtok(NULL , "[]()");				
 			
 		if( token != NULL){
 					
@@ -336,13 +344,13 @@ int set_parameters(char *definition, Parameter parameters[])
 		params++;
 		}		
 		
+			/* go to the next parameter. */
 			running = strdup(tmp_dec2);
 			token = strtok(running, ",");
 			for(i = 0; i < params;i++){
 				if(token != NULL)token = strtok(NULL,",");
 				else break;
 			}
-			
 		}		
 		
 		tmpyy = 0;
@@ -353,14 +361,18 @@ int set_parameters(char *definition, Parameter parameters[])
 			tmp_dec2[i] = '\0';
 		}
 		
-		return params;
-			
-	}
-	
+		return params;			
+	}	
 }
 
+/* 
+	Take the definition of the function and the scoped_statement structure 
+	and set the scope for each statements of the function, return the total
+	statements.
+*/
 int set_statement_scopes(char * definition, Scoped_Statements function_scoped_statements[])
 {
+	/* helper variables. */
 	int i;
 	char *running;
   	char *token;
@@ -381,10 +393,9 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 		tmp_dec2[i] = '\0';
 	}
 	
-	//Need to mutate this function to get appropriate statements.
-	
 	running = strdup(definition);
 	
+	/* Get the definition "part" */
 	token = strtok(running, "{}");
 	token = strtok(NULL, "");
 	
@@ -402,19 +413,19 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 	
 	strcpy(tmp_dec2 , tmp_dec);
 	
-	//	fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
-	
+	/* Split the "definition" according to the scope. */
 	running_scope = split(tmp_dec2 , sub1 , sub2 , original_scope);
 		
 	strcpy(tmp_dec2 , sub2);
 	strcpy(tmp_dec , sub1);
-	//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
+	
 	running = strdup(tmp_dec);
 	
 	token = strtok(running, "\r\n\t;");
 	
 	int number = 0;
 	
+	/* For each statement in the current scope. */
 	while(token != NULL)
 	{
 		tmpt = token;
@@ -466,8 +477,6 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 		
 	}
 	
-	//fprintf(stdout, "\n\n orig = %d , running = %d \n\n",original_scope , running_scope);
-	
 	original_scope = running_scope;
 	/* if there are other blocks. */
 	while( running_scope != -1){
@@ -478,12 +487,12 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 			sub2[i] = '\0';
 		}	
 	
+		/* split again */
 		running_scope = split(tmp_dec2 , sub1 , sub2 , original_scope);
 		
 		strcpy(tmp_dec2 , sub2);
 		strcpy(tmp_dec , sub1);
-		//fprintf(stdout, "\n\n tmp_dec ==>> %s \n\n",tmp_dec);
-	
+			
 		running = strdup(tmp_dec);
 	
 		token = strtok(running, "\r\n\t;");
@@ -538,14 +547,18 @@ int set_statement_scopes(char * definition, Scoped_Statements function_scoped_st
 			token = strtok(NULL, "\r\n\t;");			
 		
 		}
-	//fprintf(stdout, "\n\n orig = %d , running = %d \n\n",original_scope , running_scope);
-		if(running_scope != -1)original_scope = running_scope;
 	
+		if(running_scope != -1)original_scope = running_scope;
 	}
 		
 	return statement;
 }
 
+/*
+	This function takes all the previously set structures and goes through the "scoped_statement" structure
+	and gets the local declarations from it, and assigns them to local_variables structure array.
+	then it returns the total number of local variables for that function.
+*/
 int set_declared_local_variables(Scoped_Statements function_scoped_statements[], int total_scoped_statements, LocalVar declared_local_variables[],Parameter parameters[],int total_params, GlobalVar global_variables[], int total_globals, char (*global_constants)[MAX_LENGTH], int total_constants)
 {
 	int i,k,l,j;
@@ -555,7 +568,6 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 	int tmpyy = 0;
 	int var_found = -1;
 	int total_variables = 0;
-	//int tmpty = 0;
 	char tmp_dec[MAX_LENGTH];
 	char tmp_dec2[MAX_LENGTH];
 	char tmp_dec3[MAX_LENGTH];
@@ -587,6 +599,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			}
 		}
 	
+	/* If the local declaration has only one variable. */
 	if( findsubstr(tmp_dec,",") == 0)
 	{
 		
@@ -632,10 +645,11 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			tmpyy = tmpy;
 		}
 		
+		/* we don't care about the statements. */		
 		if( (findsubstr(tmp_dec, "if") == 1) || (findsubstr(tmp_dec, "else") == 1))continue;
-				
 		if( (strcmp(tmp_dec , "++") == 0) || (strcmp(tmp_dec , "--") == 0))continue;
 		
+		/* again for the following, we have to get the next token. */		
 		if( (strcmp(tmp_dec,"struct") == 0) || (strcmp(tmp_dec,"unsigned") == 0)
 			|| (strcmp(tmp_dec,"long") == 0) || (strcmp(tmp_dec,"short") == 0))
 		{
@@ -643,22 +657,18 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			token = strtok(NULL , " ");
 			
 					if(token != NULL){
-						//int tmpy = 0;printf
-						//printf("\n\n --- \n\n");
 						tmpt = token;
 						tmp_dec[tmpyy++] = ' ';
 						while(*tmpt != '\0'){
 							tmp_dec[tmpyy]=*tmpt;
 							tmpyy++;
 							tmpt++;
-						}
-				
-					}
-		
+						}				
+					}		
 		}
 		
 		tmpy = 0;
-			
+			/* ignore the return statement. */
 			if(strcmp(tmp_dec , "return") == 0){
 				strcpy(tmp_dec , "");
 				continue;
@@ -683,10 +693,10 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			}		
 			
 		char *ptr = trimwhitespace(tmp_dec2);
-		
-		//printf("\n\n ptr -->> %s \n\n",ptr);
-		
-		/* Check the Globals Variables Now. */					
+	
+		/* Check the global variables to see if the variable is one of them.
+			if it is then, we add it to "local variable" structure and continue.
+		*/
 		for(k = 0; k < total_globals; k++){
 			if( strcmp(ptr , global_variables[k].vars) == 0){
 				var_found = 0;
@@ -738,7 +748,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				break;
 			}
 		}
-		
+		/* Check the parameters now. */
 		for(k = 0; k < total_params; k++){
 			if( strcmp(ptr , parameters[k].vars) == 0){
 				var_found = 0;
@@ -763,9 +773,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				
 				break;
 			}
-		}
-		
-		
+		}		
 		}
 		
 		tmpyy = 0;
@@ -776,13 +784,11 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			tmp_dec2[j] = '\0';
 			tmp_dec3[j] = '\0';
 		}
-		
-		//return total_globals;
-		
-	}
+				
+	}/* for multiple declarations in one statements. */
 	else if( (findsubstr(tmp_dec,",") == 1) && (findsubstr(tmp_dec , "for(") == 0))
 	{
-	
+		/* Set the flag to say that it's the first variable. */
 		int first = 1;
 	
 		strcpy(tmp_dec2,tmp_dec);
@@ -791,6 +797,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				
 		token = strtok(running,",");
 		
+		/* For each variable. */
 		while(token != NULL)
 		{
 		tmpt = token;
@@ -828,6 +835,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			}
 		}
 		
+		/* If it's the first, then we need to set its type. */		
 		if(first == 1){
 		
 		each_running = strdup(tmp_dec);		
@@ -852,8 +860,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			tmpyy = tmpy;
 		}
 		
-		if( (findsubstr(tmp_dec, "if") == 1) || (findsubstr(tmp_dec, "else") == 1))continue;
-				
+		if( (findsubstr(tmp_dec, "if") == 1) || (findsubstr(tmp_dec, "else") == 1))continue;				
 		if( (strcmp(tmp_dec , "++") == 0) || (strcmp(tmp_dec , "--") == 0))continue;
 		
 		if( (strcmp(tmp_dec,"struct") == 0) || (strcmp(tmp_dec,"unsigned") == 0)
@@ -863,18 +870,14 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 			token = strtok(NULL , " ");
 			
 					if(token != NULL){
-						//int tmpy = 0;printf
-						//printf("\n\n --- \n\n");
 						tmpt = token;
 						tmp_dec[tmpyy++] = ' ';
 						while(*tmpt != '\0'){
 							tmp_dec[tmpyy]=*tmpt;
 							tmpyy++;
 							tmpt++;
-						}
-				
-					}
-		
+						}				
+					}		
 		}
 		
 		tmpy = 0;
@@ -956,7 +959,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				break;
 			}
 		}
-		
+		/* Check The parameters now */
 		for(k = 0; k < total_params; k++){
 			if( strcmp(ptr , parameters[k].vars) == 0){
 				var_found = 0;
@@ -981,27 +984,21 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				
 				break;
 			}
+		}		
 		}
-
-		
-		
-		}
-		
-		
+			/* reset the flag. */
 			first = 0;
+			/* get the next variable. */
 			running = strdup(tmp_dec2);
 			token = strtok(running, ",");
 			for(j = 0; j < total_variables;j++){
 				if(token != NULL){token = strtok(NULL,",");}
 				else break;
 			}
-		}
+		}/* if it's not the first variable. */
 		else if( first == 0){
 				
-				
-				
-				
-				//printf("\n\n tmp_dec -->> %s \n\n",tmp_dec);
+		/* we don't care for the type. we only need the variable name. */
 		each_running = strdup(tmp_dec);
 				
 		for(j = 0; j < MAX_LENGTH; j++)
@@ -1102,7 +1099,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 				break;
 			}
 		}
-				
+				/* get the next variable. */
 				running = strdup(tmp_dec2);
 			token = strtok(running, ",");
 			for(j = 0; j < total_globals;j++){
@@ -1116,17 +1113,14 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		
 		tmpyy = 0;
 		
+		/* reset the arrays. */
 		for(j = 0; j < MAX_LENGTH; j++)
 		{
 			tmp_dec[j] = '\0';
 			tmp_dec2[j] = '\0';
 			tmp_dec3[j] = '\0';
-		}
-	
-		//return total_globals;
-		
-	}
-		
+		}			
+	}		
 	}		
 				
 	return total_variables;
