@@ -44,16 +44,13 @@ void second(int a, double b, char c)
 {
 	double t = xy;
 	int i,j;
-	t = b + c + t;
-	++ t;
-	
+	t = b + c + t;	
 	for( i = 0; i < xx; i++){
 		for(j = 0; j < xx; j++){
 			int a;
 			fprintf(stdout, "\n T = %d \n",  a );
 		}
-	}
-	
+	}	
 	return ;
 
 }
