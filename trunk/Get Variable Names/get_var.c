@@ -117,10 +117,10 @@ int main(int argc, char **argv)
 	print_functions(function_list, function_number);
 	*/
 	//print_global_vars(global_variables, total_globals);
-	char done_func[function_number][128];
+	char done_func[total_functions][128];
 	int total_done = 0;
 	
-	for(i = 0; i < function_number; i++)
+	for(i = 0; i < total_functions; i++)
 		for(j = 0; j < 128; j++)
 			done_func[i][j] = '\0';
 	
@@ -184,7 +184,10 @@ int main(int argc, char **argv)
 					
 					//print_dependent_variables(dependent_variables, total_dependent_variables);
 					
-					strcpy(done_func[total_done++],funcs);
+					if(total_done < total_functions){
+						strcpy(done_func[0],lower);
+						total_done++;
+					}
 					
 					/* Get all the variables the function depends upon. */
 					total_variables = set_variables(done_func,total_done,0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
@@ -254,7 +257,7 @@ int main(int argc, char **argv)
 						total_unique_variables = 0;
 			
 			}
-			for(i = 0; i < function_number; i++)
+			for(i = 0; i < total_functions; i++)
 				for(j = 0; j < 128; j++)
 					done_func[i][j] = '\0';
 		
