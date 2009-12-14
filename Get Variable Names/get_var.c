@@ -185,8 +185,8 @@ int main(int argc, char **argv)
 					//print_dependent_variables(dependent_variables, total_dependent_variables);
 					
 					
-						strcpy(done_func[total_done],funcs);
-						total_done++;
+					strcpy(done_func[total_done],funcs);
+					total_done++;
 					
 					
 					/* Get all the variables the function depends upon. */
