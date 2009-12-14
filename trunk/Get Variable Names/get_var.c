@@ -182,12 +182,10 @@ int main(int argc, char **argv)
 						total_dependent_variables = total_dependent_variables + k;
 					}
 					
-					//print_dependent_variables(dependent_variables, total_dependent_variables);
-					
+					//print_dependent_variables(dependent_variables, total_dependent_variables);					
 					
 					strcpy(done_func[total_done],funcs);
-					total_done++;
-					
+					total_done++;					
 					
 					/* Get all the variables the function depends upon. */
 					total_variables = set_variables(done_func,total_done,0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
