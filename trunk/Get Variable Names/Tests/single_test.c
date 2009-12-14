@@ -22,7 +22,7 @@ typedef struct params {
 Parameter parameters[1024];
 
 int first(int a, double b, char c);
-void second(int a, double b, char c);
+double second(int a, double b, char c);
 int third(int d);
 void fourth(void);
 int fifth(Parameter e);
@@ -40,8 +40,9 @@ int first(int a, double b, char c)
 
 }
 
-void second(int a, double b, char c)
+double second(int a, double b, char c)
 {	
+	int i , j;
 	for( i = 0; i < xx; i++){
 		for(j = 0; j < xx; j++){
 			int a;
