@@ -1,7 +1,9 @@
 #include "CSInvite.h"
 
 
-/* The Find Substring Function. (acquired from an online forum*/
+/* The Find Substring Function. (acquired from an online forum
+	This function checks if the second char array is a substring 
+	of the first. if yes then it returns 1 otherwise it returns 0.*/
 int findsubstr( char *str, char *substr)
 {
   if ( !*substr )
@@ -27,26 +29,32 @@ int findsubstr( char *str, char *substr)
   return 0;
 }
 
-/* Acquired from online blog. */
+/* Acquired from online blog. 
+	Trims the white spaces from the 
+	front and the end of the string.*/
 char *trimwhitespace(char *str)
 {
   char *end;
 
-  // Trim leading space
+  /* Trim leading space*/
   while(isspace(*str)) str++;
 
-  // Trim trailing space
+  /* Trim trailing space*/
   end = str + strlen(str) - 1;
   while(end > str && isspace(*end)) end--;
 
-  // Write new null terminator
+  /* Write new null terminator */
   *(end+1) = 0;
 
   return str;
 
 }
 
-/* Split the string in two. */
+/* Split the string in two. 
+	Takes the original and "splits" it in two smaller
+	strings (doesn't affect the original).
+	The split depends upon the open and close braces.
+	The resulting slices are inside split1 and split2.*/
 int split(char *original, char * split1, char * split2 , int scope)
 {
   int i = 0;
