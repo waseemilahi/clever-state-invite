@@ -1240,7 +1240,7 @@ char *trimwhitespace(char *str)
 
 }
 
-int set_variables(char (*done_func)[128], int total_done,int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[28],Variable variables[])
+int set_variables(char (*done_func)[VAR_LENGTH], int total_done,int total_variables,int function_number, Functions function_list[],int total_params,Parameter parameters[],int total_globals,GlobalVar global_variables[],int total_constants,char (*global_constants)[MAX_LENGTH],int total_dependent_variables,char (*dependent_variables)[28],Variable variables[])
 {
 
 	int j,k,l = 0, done,m;
@@ -1346,7 +1346,7 @@ int set_variables(char (*done_func)[128], int total_done,int total_variables,int
 
 }
 
-int get_func_vars(char (*done_func)[128], int total_done,char *func,int function_number,int total_globals,int total_constants,char *definition,int total_dependent_variables,char (*dependent_variables)[28],int total_variables,Variable variables[],Functions function_list[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
+int get_func_vars(char (*done_func)[VAR_LENGTH], int total_done,char *func,int function_number,int total_globals,int total_constants,char *definition,int total_dependent_variables,char (*dependent_variables)[28],int total_variables,Variable variables[],Functions function_list[],GlobalVar global_variables[],char (*global_constants)[MAX_LENGTH])
 {
 	int total_params = 0;
 	int new_variables = 0;
