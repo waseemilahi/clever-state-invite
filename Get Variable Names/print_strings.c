@@ -1,4 +1,4 @@
-#include "get_var.h"
+#include "CSInvite.h"
 
 void print_output(char (*strings)[MAX_LENGTH], int string_number)
 {
