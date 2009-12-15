@@ -120,6 +120,8 @@ int main(int argc, char **argv)
   /* Find out the max constants in the file. */
   int possible_constants = get_possible_constants(statements, statement_number);
   
+  if(possible_constants == 0)possible_constants++;
+  
   /* Declare the global constant array, with size = max possible constants. */
   char global_constants[possible_constants][MAX_LENGTH];
   
