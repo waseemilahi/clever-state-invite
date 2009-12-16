@@ -7,17 +7,15 @@
   Author:       Waseem Ilahi
   Purpose:      To find the variables (in the current file) that a given function/test depends upon.
   Description:  This "Program" takes a "compiled without errors/warnings" c file as its argument
-                and parses it in such a way that, when the user asks for a function defined in side the
-                file, this program prints out the "external/non-local" variables that the function depends
+                and parses it in such a way that for each function definition in the file, this program
+				prints out the "external/non-local" variables this function depends
                 upon. This is a small part of a bigger project. These variables are then used by the other
                 parts of the project to do various tasks. The program hasn't been integrated with other
                 components, therefore, for now it only prints out the variables, but those variables are
                 stored inside a structure and can be passed along to any thing to be used.
-  Use Case: 	The user gives the program a c file as the argument. After that the program asks
-                the user to give it the name of the function they want to check. the user inputs
-                the name, if there is a function with that name, the program prints out its dependencies,
-                if the name is incorrect the program informs the user and asks to input again. The user
-                can keep doing this, for however long they want, or type "quit" to exit the program.
+  Use Case: 	The user gives the program a c file as the argument. After that the program goes into 
+				the array of saved function definitions and prints out all the known dependencies for
+				each function. This process happens for each function "sequencially".
   Limitations:  As you may have figured out, this parser only works on compilable c code. 
                 Other than that there are a few other limitations. First of, the number of
                 max global vairables and the function definations in each file is fixed to 128.
@@ -162,7 +160,7 @@ int main(int argc, char **argv)
 	fprintf(stdout,"\n\n There are %d functions in this file. \n",function_number);
 	fprintf(stdout, "\n ......................................................................\n\n");
   
-  /* The main loop. This loop contimues, unless the user types in "quit" . */
+  /* The main loop. */
   for(i = 0; i < function_number; i++){			
 	
 	fprintf(stdout,"\n\n Looking into the function \'%s\' \n\n",function_list[i].name);
