@@ -60,17 +60,12 @@ int main(int argc, char **argv)
   int total_declared_local_variables = 0;
   /* Total Variables (used) inside the definition. */
   int total_dependent_variables = 0;
-  /* Flag to see whether the function exists or not. */
-  int function_found = 0;
   /* Total Variables the function depends upon. */
   int total_variables = 0;
   int total_unique_variables = 0;
   
   /* The statemetns "read" from the file. */  
-  char statements[MAX_NUMBER][MAX_LENGTH];
-  /* The function name "read" from the user input. */
-  char funcs[VAR_LENGTH];
-  char lower[VAR_LENGTH];	
+  char statements[MAX_NUMBER][MAX_LENGTH];	
   /* Glocal variables. */
   GlobalVar global_variables[MAX_NUMBER];
   /* Parameters. */
@@ -105,10 +100,6 @@ int main(int argc, char **argv)
     for(j =0; j < MAX_LENGTH; j++){
       statements[i][j] = '\0';
     }
-  }
-  for(i = 0 ; i < VAR_LENGTH; i++){
-    lower[i] = '\0';
-    funcs[i] = '\0';
   }
   for(i = 0; i < MAX_NUMBER; i++)
     for(j = 0; j < VAR_LENGTH; j++)
@@ -167,38 +158,14 @@ int main(int argc, char **argv)
   for(i = 0; i < function_number; i++)
     for(j = 0; j < VAR_LENGTH; j++)
       done_func[i][j] = '\0';
+	  
+	fprintf(stdout,"\n\n There are %d functions in this file. \n",function_number);
+	fprintf(stdout, "\n ......................................................................\n\n");
   
   /* The main loop. This loop contimues, unless the user types in "quit" . */
-  while(1){
-    
-    /* Flag is set to zero. */
-    function_found = 0;
-    /* Prompt. */
-    fprintf(stdout,"\n Please enter the name of the Function/Test you want to check or type quit to exit: ");
-    fscanf(stdin,"%s", funcs);
-    fprintf(stdout, "\n");
-    
-    /* To accept "Quit , QUIT , qUIT, etc. */
-    for(j = 0; j < strlen(funcs); j++)lower[j] = tolower(funcs[j]);
-    
-    /* Check for exit condidiotn. */
-    if(strcmp(lower,"quit") == 0){
-      fprintf(stdout,"\n Exiting........done\n\n");
-      return 0;
-    }
-    else{ /* User didn't type "quit", continue... */
-      
-	  /* Is there a function with the name, the user typed in? */
-      i = find_function(function_number, funcs, function_list);
-      
-      /* Yes there is. */
-      if( i >= 0){
+  for(i = 0; i < function_number; i++){			
 	
-	/* Found the function, now work on it. */			
-	
-	/* Set the flag. */
-	function_found = 1;
-	fprintf(stdout,"\n Function Found. Processing...... \n\n");
+	fprintf(stdout,"\n\n Looking into the function \'%s\' \n\n",function_list[i].name);
 	int i5;
 	/* Reset the parameters. */
 	for(i5 = 0; i5 < MAX_NUMBER; i5++){
@@ -214,13 +181,6 @@ int main(int argc, char **argv)
 	  {
 	    /* Empty definition: continue */
 	    fprintf(stderr,"\n Empty Function Definition. \n");
-	    fprintf(stdout," Try Another!\n");
-	    
-	    /* Reset lower and funcs. */
-	    for(i = 0; i < VAR_LENGTH; i++){
-	      lower[i] = '\0';
-	      funcs[i] = '\0';
-	    }
 	    continue ;
 	  }			
 	
@@ -235,7 +195,7 @@ int main(int argc, char **argv)
 	  }
 	
 	/* add the function name to the done_func array. */
-	strcpy(done_func[total_done],funcs);
+	strcpy(done_func[total_done],function_list[i].name);
 	total_done++;					
 	
 	/* Get all the variables the function depends upon. */
@@ -244,18 +204,18 @@ int main(int argc, char **argv)
 	int var_found;
 	
 	/* Get the unique variables. assign them to unique_variables arraty. */	
-	for(i = 0; i < total_variables; i++){
+	for(k = 0; k < total_variables; k++){
 	  var_found = 0;
 	  for(j = 0; j < total_unique_variables; j++){
-	    if( (strcmp(variables[i].name,unique_variables[j].name)) == 0){
+	    if( (strcmp(variables[k].name,unique_variables[j].name)) == 0){
 	      var_found = 1;
 	      break;
 	    }
 	  }
 	  if(var_found == 1)continue;
 	  else {
-	    strcpy(unique_variables[total_unique_variables].name , variables[i].name);
-	    strcpy(unique_variables[total_unique_variables].type , variables[i].type);
+	    strcpy(unique_variables[total_unique_variables].name , variables[k].name);
+	    strcpy(unique_variables[total_unique_variables].type , variables[k].type);
 	    total_unique_variables++;
 	  }
 	}					
@@ -282,7 +242,7 @@ int main(int argc, char **argv)
 	  fprintf(stdout,"\n\n No Known Dependency. \n\n");
 	}
 	
-	fprintf(stdout, "\n .......done.\n");
+	fprintf(stdout, "\n ......................................................................\n\n");
 	
 	/* Reset all the variables that will be reused. */
 	for(j = 0; j < MAX_NUMBER; j++){
@@ -305,36 +265,16 @@ int main(int argc, char **argv)
 	total_variables = 0;
 	total_unique_variables = 0;
 	
-      }
-      for(i = 0; i < function_number; i++)
+      for(k = 0; k < function_number; k++)
 	for(j = 0; j < VAR_LENGTH; j++)
-	  done_func[i][j] = '\0';
+	  done_func[k][j] = '\0';
       
       total_done = 0;		
       
       k = 0;
       total_dependent_variables = 0;
-      
-    }
-    /* If no such function, then go back again. */
-    if(function_found == 0){
-      
-      if(strcmp(lower,"quit") == 0){
-	fprintf(stdout,"\n Exiting........done\n\n");
-	return 0;
-      }
-      
-      fprintf(stderr,"\n No Such Function/Test in this File. \n");
-      fprintf(stdout," Try Again!\n");
-    }
-    
-    /* Reset lower and funcs. */
-    for(i = 0; i < MAX_LENGTH; i++){
-      lower[i] = '\0';
-      funcs[i] = '\0';
-    }
-    
-  }/* End While. */
+        
+  }/* End for. */
   
   fprintf(stdout, "\n");
   
