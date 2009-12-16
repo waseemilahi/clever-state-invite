@@ -21,6 +21,7 @@
                 max global vairables and the function definations in each file is fixed to 128.
                 Also, the program requires the length of each function defination to be less than 2048
                 characters. This is excluding the comments spaces, tabs and new lines.
+	Note:		Code was formatted with emacs on a linux machine.
 */
 
 /*
