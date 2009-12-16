@@ -1,7 +1,6 @@
 /*
   This file contains the functions that get called once for 
-  every function the user wants to check. These values get 
-  reset for every function.
+  every function. These values get reset for every function.
 */
 #include "CSInvite.h"
 
