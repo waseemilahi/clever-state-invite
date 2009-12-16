@@ -21,7 +21,7 @@
                 max global vairables and the function definations in each file is fixed to 128.
                 Also, the program requires the length of each function defination to be less than 2048
                 characters. This is excluding the comments spaces, tabs and new lines.
-	Note:		Code was formatted with emacs on a linux machine.
+  Note:		Code was formatted with emacs on a linux machine.
 */
 
 /*
@@ -120,7 +120,6 @@ int main(int argc, char **argv)
     for( j = 0; j < MAX_LENGTH; j++)
       global_constants[i][j]='\0';
   
-  
   /* Set the Global Constants and Variables. */
   total_constants = set_global_constants(statements,global_constants,statement_number);
   total_globals = set_global_variables(statements,global_variables,statement_number);
@@ -157,127 +156,127 @@ int main(int argc, char **argv)
   for(i = 0; i < function_number; i++)
     for(j = 0; j < VAR_LENGTH; j++)
       done_func[i][j] = '\0';
-	  
-	if(function_number == 1){
-		fprintf(stdout,"\n\n There is %d function definition in this file. \n",function_number);
-	}
-	else if(function_number > 1){
-	fprintf(stdout,"\n\n There are %d function definitions in this file. \n",function_number);
-	}
-	fprintf(stdout, "\n ......................................................................\n\n");
+  
+  if(function_number == 1){
+    fprintf(stdout,"\n\n There is %d function definition in this file. \n",function_number);
+  }
+  else if(function_number > 1){
+    fprintf(stdout,"\n\n There are %d function definitions in this file. \n",function_number);
+  }
+  fprintf(stdout, "\n ......................................................................\n\n");
   
   /* The main loop. */
   for(i = 0; i < function_number; i++){			
-	
-	fprintf(stdout,"\n\n Looking into the function \'%s\' \n\n",function_list[i].name);
-	int i5;
-	/* Reset the parameters. */
-	for(i5 = 0; i5 < MAX_NUMBER; i5++){
-	  strcpy(parameters[i5].type, "");
-	  strcpy(parameters[i5].vars ,"");
+    
+    fprintf(stdout,"\n\n Looking into the function \'%s\' \n\n",function_list[i].name);
+    int i5;
+    /* Reset the parameters. */
+    for(i5 = 0; i5 < MAX_NUMBER; i5++){
+      strcpy(parameters[i5].type, "");
+      strcpy(parameters[i5].vars ,"");
+    }
+    
+    /* Get the parameters for this function. */
+    total_params = set_parameters(function_list[i].definition, parameters);
+    
+    /* Set the Scoped Statements array. */
+    if( (total_scoped_statements = set_statement_scopes(function_list[i].definition, function_scoped_statements)) == 0)
+      {
+	/* Empty definition: continue */
+	fprintf(stderr,"\n Empty Function Definition. \n");
+	continue ;
+      }			
+    
+    /* get the redeclared variables + their scopes (not all locals, but the ones that were redeclared). */
+    total_declared_local_variables = set_declared_local_variables(function_scoped_statements, total_scoped_statements, declared_local_variables,parameters, total_params, global_variables, total_globals, global_constants,total_constants);
+    
+    /* Get the "dependent_variables" for each of the scoped statement. */
+    for(j = 0; j < total_scoped_statements; j++)
+      {
+	k =  set_dependency(total_dependent_variables,function_scoped_statements[j].statements,function_scoped_statements[j].scope,function_scoped_statements[j].number,total_declared_local_variables,declared_local_variables,dependent_variables,function_list, parameters, global_variables, global_constants );					
+	total_dependent_variables = total_dependent_variables + k;
+      }
+    
+    /* add the function name to the done_func array. */
+    strcpy(done_func[total_done],function_list[i].name);
+    total_done++;					
+    
+    /* Get all the variables the function depends upon. */
+    total_variables = set_variables(done_func,total_done,0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
+    
+    int var_found;
+    
+    /* Get the unique variables. assign them to unique_variables arraty. */	
+    for(k = 0; k < total_variables; k++){
+      var_found = 0;
+      for(j = 0; j < total_unique_variables; j++){
+	if( (strcmp(variables[k].name,unique_variables[j].name)) == 0){
+	  var_found = 1;
+	  break;
 	}
-	
-	/* Get the parameters for this function. */
-	total_params = set_parameters(function_list[i].definition, parameters);
-	
-	/* Set the Scoped Statements array. */
-	if( (total_scoped_statements = set_statement_scopes(function_list[i].definition, function_scoped_statements)) == 0)
-	  {
-	    /* Empty definition: continue */
-	    fprintf(stderr,"\n Empty Function Definition. \n");
-	    continue ;
-	  }			
-	
-	/* get the redeclared variables + their scopes (not all locals, but the ones that were redeclared). */
-	total_declared_local_variables = set_declared_local_variables(function_scoped_statements, total_scoped_statements, declared_local_variables,parameters, total_params, global_variables, total_globals, global_constants,total_constants);
-	
-	/* Get the "dependent_variables" for each of the scoped statement. */
-	for(j = 0; j < total_scoped_statements; j++)
-	  {
-	    k =  set_dependency(total_dependent_variables,function_scoped_statements[j].statements,function_scoped_statements[j].scope,function_scoped_statements[j].number,total_declared_local_variables,declared_local_variables,dependent_variables,function_list, parameters, global_variables, global_constants );					
-	    total_dependent_variables = total_dependent_variables + k;
-	  }
-	
-	/* add the function name to the done_func array. */
-	strcpy(done_func[total_done],function_list[i].name);
-	total_done++;					
-	
-	/* Get all the variables the function depends upon. */
-	total_variables = set_variables(done_func,total_done,0,function_number,function_list,total_params, parameters,total_globals,global_variables,total_constants,global_constants,total_dependent_variables,dependent_variables,variables);					
-	
-	int var_found;
-	
-	/* Get the unique variables. assign them to unique_variables arraty. */	
-	for(k = 0; k < total_variables; k++){
-	  var_found = 0;
-	  for(j = 0; j < total_unique_variables; j++){
-	    if( (strcmp(variables[k].name,unique_variables[j].name)) == 0){
-	      var_found = 1;
-	      break;
-	    }
-	  }
-	  if(var_found == 1)continue;
-	  else {
-	    strcpy(unique_variables[total_unique_variables].name , variables[k].name);
-	    strcpy(unique_variables[total_unique_variables].type , variables[k].type);
-	    total_unique_variables++;
-	  }
-	}					
-	/* Set the array length for variables. To "output the actual variables, we need to "convert" them back to original state
-	   from their stored staate.*/
-	int i6,i7;
-	int sub_size;
-	for(i6 = 0; i6 < total_unique_variables; i6++){
-	  if( (findsubstr(unique_variables[i6].type,"*") == 1) && (findsubstr(unique_variables[i6].type,"[") == 1) ){
-	    strcat(unique_variables[i6].name,strchr(unique_variables[i6].type,'['));
-	    sub_size = strlen(unique_variables[i6].type) - strlen(strchr(unique_variables[i6].type,'['));
-	    for(i7 = sub_size; i7 <= strlen(unique_variables[i6].type); i7++){
-	      unique_variables[i6].type[i7] = '\0';
-	    }
-	  }
+      }
+      if(var_found == 1)continue;
+      else {
+	strcpy(unique_variables[total_unique_variables].name , variables[k].name);
+	strcpy(unique_variables[total_unique_variables].type , variables[k].type);
+	total_unique_variables++;
+      }
+    }					
+    /* Set the array length for variables. To "output the actual variables, we need to "convert" them back to original state
+       from their stored staate.*/
+    int i6,i7;
+    int sub_size;
+    for(i6 = 0; i6 < total_unique_variables; i6++){
+      if( (findsubstr(unique_variables[i6].type,"*") == 1) && (findsubstr(unique_variables[i6].type,"[") == 1) ){
+	strcat(unique_variables[i6].name,strchr(unique_variables[i6].type,'['));
+	sub_size = strlen(unique_variables[i6].type) - strlen(strchr(unique_variables[i6].type,'['));
+	for(i7 = sub_size; i7 <= strlen(unique_variables[i6].type); i7++){
+	  unique_variables[i6].type[i7] = '\0';
 	}
-	
-	/* Print the Variables, the Function depends upon. */
-	if(total_variables > 0){
-	  fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
-	  print_variables(unique_variables,total_unique_variables);					
-	}
-	else{ 
-	  fprintf(stdout,"\n\n No Known Dependency. \n\n");
-	}
-	
-	fprintf(stdout, "\n ......................................................................\n\n");
-	
-	/* Reset all the variables that will be reused. */
-	for(j = 0; j < MAX_NUMBER; j++){
-	  strcpy(variables[j].type , "");
-	  strcpy(variables[j].name , "");
-	  strcpy(unique_variables[j].type , "");
-	  strcpy(unique_variables[j].name , "");			
-	  strcpy(function_scoped_statements[i].statements,"");
-	  function_scoped_statements[i].scope = -1;
-	  function_scoped_statements[i].number = -1;
-	  strcpy(declared_local_variables[i].type,"");
-	  strcpy(declared_local_variables[i].name,"");
-	  declared_local_variables[i].scope = -1;
-	  declared_local_variables[i].number = -1;	
-	  for(k = 0; k < VAR_LENGTH; k++)
-	    dependent_variables[j][k] = '\0';
-	}
-	
-	total_dependent_variables = 0;
-	total_variables = 0;
-	total_unique_variables = 0;
-	
-      for(k = 0; k < function_number; k++)
-	for(j = 0; j < VAR_LENGTH; j++)
-	  done_func[k][j] = '\0';
-      
-      total_done = 0;		
-      
-      k = 0;
-      total_dependent_variables = 0;
-        
+      }
+    }
+    
+    /* Print the Variables, the Function depends upon. */
+    if(total_variables > 0){
+      fprintf(stdout, "\n\n Variables the function depends upon: \n\n");
+      print_variables(unique_variables,total_unique_variables);					
+    }
+    else{ 
+      fprintf(stdout,"\n\n No Known Dependency. \n\n");
+    }
+    
+    fprintf(stdout, "\n ......................................................................\n\n");
+    
+    /* Reset all the variables that will be reused. */
+    for(j = 0; j < MAX_NUMBER; j++){
+      strcpy(variables[j].type , "");
+      strcpy(variables[j].name , "");
+      strcpy(unique_variables[j].type , "");
+      strcpy(unique_variables[j].name , "");			
+      strcpy(function_scoped_statements[i].statements,"");
+      function_scoped_statements[i].scope = -1;
+      function_scoped_statements[i].number = -1;
+      strcpy(declared_local_variables[i].type,"");
+      strcpy(declared_local_variables[i].name,"");
+      declared_local_variables[i].scope = -1;
+      declared_local_variables[i].number = -1;	
+      for(k = 0; k < VAR_LENGTH; k++)
+	dependent_variables[j][k] = '\0';
+    }
+    
+    total_dependent_variables = 0;
+    total_variables = 0;
+    total_unique_variables = 0;
+    
+    for(k = 0; k < function_number; k++)
+      for(j = 0; j < VAR_LENGTH; j++)
+	done_func[k][j] = '\0';
+    
+    total_done = 0;		
+    
+    k = 0;
+    total_dependent_variables = 0;
+    
   }/* End for. */
   
   fprintf(stdout, "\n");
