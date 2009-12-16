@@ -157,7 +157,12 @@ int main(int argc, char **argv)
     for(j = 0; j < VAR_LENGTH; j++)
       done_func[i][j] = '\0';
 	  
-	fprintf(stdout,"\n\n There are %d functions in this file. \n",function_number);
+	if(function_number == 1){
+		fprintf(stdout,"\n\n There is %d function definition in this file. \n",function_number);
+	}
+	else if(function_number > 1){
+	fprintf(stdout,"\n\n There are %d function definitions in this file. \n",function_number);
+	}
 	fprintf(stdout, "\n ......................................................................\n\n");
   
   /* The main loop. */
