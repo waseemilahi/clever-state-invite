@@ -571,6 +571,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
   char tmp_dec[MAX_LENGTH];
   char tmp_dec2[MAX_LENGTH];
   char tmp_dec3[MAX_LENGTH];
+  int isFunction;
   
   for(i = 0; i < MAX_LENGTH; i++){
     tmp_dec[i] = '\0';
@@ -581,6 +582,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
   int tmpy = 0;
   
   for(i = 0; i < total_scoped_statements; i++){
+	isFunction = 0;
     tmpy = 0;	
     
     strcpy(tmp_dec , "");
@@ -834,6 +836,11 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		tmpt++;
 	      }
 	    }
+		
+		if( findsubstr(tmp_dec , "(") == 1){
+			isFunction = 1;
+			break;
+		}
 	    
 	    /* If it's the first, then we need to set its type. */		
 	    if(first == 1){
@@ -849,7 +856,6 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 	      
 	      tmpt = token;
 	      
-	      
 	      if(token != NULL){
 		int tmpy = 0;
 		while(*tmpt != '\0'){
@@ -859,7 +865,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		}
 		tmpyy = tmpy;
 	      }
-	      
+		  	      
 	      if( (findsubstr(tmp_dec, "if") == 1) || (findsubstr(tmp_dec, "else") == 1))continue;				
 	      if( (strcmp(tmp_dec , "++") == 0) || (strcmp(tmp_dec , "--") == 0))continue;
 	      
@@ -877,7 +883,8 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		      tmpyy++;
 		      tmpt++;
 		    }				
-		  }		
+		  }
+		
 		}
 	      
 	      tmpy = 0;
@@ -985,7 +992,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		    break;
 		  }
 		}		
-	      }
+	      }else break;
 	      /* reset the flag. */
 	      first = 0;
 	      /* get the next variable. */

@@ -717,15 +717,12 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
       if(token != NULL){
 	token = strtok(NULL," *(");
       }
-      tmpt = token;
+	  
       /* set the function name. */
       if(token != NULL){
-	int tmpy = 0;
-	while(*tmpt != '\0'){
-	  function_list[function_number].name[tmpy]=*tmpt;
-	  tmpt++;
-	  tmpy++;
-	}
+		tmpt = token;
+		strcpy(function_list[function_number].name , tmpt);
+	  
 	/* set the function definition. */
 	strcpy(function_list[function_number].definition,statements[i]);
 	
