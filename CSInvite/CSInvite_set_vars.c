@@ -2,7 +2,7 @@
   This file has the functions that get called the most.
   These functions take what we have so far and figure
   out the variables the function depends upon and set the
-  data structure that hoolds these variables.
+  data structure that holds these variables.
 */
 # include "CSInvite.h"
 
