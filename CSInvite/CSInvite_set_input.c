@@ -59,8 +59,7 @@ int get_input(char (*statements)[MAX_LENGTH], char *filename)
 	strcpy(statements[statement_number] , line);
 	
 	statement_number ++;
-	
-	
+		
       }
       /* reset the line array. */
       for(i = 0; i < MAX_LENGTH; i++)
@@ -717,12 +716,12 @@ int set_functions(char (*statements)[MAX_LENGTH],Functions function_list[],int s
       if(token != NULL){
 	token = strtok(NULL," *(");
       }
-	  
+      
       /* set the function name. */
       if(token != NULL){
-		tmpt = token;
-		strcpy(function_list[function_number].name , tmpt);
-	  
+	tmpt = token;
+	strcpy(function_list[function_number].name , tmpt);
+	
 	/* set the function definition. */
 	strcpy(function_list[function_number].definition,statements[i]);
 	

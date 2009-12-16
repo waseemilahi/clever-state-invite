@@ -836,11 +836,11 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		tmpt++;
 	      }
 	    }
-		
-		if( findsubstr(tmp_dec , "(") == 1){
-			isFunction = 1;
-			break;
-		}
+	    
+	    if( findsubstr(tmp_dec , "(") == 1){
+	      isFunction = 1;
+	      break;
+	    }
 	    
 	    /* If it's the first, then we need to set its type. */		
 	    if(first == 1){
@@ -865,7 +865,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		}
 		tmpyy = tmpy;
 	      }
-		  	      
+	      
 	      if( (findsubstr(tmp_dec, "if") == 1) || (findsubstr(tmp_dec, "else") == 1))continue;				
 	      if( (strcmp(tmp_dec , "++") == 0) || (strcmp(tmp_dec , "--") == 0))continue;
 	      
@@ -884,7 +884,7 @@ int set_declared_local_variables(Scoped_Statements function_scoped_statements[],
 		      tmpt++;
 		    }				
 		  }
-		
+		  
 		}
 	      
 	      tmpy = 0;
