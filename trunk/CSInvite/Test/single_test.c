@@ -30,7 +30,7 @@ void sixth();
 
 int first(int a, double b, char c)
 {
-	int t;
+	int t = 0;
 	a = b + c;
 	t = a + t;
 	t = xz;
@@ -46,7 +46,7 @@ double second(int a, double b, char c)
 	int i , j;
 	for( i = 0; i < xx; i++){
 		for(j = 0; j < xx; j++){
-			int a;
+			int a = 0;
 			fprintf(stdout, "\n T = %d \n",  a );
 		}
 	}	
