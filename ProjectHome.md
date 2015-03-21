@@ -1,0 +1,2 @@
+Investigate
+•	Can the technique be made more efficient by only running tests in application states it hasn’t seen before? We currently run tests probabilistically or according to the system load; however, certain states may unnecessarily be tested multiple times.
